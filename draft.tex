@@ -23,7 +23,7 @@
 %\fntext[myfootnote]{Since 1880.}
 
 %% or include affiliations in footnotes:
-\author[itt]{Mario García Valdez \corref{mycorrespondingauthor}}
+\author[itt]{Mario Garci\'a Valdez \corref{mycorrespondingauthor}}
 \cortext[mycorrespondingauthor]{Corresponding author}
 \ead{mario@tectijuana.edu.mx}
 
@@ -34,12 +34,40 @@
 \address[granada]{Universidad de Granada, Granada, Spain}
 
 \begin{abstract}
-This template helps you to create a properly formatted \LaTeX\ manuscript.
+    Multi-population based methods have been used extensively in recent years to
+    improve the performance of nature-inspired optimization algorithms.
+    Researchers try to avoid premature convergence and maintain population
+    diversity by dividing the original population into multiple small
+    subpopulations. Each subpopulation then evolves independently using a
+    specified search strategy. Finally, these subpopulations communicate with
+    each other to exchange individuals. Multi-population based methods are
+    parallel and asynchronous by nature; researchers take advantage of this to
+    scale algorithms with distributed, multi-threaded, and parallel
+    implementations. The design of parallel and distributed versions of
+    multi-population algorithms for their execution in cloud infrastructures is
+    not a trivial task. Designers need to adapt the algorithms to leverage the
+    benefits of scalability, elasticity, fault-tolerance, reproducibility,  and
+    cost-effectiveness of cloud-based systems. In this work, we present the
+    design and implementation of a novel event-driven architecture, designed to
+    distribute the processing of population-based algorithms asynchronously. The
+    system provides researchers a serverless strategy for creating multiple
+    populations with different parameters of execution, allowing the
+    implementation of multiple algorithms. We provide a container-based platform
+    where researchers can deploy experiments by just specifying the resources
+    and parameters of the algorithm. The performance of the platform and the
+    benefits of a multi-population approach has been evaluated using an ensemble
+    of Genetic  Algorithms (GAs) and Particle Swarm Optimization (PSO).
+    Experiments show that the framework allows the combined algorithms to
+    outperform, with a high probability, single-algorithm versions. The
+    framework we provide also has few parameters to tune since single-algorithm
+    parameters are selected randomly. The architecture and the implemented
+    platform is an excellent alternative for locally or a cloud-based
+    deployment.
 \end{abstract}
 
 \begin{keyword}
-\texttt{elsarticle.cls}\sep \LaTeX\sep Elsevier \sep template
-\MSC[2010] 00-01\sep  99-00
+Multi-population \sep Nature-inspired algorithm \sep Parallel Genetic Algorithms \sep Cloud-Computing
+\sep Event-driven architecture 
 \end{keyword}
 
 \end{frontmatter}
