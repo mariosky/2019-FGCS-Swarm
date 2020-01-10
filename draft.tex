@@ -25,11 +25,15 @@
 Multi-population based methods have been used extensively in
 recent years to improve the performance of nature-inspired optimization
 algorithms, these methods are parallel and asynchronous by nature and researchers
-leverage this to scale algorithms % scale algorithms or implementations? - JJ
+leverage this to scale implementations % scale algorithms or implementations? - JJ   
+%I think they are both, but in this case, implementation is more appropriate - Mario  
 with distributed, multi-threaded,
-parallel and cloud-based implementations. However, the design  of cloud-native,  distributed, multi-population algorithms is not a trivial task. Designers need to adapt the algorithms, while keeping its nature, to
+parallel and cloud-based implementations. However, the design  of cloud-native,  
+distributed, multi-population algorithms is not a trivial task. Designers need to adapt the algorithms, while keeping its nature, to
 leverage the scalability, elasticity, fault-tolerance,
-reproducibility, and cost-effectiveness of reactive cloud-based systems. % reactive is mentioned here for the first time. Possibly you should just refer to "cloud-native" and then specify that it implies asynchrony, reactivity, and so on - JJ
+reproducibility, and cost-effectiveness of cloud-native systems. 
+% reactive is mentioned here for the first time. Possibly you should just refer to "cloud-native" and then specify that it implies asynchrony, reactivity, and so on - JJ
+% OK - Mario
 In this
 work, we present the design and implementation of a reactive container-based
 application for the execution of multi-population algorithms. Researchers can
@@ -68,8 +72,9 @@ are Genetic Algorithms (GAs), Genetic Programming (GP), grey wolf optimization
 (GWO) and Differential Evolution (DE), while examples of (SI) are particle swarm
 optimization (PSO) and ant colony algorithms (ACO).
 
-Population-based algorithms are intrinsically parallel, and can be implemented in an asynchronous. % They needn't be intrinsically asynchronous, I think. Most are implemented synchronouslu - JJ
-The fitness of each individual can be evaluated independently of
+Population-based algorithms are intrinsically parallel, and can be implemented to run asynchronously. % They needn't be intrinsically asynchronous, I think. Most are implemented synchronouslu - JJ  
+%OK - M
+The fitness of each individual can be evaluated independently of 
 others, and similarly, each population could evolve in isolation. Since 
 earlier works, researchers have been proposing some form of parallelization
 \cite{muhlenbein1988evolution} to increase the scalability of these algorithms.
@@ -82,6 +87,19 @@ besides the execution speed; these include avoiding a premature convergence and
 maintaining the diversity of the global population. Researchers use the term
 multi-population based methods when generally referring to techniques using
 subpopulations as part of their optimization strategy. % Some comment about asynchrony would be in order - JJ
+% Comments below - Mario
+Moreover, parallel implementations can run in two ways: synchronous and
+asynchronous. When operations run in parallel but maintain synchronism with
+other operations,  all operations need to finish to continue to the next step.
+For instance, in a  parent/worker model, the parent needs to wait for all
+workers to finish their operations before moving to the next iteration.  In
+contrast, in an asynchronous execution,  operations are not synchronized with
+each other. In the previous, the parent operation can continue to the next
+iteration, even if a worker has not finished its work.  Several works have
+proposed asynchronous algorithms, reporting benefits in execution time, and
+scalability. In these works, sub-populations
+are processed independently and communicate asynchronously through a central
+repository or message queue [refs needed to our previous work].
 
 When designing efficient multi-population algorithms, researchers need to
 consider additional issues. These include the number and size of subpopulations,
