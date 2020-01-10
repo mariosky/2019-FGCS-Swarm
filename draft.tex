@@ -68,16 +68,16 @@ are Genetic Algorithms (GAs), Genetic Programming (GP), grey wolf optimization
 (GWO) and Differential Evolution (DE), while examples of (SI) are particle swarm
 optimization (PSO) and ant colony algorithms (ACO).
 
-As in nature, population-based algorithms are intrinsically parallel and
+Population-based algorithms are intrinsically parallel and
 asynchronous. The fitness of each individual can be evaluated independently of
 others, and similarly, each population could evolve in isolation. Since 
 earlier works, researchers have been proposing some form of parallelization
 \cite{muhlenbein1988evolution} to increase the scalability of these algorithms.
 The island model was one of the first techniques proposed for parallelization,
-which lead to an increased performance
-\cite{gorges1990explicit,grosso1985computer}. The concept was to divide a large
-population into communicated subpopulations. Since then, other population-based
-algorithms have adopted the concept, and researchers have found other benefits
+which lead to an increased performance \cite{gorges1990explicit,grosso1985computer}. 
+The concept was to divide a large population into communicated subpopulations. 
+Since then, other population-based algorithms have adopted the concept, 
+and researchers have found additional benefits
 besides the execution speed; these include avoiding a premature convergence and
 maintaining the diversity of the global population. Researchers use the term
 multi-population based methods when generally referring to techniques using
@@ -90,7 +90,7 @@ strategy and parametrization of each subpopulation. We must take into account
 these high-level issues when designing a parallel architecture. 
 
 The parallel execution of multi-population algorithms has been the focus of many
-works,  going from earlier hardware-based works using transputers,
+works,  going from earlier hardware-based implementations using transputers,
 multi-threaded, and multi-core systems. Recently the trend has been on
 exploiting a higher number of processing units by using GPUs, or distributed
 systems: client-server, web-based, map-reduce,  grid, and cloud computing. Cloud
@@ -98,42 +98,30 @@ computing is becoming the standard way of running enterprise applications, not
 only because of the convenience of the pay-as-you-go model or the non-existent
 cost of administration, but it also offers a way of describing the
 infrastructure as part of the code, so that it is much easier to reproduce
-results and has been a boon for scientific computing.  However,  cloud computing
+results and this has been a boon for scientific computing.  However,  cloud computing
 has also been evolving, going from monolithic applications, that is,
 applications built on a single stack of services that communicate by layers, to
 microservice and serverless architectures that favor the parallel and
 asynchronous communication of heterogeneous resources. In these architectures,
-services or even functions are single processing points, that depart from the
-monolithic or even distributed paradigm to become a loose collection of {\em
-microservices} \cite{microservices}, which in many cases are stateless, that
-react to events and they only exist while they are doing some processing. 
+services or even functions are seen as single processing points, that departing
+from the monolithic and even distributed paradigms, become a loose collection of 
+{\em stateless functions}, that react to events and they only exist while they 
+are doing some processing. 
 
-Based on these considerations, in this work, we present the design and
-implementation of a reactive multi-population based platform extending the
-architecture proposed in [Anonymous]; this is a so-called {\em serverless}
-architecture that asynchronously processes isolated and heterogeneous
-subpopulations. In the proposed reactive system, each subpopulation is trated as
-a message that is pushed asynchronously into a message queue. Messages trigger
-stateless functions that receive the subpopulation and proceed to run an
-algorithm, using the parameters and population included in the message. After
-the specified number of iterations, each stateless function returns the evolved
-subpopulation by again pushing a message to another queue, used for receiving
-the resulting subpopulations. Subpopulations are received from the queue by a
-controller that is responsible for mixing the individuals from different
-subpopulations and producing new subpopulations. These new subpopulations are
-pushed again by the controller into the message queue, creating a loop. The
-cycle stops when the controller receives a subpopulation containing a candidate
-solution that satisfies a particular condition, or a maximum number of messages
-were received. 
 
-To evaluate the capability of a cross-breed multi-population solution,
-we conducted several experiments using different benchmark functions, comparing the
-results of single versus cross-breed multi-population algorithms. For the experiments, we choose to
-compare the PSO and GA algorithms, as they are well understood, and there are
-several implementations in the literature. We implemented both algorithms as
-stateless functions, and more algorithms can be added in the same way.
+Based on a reactive architecture \cite{guervos2018introducing} , each subpopulation is represented as an event message that is pushed asynchronously into a message queue. Incoming messages trigger stateless functions that receive the subpopulation and proceed to run an algorithm, using the parameters and population included in the message. After the specified number of iterations, each stateless function returns the evolved subpopulation by again pushing a message to another queue, used for receiving the resulting subpopulations. Subpopulations are received from the queue by a controller that is responsible for mixing the individuals from different subpopulations and producing new subpopulations. These new subpopulations are pushed again by the controller into the message queue, creating a loop. The cycle stops when the controller receives a subpopulation containing a candidate solution that satisfies a particular condition, or a maximum number of messages were received. 
 
-The rest of the paper is organized as follows
+Taking these factors into account, in this work, we present Swarm, a  multi-container Docker application that reactively processes isolated and heterogeneous subpopulations. The platform uses the Docker Compose tool for defining and running experiments as multi-container applications. Docker Container images host the stateless functions responsible for running algorithms on subpopulations. Researchers then define the configuration of services used by a multi-population algorithm using a YAML file. Other researchers can deploy and start all the services from this configuration file with a single command. Once the services are up, multiple instances of an experiment can be sent to a queue for their execution.  The platform includes containerized services that are compatible with other container orchestration technologies like Kubernetes and Docker Swarm. The services included are a Redis Server used for the Message Queue implementation and logging and an Experiment Controller implemented in python.  Developers of sub-population processing functions have the freedom to implement new population-based algorithms or operators in the language they choose inside a container, as they only need to subscribe to a channel of the Message Queue and have the ability to read the population and parameters as JSON file.  
+
+This paper extends our earlier publication on the topic \cite{guervos2018introducing}, and we highlight the main contributions as follows:
+
+\begin{itemize}
+	\item First, we present the design and implementation of a reactive container-based application for the asynchronous execution of multi-population algorithms. The source code and example container definitions are publicly available.
+	\item Second, we propose a method for the deployment and execution of multiple experiments by specifying the infrastructure as part of an experiment definition in both local or cloud environments,  facilitating the reproduction of experimental results.
+	\item Third, the application is compatible with the COCO benchmark framework, allowing researchers to compare the performance of their algorithms with other works.
+	\item Lastly, we present an empirical study to validate the applicability of our application,  measuring the execution time, speedup, and a comparison between homogeneous and an ensemble of multi-populations, using Genetic Algorithms (GAs) and Particle Swarm Optimization (PSO) in a benchmark for the optimization of continuous functions.
+\end{itemize}
+
 
 \section{Multi-population design}
 
@@ -183,13 +171,8 @@ success. Moreover, there is a need for frameworks, architecture, and
 implementation models that can allow researchers the development of new
 parallel, asynchronous, heterogeneous, and parameter-free algorithms in a scalable way.  
 
-\section{Bibliography styles}
-
-There are various bibliography styles available. You can select the style of your choice in the preamble of this document. These styles are Elsevier styles based on standard styles like Harvard and Vancouver. Please use Bib\TeX\ to generate your bibliography and include DOIs whenever available.
-
-Here are two sample references: \cite{Feynman1963118,Dirac1953888}.
 
 \bibliographystyle{elsarticle-num}
-\bibliography{mybibfile}
+\bibliography{multipopulation, serverless}
 
 \end{document}
