@@ -109,17 +109,60 @@ from the monolithic and even distributed paradigms, become a loose collection of
 are doing some processing. 
 
 
-Based on a reactive architecture \cite{guervos2018introducing} , each subpopulation is represented as an event message that is pushed asynchronously into a message queue. Incoming messages trigger stateless functions that receive the subpopulation and proceed to run an algorithm, using the parameters and population included in the message. After the specified number of iterations, each stateless function returns the evolved subpopulation by again pushing a message to another queue, used for receiving the resulting subpopulations. Subpopulations are received from the queue by a controller that is responsible for mixing the individuals from different subpopulations and producing new subpopulations. These new subpopulations are pushed again by the controller into the message queue, creating a loop. The cycle stops when the controller receives a subpopulation containing a candidate solution that satisfies a particular condition, or a maximum number of messages were received. 
+Based on a reactive architecture \cite{guervos2018introducing} , each
+subpopulation is represented as an event message that is pushed asynchronously
+into a message queue. Incoming messages trigger stateless functions that receive
+the subpopulation and proceed to run an algorithm, using the parameters and
+population included in the message. After the specified number of iterations,
+each stateless function returns the evolved subpopulation by again pushing a
+message to another queue, used for receiving the resulting subpopulations.
+Subpopulations are received from the queue by a controller that is responsible
+for mixing the individuals from different subpopulations and producing new
+subpopulations. These new subpopulations are pushed again by the controller into
+the message queue, creating a loop. The cycle stops when the controller receives
+a subpopulation containing a candidate solution that satisfies a particular
+condition, or a maximum number of messages were received.
 
-Taking these factors into account, in this work, we present Swarm, a  multi-container Docker application that reactively processes isolated and heterogeneous subpopulations. The platform uses the Docker Compose tool for defining and running experiments as multi-container applications. Docker Container images host the stateless functions responsible for running algorithms on subpopulations. Researchers then define the configuration of services used by a multi-population algorithm using a YAML file. Other researchers can deploy and start all the services from this configuration file with a single command. Once the services are up, multiple instances of an experiment can be sent to a queue for their execution.  The platform includes containerized services that are compatible with other container orchestration technologies like Kubernetes and Docker Swarm. The services included are a Redis Server used for the Message Queue implementation and logging and an Experiment Controller implemented in python.  Developers of sub-population processing functions have the freedom to implement new population-based algorithms or operators in the language they choose inside a container, as they only need to subscribe to a channel of the Message Queue and have the ability to read the population and parameters as JSON file.  
+Taking these factors into account, in this work, we present Swarm, a
+multi-container Docker application that reactively processes isolated and
+heterogeneous subpopulations. The platform uses the Docker Compose tool for
+defining and running experiments as multi-container applications. Docker
+Container images host the stateless functions responsible for running algorithms
+on subpopulations. Researchers then define the configuration of services used by
+a multi-population algorithm using a YAML file. Other researchers can deploy and
+start all the services from this configuration file with a single command. Once
+the services are up, multiple instances of an experiment can be sent to a queue
+for their execution. The platform includes containerized services that are
+compatible with other container orchestration technologies like Kubernetes and
+Docker Swarm. The services included are a Redis Server used for the Message
+Queue implementation and logging and an Experiment Controller implemented in
+python. Developers of sub-population processing functions have the freedom to
+implement new population-based algorithms or operators in the language they
+choose inside a container, as they only need to subscribe to a channel of the
+Message Queue and have the ability to read the population and parameters as JSON  
+file.
 
-This paper extends our earlier publication on the topic \cite{guervos2018introducing}, and we highlight the main contributions as follows:
+This paper extends our earlier publication on the topic
+\cite{guervos2018introducing}, and we highlight the main contributions as
+follows:
 
 \begin{itemize}
-	\item First, we present the design and implementation of a reactive container-based application for the asynchronous execution of multi-population algorithms. The source code and example container definitions are publicly available.
-	\item Second, we propose a method for the deployment and execution of multiple experiments by specifying the infrastructure as part of an experiment definition in both local or cloud environments,  facilitating the reproduction of experimental results.
-	\item Third, the application is compatible with the COCO benchmark framework, allowing researchers to compare the performance of their algorithms with other works.
-	\item Lastly, we present an empirical study to validate the applicability of our application,  measuring the execution time, speedup, and a comparison between homogeneous and an ensemble of multi-populations, using Genetic Algorithms (GAs) and Particle Swarm Optimization (PSO) in a benchmark for the optimization of continuous functions.
+    \item First, we present the design and implementation of a reactive 
+    container-based application for the asynchronous execution of multi-population 
+    algorithms. The source code and example container definitions are publicly available.
+    \item Second, we propose a method for the deployment and execution of 
+    multiple experiments by specifying the infrastructure as part of an 
+    experiment definition in both local or cloud environments,
+    facilitating the reproduction of experimental results.
+    \item Third, the application is compatible with the COCO benchmark 
+    framework, allowing researchers to compare the performance of their 
+    algorithms with other works.
+    \item Lastly, we present an empirical study to validate the 
+    applicability of our application,  measuring the execution time, 
+    speedup, and a comparison between homogeneous and an ensemble of 
+    multi-populations, using Genetic Algorithms (GAs) and Particle 
+    Swarm Optimization (PSO) in a benchmark for the optimization of 
+    continuous functions.
 \end{itemize}
 
 
