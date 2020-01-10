@@ -208,15 +208,22 @@ follows:
 Multi-population based methods divide the original population into
 smaller subpopulations or islands, with every subpopulation carrying out the
 algorithm independently, with synchronous or asynchronous communication with the
-rest of the islands. This relative isolation helps in maintaining an overall
+rest of the islands. % exemplify how this is done in different
+                     % metaheuristics, especially those we will be
+                     % using here - JJ
+This relative isolation helps in maintaining an overall
 diversity since each subpopulation will search in a particular area, at least
 between communications. The recombination mentioned above (mixing) or migration
 between subpopulations is needed to avoid a premature convergence of candidate
 solutions since smaller populations are known to perform better for a given
-problem than bigger populations. However, it gives them the added advantage of
+problem than bigger populations. % Smaller populations converge
+                                % prematurely or perform better? - JJ
+However, it gives them the added advantage of
 parallel operation. Additionally, and in some cases, multi-population algorithms
 scale better than expected due to the interaction between the algorithm and the
-parallelism of the operation \cite{ALBA20027}.
+parallelism of the operation \cite{ALBA20027}. % Need to clarify this
+                                % and if it extends to Swarm
+                                % algorithms too
 
 However, in most cases, algorithms applied to each subpopulation are
 homogeneous, or at any rate, the same variant of the algorithm. As long as this
