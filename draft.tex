@@ -22,35 +22,27 @@
 \address[granada]{Universidad de Granada, Granada, Spain}
 
 \begin{abstract}
-    Multi-population based methods have been used extensively in recent years to
-    improve the performance of nature-inspired optimization algorithms.
-    Researchers try to avoid premature convergence and maintain population
-    diversity by dividing the original population into multiple small
-    subpopulations. Each subpopulation then evolves independently using a
-    specified search strategy. Finally, these subpopulations communicate with
-    each other to exchange individuals. Multi-population based methods are
-    parallel and asynchronous by nature; researchers take advantage of this to
-    scale algorithms with distributed, multi-threaded, and parallel
-    implementations. The design of parallel and distributed versions of
-    multi-population algorithms for their execution in cloud infrastructures is
-    not a trivial task. Designers need to adapt the algorithms to leverage the
-    benefits of scalability, elasticity, fault-tolerance, reproducibility,  and
-    cost-effectiveness of cloud-based systems. In this work, we present the
-    design and implementation of a novel event-driven architecture, designed to
-    distribute the processing of population-based algorithms asynchronously. The
-    system provides researchers a serverless strategy for creating multiple
-    populations with different parameters of execution, allowing the
-    implementation of multiple algorithms. We provide a container-based platform
-    where researchers can deploy experiments by just specifying the resources
-    and parameters of the algorithm. The performance of the platform and the
-    benefits of a multi-population approach has been evaluated using an ensemble
-    of Genetic  Algorithms (GAs) and Particle Swarm Optimization (PSO).
-    Experiments show that the framework allows the combined algorithms to
-    outperform, with a high probability, single-algorithm versions. The
-    framework we provide also has few parameters to tune since single-algorithm
-    parameters are selected randomly. The architecture and the implemented
-    platform is an excellent alternative for locally or a cloud-based
-    deployment.
+    Multi-population based optimization methods are parallel and asynchronous by
+    nature; researchers take advantage of this to scale algorithms with
+    distributed, multi-threaded, and parallel implementations. However, the design of
+    parallel and distributed versions of multi-population algorithms for their
+    execution in cloud infrastructures is not a trivial task. Designers need to
+    adapt the algorithms to leverage the benefits of scalability, elasticity,
+    fault-tolerance, reproducibility, and cost-effectiveness of reactive
+    cloud-based systems. In this work, we present the design and
+    implementation of a reactive container-based application for the execution
+    of multi-population algorithms. The application can be used to execute
+    multiple experiments, both locally or in a cloud environment. Researchers
+    can deploy experiments by specifying the infrastructure as part of an
+    experiment definition so that it is much easier to reproduce results. The
+    performance of the platform and the benefits of a multi-population approach
+    has been evaluated using an ensemble of Genetic  Algorithms (GAs) and
+    Particle Swarm Optimization (PSO). Experiments show that the framework
+    allows the combined algorithms to outperform, with a high probability,
+    single-algorithm versions. The framework we provide also has fewer
+    parameters to tune since single-algorithm parameters are selected randomly.
+    The architecture and the implemented platform is an excellent alternative
+    for locally or a cloud-based deployment.
 \end{abstract}
 
 \begin{keyword}
@@ -63,6 +55,132 @@ Multi-population \sep Nature-inspired algorithm \sep Parallel Genetic Algorithms
 \linenumbers
 
 \section{Introduction}
+
+In the last decades, nature-inspired optimization algorithms have been succesfully
+applied to solve complex real-world problems \cite{yang2014nature}. Algorithms
+inspired in natural processes include evolutionary algorithms (EAs)
+\cite{back1996evolutionary} and swarm intelligence (SI) \cite{kennedy2006swarm},
+among others. These population-based algorithms share the common characteristic
+of using an initial set of random candidate solutions that are later used to
+generate a new set of candidates, using a nature-inspired heuristic. Popular EAs
+are Genetic Algorithms (GAs), Genetic Programming (GP), grey wolf optimization
+(GWO) and Differential Evolution (DE), while examples of (SI) are particle swarm
+optimization (PSO) and ant colony algorithms (ACO).
+
+As in nature, population-based algorithms are intrinsically parallel and
+asynchronous. The fitness of each individual can be evaluated independently of
+others, and similarly, each population could evolve in isolation. Since 
+earlier works, researchers have been proposing some form of parallelization
+\cite{muhlenbein1988evolution} to increase the scalability of these algorithms.
+The island model was one of the first techniques proposed for parallelization,
+which lead to an increased performance
+\cite{gorges1990explicit,grosso1985computer}. The concept was to divide a large
+population into communicated subpopulations. Since then, other population-based
+algorithms have adopted the concept, and researchers have found other benefits
+besides the execution speed; these include avoiding a premature convergence and
+maintaining the diversity of the global population. Researchers use the term
+multi-population based methods when generally referring to techniques using
+subpopulations as part of their optimization strategy.
+
+When designing efficient multi-population algorithms, researchers need to
+consider additional issues. These include the number and size of subpopulations,
+the interaction between them, the search area of subpopulations, and the search
+strategy and parametrization of each subpopulation. We must take into account
+these high-level issues when designing a parallel architecture. 
+
+The parallel execution of multi-population algorithms has been the focus of many
+works,  going from earlier hardware-based works using transputers,
+multi-threaded, and multi-core systems. Recently the trend has been on
+exploiting a higher number of processing units by using GPUs, or distributed
+systems: client-server, web-based, map-reduce,  grid, and cloud computing. Cloud
+computing is becoming the standard way of running enterprise applications, not
+only because of the convenience of the pay-as-you-go model or the non-existent
+cost of administration, but it also offers a way of describing the
+infrastructure as part of the code, so that it is much easier to reproduce
+results and has been a boon for scientific computing.  However,  cloud computing
+has also been evolving, going from monolithic applications, that is,
+applications built on a single stack of services that communicate by layers, to
+microservice and serverless architectures that favor the parallel and
+asynchronous communication of heterogeneous resources. In these architectures,
+services or even functions are single processing points, that depart from the
+monolithic or even distributed paradigm to become a loose collection of {\em
+microservices} \cite{microservices}, which in many cases are stateless, that
+react to events and they only exist while they are doing some processing. 
+
+Based on these considerations, in this work, we present the design and
+implementation of a reactive multi-population based platform extending the
+architecture proposed in [Anonymous]; this is a so-called {\em serverless}
+architecture that asynchronously processes isolated and heterogeneous
+subpopulations. In the proposed reactive system, each subpopulation is trated as
+a message that is pushed asynchronously into a message queue. Messages trigger
+stateless functions that receive the subpopulation and proceed to run an
+algorithm, using the parameters and population included in the message. After
+the specified number of iterations, each stateless function returns the evolved
+subpopulation by again pushing a message to another queue, used for receiving
+the resulting subpopulations. Subpopulations are received from the queue by a
+controller that is responsible for mixing the individuals from different
+subpopulations and producing new subpopulations. These new subpopulations are
+pushed again by the controller into the message queue, creating a loop. The
+cycle stops when the controller receives a subpopulation containing a candidate
+solution that satisfies a particular condition, or a maximum number of messages
+were received. 
+
+To evaluate the capability of a cross-breed multi-population solution,
+we conducted several experiments using different benchmark functions, comparing the
+results of single versus cross-breed multi-population algorithms. For the experiments, we choose to
+compare the PSO and GA algorithms, as they are well understood, and there are
+several implementations in the literature. We implemented both algorithms as
+stateless functions, and more algorithms can be added in the same way.
+
+The rest of the paper is organized as follows
+
+\section{Multi-population design}
+
+Multi-population based methods divide the original population into
+smaller subpopulations or islands, with every subpopulation carrying out the
+algorithm independently, with synchronous or asynchronous communication with the
+rest of the islands. This relative isolation helps in maintaining an overall
+diversity since each subpopulation will search in a particular area, at least
+between communications. The recombination mentioned above (mixing) or migration
+between subpopulations is needed to avoid a premature convergence of candidate
+solutions since smaller populations are known to perform better for a given
+problem than bigger populations. However, it gives them the added advantage of
+parallel operation. Additionally, and in some cases, multi-population algorithms
+scale better than expected due to the interaction between the algorithm and the
+parallelism of the operation \cite{ALBA20027}.
+
+However, in most cases, algorithms applied to each subpopulation are
+homogeneous, or at any rate, the same variant of the algorithm. As long as this
+parallel operation is not synchronous, other population-based algorithms, or, as
+a matter of fact, any algorithm, could be easily integrated. That is why several
+works based on multi-population are heterogeneous, integrating various
+optimization algorithms, and often performing better than single-population or
+homogeneous optimization algorithms \cite{wu2016differential,nseef2016adaptive}.
+
+Heterogeneous algorithms add another degree of freedom to the problem of finding
+the correct parameter settings for an algorithm; because some parameters affect
+the accuracy of the solution and the convergence speed of the algorithms as they
+tip the balance between exploration and exploitation of the search space. On the
+other hand, current studies show that by having a high number of subpopulations
+interacting in parallel, the effect of the individual parameters of each
+subpopulation is compensated by those selected in other subpopulations. In this
+work, we will use random settings within a specific range as results have shown
+this is a valid solution to this problem. 
+
+Some parameters, specially the population size, are
+kept fixed in order to control more easily the execution of the algorithm. For
+instance, by having the size of subpopulations fixed, it is easier to control
+the number of evaluations and the communication costs, when the algorithm is in
+operation.
+
+Combining multiple algorithms, with different parameters, interacting with each
+other at the same time, can benefit from the strengths of each. For instance, a
+genetic algorithm could find a promising global solution that is not optimal
+while another algorithm, more suitable for a local search, finds the global
+optimum. This approach has been followed extensively in recent years, with
+success. Moreover, there is a need for frameworks, architecture, and
+implementation models that can allow researchers the development of new
+parallel, asynchronous, heterogeneous, and parameter-free algorithms in a scalable way.  
 
 \section{Bibliography styles}
 
