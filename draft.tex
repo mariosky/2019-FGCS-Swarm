@@ -11,7 +11,7 @@
 
 \title{An Event-based Architecture for Multi-population Optimization Algorithms}
 
-\author[itt]{Mario Garci\'a Valdez}\corref{mycorrespondingauthor}
+\author[itt]{Mario Garc\'ia Valdez}\corref{mycorrespondingauthor}
 \cortext[mycorrespondingauthor]{Corresponding author}
 \ead{mario@tectijuana.edu.mx}
 
@@ -59,7 +59,7 @@ Multi-population \sep Nature-inspired algorithm \sep Parallel Genetic Algorithms
 
 In the last decades, nature-inspired optimization algorithms have been succesfully
 applied to solve complex real-world problems \cite{yang2014nature}. Algorithms
-inspired in natural processes include evolutionary algorithms (EAs)
+inspired by natural processes include evolutionary algorithms (EAs)
 \cite{back1996evolutionary} and swarm intelligence (SI) \cite{kennedy2006swarm},
 among others. These population-based algorithms share the common characteristic
 of using an initial set of random candidate solutions that are later used to
@@ -68,8 +68,8 @@ are Genetic Algorithms (GAs), Genetic Programming (GP), grey wolf optimization
 (GWO) and Differential Evolution (DE), while examples of (SI) are particle swarm
 optimization (PSO) and ant colony algorithms (ACO).
 
-Population-based algorithms are intrinsically parallel and
-asynchronous. The fitness of each individual can be evaluated independently of
+Population-based algorithms are intrinsically parallel, and can be implemented in an asynchronous. % They needn't be intrinsically asynchronous, I think. Most are implemented synchronouslu - JJ
+The fitness of each individual can be evaluated independently of
 others, and similarly, each population could evolve in isolation. Since 
 earlier works, researchers have been proposing some form of parallelization
 \cite{muhlenbein1988evolution} to increase the scalability of these algorithms.
@@ -81,7 +81,7 @@ and researchers have found additional benefits
 besides the execution speed; these include avoiding a premature convergence and
 maintaining the diversity of the global population. Researchers use the term
 multi-population based methods when generally referring to techniques using
-subpopulations as part of their optimization strategy.
+subpopulations as part of their optimization strategy. % Some comment about asynchrony would be in order - JJ
 
 When designing efficient multi-population algorithms, researchers need to
 consider additional issues. These include the number and size of subpopulations,
@@ -91,24 +91,26 @@ these high-level issues when designing a parallel architecture.
 
 The parallel execution of multi-population algorithms has been the focus of many
 works,  going from earlier hardware-based implementations using transputers,
-multi-threaded, and multi-core systems. Recently the trend has been on
+multi-threaded, and multi-core systems. % many citations here - JJ
+Recently the trend has been on
 exploiting a higher number of processing units by using GPUs, or distributed
-systems: client-server, web-based, map-reduce,  grid, and cloud computing. Cloud
-computing is becoming the standard way of running enterprise applications, not
+systems; techniques used to achieve this include client-server, web-based, map-reduce,  grid, and cloud computing. % many references here too - JJ
+Cloud
+computing has become the standard way of running enterprise applications, not
 only because of the convenience of the pay-as-you-go model or the non-existent
-cost of administration, but it also offers a way of describing the
+cost of administration, but also because it offers a way of describing the
 infrastructure as part of the code, so that it is much easier to reproduce
 results and this has been a boon for scientific computing.  However,  cloud computing
-has also been evolving, going from monolithic applications, that is,
+has also been evolving, going from simply putting in the cloud old-style monolithic applications, that is,
 applications built on a single stack of services that communicate by layers, to
 microservice and serverless architectures that favor the parallel and
-asynchronous communication of heterogeneous resources. In these architectures,
-services or even functions are seen as single processing points, that departing
-from the monolithic and even distributed paradigms, become a loose collection of 
-{\em stateless functions}, that react to events and they only exist while they 
-are doing some processing. 
+asynchronous communication of heterogeneous resources; in the process, a new process for designing {\em cloud native applications} has been created, with brand new methodologies and techniques. In these architectures,
+services or even functions are seen as single processing points,  departing
+from the monolithic and even distributed paradigms, become a loosely coupled collection of 
+{\em stateless functions}, that react to events and only come into existence while they 
+are doing some processing. % many references more here - JJ
 
-
+% Again, you have to justify the need for a reactive architecture and define it before this paragraph - JJ
 Based on a reactive architecture \cite{guervos2018introducing} , each
 subpopulation is represented as an event message that is pushed asynchronously
 into a message queue. Incoming messages trigger stateless functions that receive
@@ -123,20 +125,36 @@ the message queue, creating a loop. The cycle stops when the controller receives
 a subpopulation containing a candidate solution that satisfies a particular
 condition, or a maximum number of messages were received.
 
-Taking these factors into account, in this work, we present Swarm, a
+% There is a big gap here where you go from generic considerations
+% about cloud computing to the presentation of this method. In the
+% middle, there should be motivation for it, what are you trying to
+% address precisely, and how you intend to address it. "Approaching
+% multi-population algorithms in cloud computing" is not nearly
+% enough. There are several points here, and every one of them needs
+% to be addressed and justified
+% * Using containers as opposed to a serverless architecture or a
+% virtual-machine based one.
+% * Combining several metaheuristics instead of using a single one.
+% * Reducing the amount of parameters.
+% There needs to be a motivation for every one, relate them to the
+% objectives of the paper (which need to be clarified) and eventually
+% prove the contribution of every one of them to the final result - JJ
+Taking these factors into account, in this work, we present Swarm, % maybe a less generic name? - JJ
+a
 multi-container Docker application that reactively processes isolated and
 heterogeneous subpopulations. The platform uses the Docker Compose tool for
-defining and running experiments as multi-container applications. Docker
+defining and running experiments as multi-container applications. % Docker compose is not really for production, more for development environments, you have to justify this. Also, it does not handle scaling so need to justify it too - JJ
+Docker
 Container images host the stateless functions responsible for running algorithms
 on subpopulations. Researchers then define the configuration of services used by
-a multi-population algorithm using a YAML file. Other researchers can deploy and
+a multi-population algorithm using a YAML file. Any researcher can deploy and
 start all the services from this configuration file with a single command. Once
 the services are up, multiple instances of an experiment can be sent to a queue
 for their execution. The platform includes containerized services that are
 compatible with other container orchestration technologies like Kubernetes and
 Docker Swarm. The services included are a Redis Server used for the Message
 Queue implementation and logging and an Experiment Controller implemented in
-python. Developers of sub-population processing functions have the freedom to
+Python. Developers of sub-population processing functions have the freedom to
 implement new population-based algorithms or operators in the language they
 choose inside a container, as they only need to subscribe to a channel of the
 Message Queue and have the ability to read the population and parameters as JSON  
