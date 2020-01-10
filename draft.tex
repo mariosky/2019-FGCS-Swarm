@@ -24,18 +24,18 @@
 \begin{abstract} 
 Multi-population based methods have been used extensively in
 recent years to improve the performance of nature-inspired optimization
-algorithms, these methods are parallel and asynchronous by nature; researchers
-take advantage of this to scale algorithms with distributed, multi-threaded,
-parallel and cloud-based implementations. However, the design of distributed
-versions of multi-population algorithms for their execution in cloud
-infrastructures is not a trivial task. Designers need to adapt the algorithms to
-leverage the benefits of scalability, elasticity, fault-tolerance,
-reproducibility, and cost-effectiveness of reactive cloud-based systems. In this
+algorithms, these methods are parallel and asynchronous by nature and researchers
+leverage this to scale algorithms % scale algorithms or implementations? - JJ
+with distributed, multi-threaded,
+parallel and cloud-based implementations. However, the design  of cloud-native,  distributed, multi-population algorithms is not a trivial task. Designers need to adapt the algorithms, while keeping its nature, to
+leverage the scalability, elasticity, fault-tolerance,
+reproducibility, and cost-effectiveness of reactive cloud-based systems. % reactive is mentioned here for the first time. Possibly you should just refer to "cloud-native" and then specify that it implies asynchrony, reactivity, and so on - JJ
+In this
 work, we present the design and implementation of a reactive container-based
 application for the execution of multi-population algorithms. Researchers can
 use the application to execute multiple experiments, both locally or in a cloud
 environment and deploy experiments by specifying the infrastructure as part of
-an experiment definition so that it is much easier to reproduce results. We
+an experiment definition so that results are easily reproducible. We
 evaluated the performance of the platform and the benefits of a multi-population
 approach by using an ensemble of Genetic Algorithms (GAs) and Particle Swarm
 Optimization (PSO) in a benchmark for the optimization of continuous functions.
@@ -43,7 +43,7 @@ Experiments show that the framework allows the ensemble to outperform
 single-algorithm versions. The framework we provide also has fewer parameters to
 tune since subpopulation parameters are selected randomly. The architecture and
 the implemented platform is an excellent alternative for locally or a
-cloud-based deployment. 
+cloud-based deployment.
 \end{abstract}
 
 \begin{keyword}
