@@ -24,30 +24,44 @@
 \begin{abstract} 
 Multi-population based methods have been used extensively in
 recent years to improve the performance of nature-inspired optimization
-algorithms, these methods are parallel and asynchronous by nature and researchers
+algorithms. These methods are parallel and asynchronous by nature and researchers
 leverage this to scale implementations % scale algorithms or implementations? - JJ   
-%I think they are both, but in this case, implementation is more appropriate - Mario  
+% I think they are both, but in this case, implementation is more appropriate - Mario
 with distributed, multi-threaded,
-parallel and cloud-based implementations. However, the design  of cloud-native,  
-distributed, multi-population algorithms is not a trivial task. Designers need to adapt the algorithms, while keeping its nature, to
+parallel and cloud-based implementations. % scale implementations with ... implementations. Please rephrase - JJ
+However, the design  of these cloud-native,  
+distributed, multi-population algorithms is not a trivial task. Designers need to adapt the algorithms,
+% design of algorithms is not trivial... designer need to adapt the algorithms... Maybe rephrase to avoid repetition - JJ
+while keeping its nature, to
 leverage the scalability, elasticity, fault-tolerance,
 reproducibility, and cost-effectiveness of cloud-native systems. 
-% reactive is mentioned here for the first time. Possibly you should just refer to "cloud-native" and then specify that it implies asynchrony, reactivity, and so on - JJ
-% OK - Mario
+% Something about "this is the problem we want to address... " to link the previous sentence with this one - JJ
 In this
 work, we present the design and implementation of a reactive container-based
+% again maybe it's better cloud-native instead of reactive - JJ
 application for the execution of multi-population algorithms. Researchers can
 use the application to execute multiple experiments, both locally or in a cloud
 environment and deploy experiments by specifying the infrastructure as part of
-an experiment definition so that results are easily reproducible. We
+an experiment definition so that results are easily reproducible. % A sentence on how this implementation is better than the state of the art - JJ
+% For instance "Generally the current implementations include a single algorithm, which is bad because... " - JJ
+% Also "Current implementations are more or less functional equivalent to parallel, including the fact that they run copies of the same, parametrized, algorithm...
+% If this is too long, maybe just some reference about "current implementation do not leverage the fact that (you can use different algorithms, and differently parametrized...) and then qualify this in the introduction - JJ
+We
 evaluated the performance of the platform and the benefits of a multi-population
+% performance evaluation always needs to have an objective. What is the main objective of this performance evaluation? - JJ
 approach by using an ensemble of Genetic Algorithms (GAs) and Particle Swarm
 Optimization (PSO) in a benchmark for the optimization of continuous functions.
 Experiments show that the framework allows the ensemble to outperform
-single-algorithm versions. The framework we provide also has fewer parameters to
-tune since subpopulation parameters are selected randomly. The architecture and
+single-algorithm versions. % If this is the objective, then
+% 1) say that the state of the art is using single-algorithm implementations and this might not be the best
+% 2) state it clearly as the objective of the performance evaluation - JJ
+The framework we provide also has fewer parameters to
+tune since subpopulation parameters are selected randomly. % Again, this can't be a result if it's not a research question. - JJ
+% It needs to be a consequence of using a cloud-native architecture - JJ
+% Before this, "experiments prove that... "
+The architecture and
 the implemented platform is an excellent alternative for locally or a
-cloud-based deployment.
+cloud-based deployment, % thus proving that cloud-native bioinspired algorithms perform better in their "natural" environment that other kind of algorithms - JJ
 \end{abstract}
 
 \begin{keyword}
