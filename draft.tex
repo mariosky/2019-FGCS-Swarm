@@ -65,15 +65,12 @@ to outperform single-algorithm versions,
 % We also run experiments to see the effect of population size for seveal problem sizes  
 % Against NUMBER OF WORKERS (this concept is not mentioned yet)
 % We can add something like:      
-% Moreover, we evaluated the effect other 
-% design parameters had on the performance; in particular, the number and the size of 
-% populations concerning the problem size. - Mario
-thus proving that cloud-native bioinspired algorithms perform better 
-in their "natural" environment than other kinds of algorithms.
-
-%The architecture and the implemented platform is an excellent alternative for
-%locally or a cloud-based deployment, 
-% thus proving that cloud-native bioinspired algorithms perform better in their "natural" environment that other kind of algorithms - JJ 
+Moreover, we evaluated the effect other design parameters had on the
+performance; in particular, the number and the size of populations concerning
+the problem size. The architecture and the implemented platform is an excellent
+alternative for locally or in the cloud, thus proving that cloud-native
+bioinspired algorithms perform better in their "natural" environment than other
+kinds of algorithms.
 \end{abstract}
 
 \begin{keyword}
@@ -96,11 +93,11 @@ of using an initial set of random candidate solutions that are later used to
 generate a new set of candidates, using a nature-inspired heuristic. Popular EAs
 are Genetic Algorithms (GAs) \cite{holland1992adaptation,eiben2003genetic}, 
 Genetic Programming (GP) \cite{back1996evolutionary}, Grey Wolf Optimization
-(GWO) and Differential Evolution (DE), while examples of (SI) are particle swarm
-optimization (PSO) and ant colony algorithms (ACO).
+(GWO) \cite{mirjalili2014grey} and Differential Evolution (DE) \cite{karabouga2004simple},
+while examples of (SI) \cite{kennedy2006swarm} are particle swarm
+optimization (PSO) \cite{clerc2010particle} and ant colony algorithms (ACO) \cite{dorigo1999ant}.
 
-Population-based algorithms are intrinsically parallel, and can be implemented to run asynchronously. % They needn't be intrinsically asynchronous, I think. Most are implemented synchronouslu - JJ  
-%OK - M
+Population-based algorithms are intrinsically parallel, and can be implemented to run asynchronously.
 The fitness of each individual can be evaluated independently of 
 others, and similarly, each population could evolve in isolation. Since 
 earlier works, researchers have been proposing some form of parallelization
@@ -111,33 +108,35 @@ The concept was to divide a large population into communicated subpopulations.
 Since then, other population-based algorithms have adopted the concept, 
 and researchers have found additional benefits
 besides the execution speed; these include avoiding a premature convergence and
-maintaining the diversity of the global population. Researchers use the term
+maintaining the diversity of the global population \cite{li2015multi}. Researchers use the term
 multi-population based methods when generally referring to techniques using
 subpopulations as part of their optimization strategy. % Some comment about asynchrony would be in order - JJ
 % Comments below - Mario
 Moreover, parallel implementations can run in two ways: synchronous and
-asynchronous. When operations run in parallel but maintain synchronism with
-other operations,  all operations need to finish to continue to the next step.
-For instance, in a  parent/worker model, the parent needs to wait for all
+asynchronous. When operations run in parallel but must maintain synchronism with
+the other operations,  all operations need to finish to continue to the next
+step. For instance, in a  parent/worker model, the parent needs to wait for all
 workers to finish their operations before moving to the next iteration.  In
 contrast, in an asynchronous execution,  operations are not synchronized with
-each other. In the previous, the parent operation can continue to the next
-iteration, even if a worker has not finished its work.  Several works have
-proposed asynchronous algorithms \cite{coleman89,baugh2003asynchronous}, reporting benefits in execution time, and
-scalability. In other works, sub-populations
-are processed independently and communicate asynchronously through a central
-repository \cite{sofea:cec2012,JSON} or message queues \cite{salza2019speed, guervos2018introducing} .
-
+each other. Following the previous example, now the parent operation can
+continue to the next iteration, even if a worker has not finished its work.  In
+the literature, we can find many asynchronous algorithms
+\cite{coleman89,baugh2003asynchronous}, reporting benefits in execution time,
+and scalability. In the particular case of asynchronous and cloud-native
+multi-population algorithms, recent works propose an asynchronous communication
+through a central repository \cite{sofea:cec2012, JSON} or message queues
+\cite{salza2019speed, guervos2018introducing}, in this work we follow this
+practice.
 When designing efficient multi-population algorithms, researchers need to
-consider additional issues. These include the number and size of subpopulations,
+consider additional issues \cite{Ma2019}. These include the number and size of subpopulations,
 the interaction between them, the search area of subpopulations, and the search
 strategy and parametrization of each subpopulation. We must take into account
 these high-level issues when designing a parallel architecture. 
 
-The parallel execution of multi-population algorithms has been the focus of many
-works,  going from earlier hardware-based implementations using transputers \cite{gorges1990explicit},
+The trend concerning the parallel execution multi-population algorithms  
+go from earlier hardware-based implementations using transputers \cite{gorges1990explicit},
 multi-threaded \cite{merelo2019scaling}, and multi-core systems \cite{Serrano2008,lai2019adaptive}. % many citations here - JJ
-Recently the trend has been on exploiting a higher number of processing units 
+And recently the focus has been on exploiting a higher number of processing units 
 by using GPUs \cite{tan2015survey,li2007efficient}, or distributed systems; techniques used to achieve this include 
 web-based \cite{JSON}, map-reduce \cite{fazenda2012},  grid \cite{munawar2010design,Gonzalez09}, 
 voluntary computing \cite{MilkyWay}, and cloud computing 
