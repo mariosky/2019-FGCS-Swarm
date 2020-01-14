@@ -133,44 +133,52 @@ the interaction between them, the search area of subpopulations, and the search
 strategy and parametrization of each subpopulation. We must take into account
 these high-level issues when designing a parallel architecture. 
 
-The trend concerning the parallel execution multi-population algorithms  
-go from earlier hardware-based implementations using transputers \cite{gorges1990explicit},
-multi-threaded \cite{merelo2019scaling}, and multi-core systems \cite{Serrano2008,lai2019adaptive}. % many citations here - JJ
-And recently the focus has been on exploiting a higher number of processing units 
-by using GPUs \cite{tan2015survey,li2007efficient}, or distributed systems; techniques used to achieve this include 
-web-based \cite{JSON}, map-reduce \cite{fazenda2012},  grid \cite{munawar2010design,Gonzalez09}, 
-voluntary computing \cite{MilkyWay}, and cloud computing 
-\cite{GValdez2015,salza2019speed,valenzuela2015implementing,FlexGP}. % many references here too - JJ
-Cloud computing has become the standard way of running enterprise applications, not
-only because of the convenience of the pay-as-you-go model or the non-existent
-cost of administration, but also because it offers a way of describing the
-infrastructure as part of the code, so that it is much easier to reproduce
-results and this has been a boon for scientific computing.  However,  cloud computing
-has also been evolving, going from simply putting in the cloud old-style monolithic applications, that is,
-applications built on a single stack of services that communicate by layers, to
-microservices \cite{microservices} and serverless architectures \cite{varghese2018next, Varghese2018849} that favor the parallel and
-asynchronous communication of heterogeneous resources; in the process, 
-a new process for designing {\em cloud native applications} has been created, 
-with brand new methodologies and techniques \cite{Baldini2016287}. In these architectures,
-services or even functions are seen as single processing points,  departing
-from the monolithic and even distributed paradigms, become a loosely coupled collection of 
-{\em stateless functions} \cite{malawski2017serverless}, that react to events and only come into existence while they 
-are doing some processing. % many references more here - JJ
-
+The trend concerning the parallel execution multi-population algorithms go from
+earlier hardware-based implementations using transputers
+\cite{gorges1990explicit}, multi-threaded \cite{merelo2019scaling}, and
+multi-core systems \cite{Serrano2008,lai2019adaptive}. % many citations here - JJ 
+And recently the focus has been on exploiting a higher number of processing
+units by using GPUs \cite{tan2015survey,li2007efficient}, or distributed
+systems; techniques used to achieve this include web-based \cite{JSON},
+map-reduce \cite{fazenda2012},  grid \cite{munawar2010design,Gonzalez09},
+voluntary computing \cite{MilkyWay}, and cloud computing
+\cite{GValdez2015,salza2019speed,valenzuela2015implementing,FlexGP}. % many references here too - JJ 
+Cloud computing has become the standard way of running
+enterprise applications, not only because of the convenience of the
+pay-as-you-go model or the non-existent cost of administration, but also because
+it offers a way of describing the infrastructure as part of the code, so that it
+is much easier to reproduce results and this has been a boon for scientific
+computing.  However,  cloud computing has also been evolving, going from simply
+putting in the cloud old-style monolithic applications, that is, applications
+built on a single stack of services that communicate by layers, to microservices
+\cite{microservices} and serverless architectures \cite{varghese2018next,
+Varghese2018849} that favor the parallel and asynchronous communication of
+heterogeneous resources; in the process, a new process for designing {\em cloud
+native applications} has been created, with brand new methodologies and
+techniques \cite{Baldini2016287}. In these architectures, services or even
+functions are seen as single processing points, departing from the monolithic
+and even distributed paradigms, become a loosely coupled collection of {\em
+stateless functions} \cite{malawski2017serverless}, that react to events and
+only come into existence while they are doing some processing. % many references more here - JJ 
+Systems developed with the patterns outlined above have the
+properties of a reactive system \cite{boner2014reactive} and they are commonly
+more flexible, loosely-coupled, and scalable. % Some properies and reference - Mario  
 % Again, you have to justify the need for a reactive architecture and define it before this paragraph - JJ
-Based on a reactive architecture \cite{guervos2018introducing} , each
-subpopulation is represented as an event message that is pushed asynchronously
-into a message queue. Incoming messages trigger stateless functions that receive
-the subpopulation and proceed to run an algorithm, using the parameters and
-population included in the message. After the specified number of iterations,
-each stateless function returns the evolved subpopulation by again pushing a
-message to another queue, used for receiving the resulting subpopulations.
-Subpopulations are received from the queue by a controller that is responsible
-for mixing the individuals from different subpopulations and producing new
-subpopulations. These new subpopulations are pushed again by the controller into
-the message queue, creating a loop. The cycle stops when the controller receives
-a subpopulation containing a candidate solution that satisfies a particular
-condition, or a maximum number of messages were received.
+
+% This paragraph will be moved to the Proposed Method section - Mario
+% Based on a reactive architecture \cite{guervos2018introducing} , each
+% subpopulation is represented as an event message that is pushed asynchronously
+% into a message queue. Incoming messages trigger stateless functions that receive
+% the subpopulation and proceed to run an algorithm, using the parameters and
+% population included in the message. After the specified number of iterations,
+% each stateless function returns the evolved subpopulation by again pushing a
+% message to another queue, used for receiving the resulting subpopulations.
+% Subpopulations are received from the queue by a controller that is responsible
+% for mixing the individuals from different subpopulations and producing new
+% subpopulations. These new subpopulations are pushed again by the controller into
+% the message queue, creating a loop. The cycle stops when the controller receives
+% a subpopulation containing a candidate solution that satisfies a particular
+% condition, or a maximum number of messages were received.
 
 % There is a big gap here where you go from generic considerations
 % about cloud computing to the presentation of this method. In the
@@ -186,6 +194,10 @@ condition, or a maximum number of messages were received.
 % There needs to be a motivation for every one, relate them to the
 % objectives of the paper (which need to be clarified) and eventually
 % prove the contribution of every one of them to the final result - JJ
+
+
+
+
 Taking these factors into account, in this work, we present EcoSwarm, % maybe a less generic name? - JJ
 % agree - Mario
 a multi-container Docker application that reactively processes isolated and
