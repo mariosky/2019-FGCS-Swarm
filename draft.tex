@@ -31,21 +31,22 @@ applying distributed, multi-threaded, parallel, and cloud-based computing.
 % done - Mario
 However, the design  of these cloud-native,  
 distributed, multi-population algorithms is not a trivial task. Designers need
-to adapt their solutions, 
-% design of algorithms is not trivial... designer need to adapt the algorithms... Maybe rephrase to avoid repetition - JJ to leverage
+to adapt their solutions 
+% design of algorithms is not trivial... designer need to adapt the algorithms... Maybe rephrase to avoid repetition - JJ 
+to leverage
 the scalability, elasticity, fault-tolerance, reproducibility, and
 cost-effectiveness of cloud systems while conserving the intended functionality.
 % I am removing the native part above, because is also very repetetive - Mario 
 % Something about "this is the problem we want to address... " to link the previous sentence with this one - JJ 
 Furthermore, currently, there are no
 cloud-native solutions that support basic algorithm design practices that can make
-multi-population methods more efficient: having multiple search strategies and
+multi-population methods more efficient: having multiple search strategies, and
 varying the number and size of subpopulations. We address these problems in this work,
 by presenting the design and implementation of a cloud-native 
 container-based % again maybe it's better cloud-native instead of reactive - JJ
 application for the execution of ensemble multi-population algorithms. Researchers can
 use the application to execute multiple experiments, both locally or in a cloud
-environment and deploy experiments by specifying the infrastructure as part of
+environment, and deploy experiments by specifying the infrastructure as part of
 an experiment definition so that results are easily reproducible.
 % A sentence on how this implementation is better than the state of the art - JJ 
 % Added a comment above - Mario, 
@@ -61,12 +62,12 @@ not be the best solution. We compared the speedup, execution time, and the numbe
 of evaluations between a single and an ensemble approach by using Genetic Algorithms (GAs)
 and Particle Swarm Optimization (PSO) algorithms against a benchmark for the optimization
 of continuous functions. Experiments show that the framework allows the ensemble 
-to outperform single-algorithm versions,  
+to outperform single-algorithm versions.  
 % We also run experiments to see the effect of population size for seveal problem sizes  
 % Against NUMBER OF WORKERS (this concept is not mentioned yet)
 % We can add something like:      
 Moreover, we evaluated the effect other design parameters had on the
-performance; in particular, the number and the size of populations concerning
+performance, in particular, the number and the size of populations concerning
 the problem size. The architecture and the implemented platform is an excellent
 alternative for locally or in the cloud, thus proving that cloud-native
 bioinspired algorithms perform better in their "natural" environment than other
@@ -195,8 +196,26 @@ more flexible, loosely-coupled, and scalable. % Some properies and reference - M
 % objectives of the paper (which need to be clarified) and eventually
 % prove the contribution of every one of them to the final result - JJ
 
+Researchers and algorithm designers willing to  adapt to the cloud their
+multi-population solutions face the following challenges:
+\begin{itemize}
+    \item They need to change their current solutions to a reactive architecture in which processes
+    communicate with each other by exchanging messages asynchronously and react
+    to a continuous stream of data. One of the options is to consider
+    sub-populations as messages to be modified asynchronously by functions. 
 
+    \item To scale the system, when it is possible, they must use stateless functions for
+    processing. 
 
+    \item They need to establish a workflow of local development and prototyping while having the 
+    option of deployment in a cloud provider. It is desirable to use modern development methodologies and technologies. 
+
+    \item They must log experimental results and be able to replicate the experiments. 
+
+    \item They must consider additional parameters that can affect the monetary cost or the performance of the
+    execution — for instance, the format and size of messages, the number of
+    worker processes and their capabilities.  
+\end{itemize}
 
 Taking these factors into account, in this work, we present EcoSwarm, % maybe a less generic name? - JJ
 % agree - Mario
@@ -205,8 +224,16 @@ heterogeneous subpopulations. The platform uses the Docker Compose tool for
 defining and running experiments as multi-container applications. 
 % Docker compose is not really for production, more for development environments, 
 % you have to justify this. Also, it does not handle scaling so need to justify it too - JJ
+% justification: - Mario
+We preferred the use of a container-based application for this prototype because
+it is more suitable for development and replication without the need for
+additional components. Nevertheless, the application is compatible with other
+orchestration and deployment technologies if more scalabilty like Docker Swarm
+and Kubernetes with additional configuration.  
 Docker Container images host the stateless functions responsible for running algorithms
-on subpopulations. Researchers then define the configuration of services used by
+on subpopulations(these can be used directly in a FaaS implementation).
+% Need to improve the next paragraph or maybe move it to another place - Mario
+Researchers then define the configuration of services used by
 a multi-population algorithm using a YAML file. Any researcher can deploy and
 start all the services from this configuration file with a single command. Once
 the services are up, multiple instances of an experiment can be sent to a queue
