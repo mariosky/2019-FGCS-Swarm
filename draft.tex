@@ -30,37 +30,50 @@ applying distributed, multi-threaded, parallel, and cloud-based computing.
 % scale implementations with ... implementations. Please rephrase - JJ 
 % done - Mario
 However, the design  of these cloud-native,  
-distributed, multi-population algorithms is not a trivial task. Designers need to adapt their solutions,
-% design of algorithms is not trivial... designer need to adapt the algorithms... Maybe rephrase to avoid repetition - JJ
-to leverage the scalability, elasticity, fault-tolerance,
-reproducibility, and cost-effectiveness of cloud-native systems while conserving the intended functionality.
-% Something about "this is the problem we want to address... " to link the previous sentence with this one - JJ
-In this
-work, we present the design and implementation of a reactive container-based
-% again maybe it's better cloud-native instead of reactive - JJ
-application for the execution of multi-population algorithms. Researchers can
+distributed, multi-population algorithms is not a trivial task. Designers need
+to adapt their solutions, 
+% design of algorithms is not trivial... designer need to adapt the algorithms... Maybe rephrase to avoid repetition - JJ to leverage
+the scalability, elasticity, fault-tolerance, reproducibility, and
+cost-effectiveness of cloud systems while conserving the intended functionality.
+% I am removing the native part above, because is also very repetetive - Mario 
+% Something about "this is the problem we want to address... " to link the previous sentence with this one - JJ 
+Furthermore, currently, there are no
+cloud-native solutions that support basic algorithm design practices that can make
+multi-population methods more efficient: having multiple search strategies and
+varying the number and size of subpopulations. We address these problems in this work,
+by presenting the design and implementation of a cloud-native 
+container-based % again maybe it's better cloud-native instead of reactive - JJ
+application for the execution of ensemble multi-population algorithms. Researchers can
 use the application to execute multiple experiments, both locally or in a cloud
 environment and deploy experiments by specifying the infrastructure as part of
-an experiment definition so that results are easily reproducible. % A sentence on how this implementation is better than the state of the art - JJ
-% For instance "Generally the current implementations include a single algorithm, which is bad because... " - JJ
-% Also "Current implementations are more or less functional equivalent to parallel, including the fact that they run copies of the same, parametrized, algorithm...
-% If this is too long, maybe just some reference about "current implementation do not leverage the fact that (you can use different algorithms, and differently parametrized...) and then qualify this in the introduction - JJ
-We
-evaluated the performance of the platform and the benefits of a multi-population
-% performance evaluation always needs to have an objective. What is the main objective of this performance evaluation? - JJ
-approach by using an ensemble of Genetic Algorithms (GAs) and Particle Swarm
-Optimization (PSO) in a benchmark for the optimization of continuous functions.
-Experiments show that the framework allows the ensemble to outperform
-single-algorithm versions. % If this is the objective, then
-% 1) say that the state of the art is using single-algorithm implementations and this might not be the best
-% 2) state it clearly as the objective of the performance evaluation - JJ
-The framework we provide also has fewer parameters to
-tune since subpopulation parameters are selected randomly. % Again, this can't be a result if it's not a research question. - JJ
-% It needs to be a consequence of using a cloud-native architecture - JJ
-% Before this, "experiments prove that... "
-The architecture and
-the implemented platform is an excellent alternative for locally or a
-cloud-based deployment, % thus proving that cloud-native bioinspired algorithms perform better in their "natural" environment that other kind of algorithms - JJ
+an experiment definition so that results are easily reproducible.
+% A sentence on how this implementation is better than the state of the art - JJ 
+% Added a comment above - Mario, 
+% But maybe we need to say it again? - Mario
+% For instance "Generally the current implementations include a single algorithm, which is bad because... " - JJ 
+% Also "Current implementations are more or less functional equivalent 
+%to parallel, including the fact that they run copies of the same, parametrized, algorithm... 
+% If this is too long, maybe just some reference about 
+%"current implementation do not leverage the fact that (you can use different algorithms,
+% and differently parametrized...) and then qualify this in the introduction - JJ
+State of the art approaches use a single-algorithm implementation, and this might
+not be the best solution. We compared the speedup, execution time, and the number
+of evaluations between a single and an ensemble approach by using Genetic Algorithms (GAs)
+and Particle Swarm Optimization (PSO) algorithms against a benchmark for the optimization
+of continuous functions. Experiments show that the framework allows the ensemble 
+to outperform single-algorithm versions,  
+% We also run experiments to see the effect of population size for seveal problem sizes  
+% Against NUMBER OF WORKERS (this concept is not mentioned yet)
+% We can add something like:      
+% Moreover, we evaluated the effect other 
+% design parameters had on the performance; in particular, the number and the size of 
+% populations concerning the problem size. - Mario
+thus proving that cloud-native bioinspired algorithms perform better 
+in their "natural" environment than other kinds of algorithms.
+
+%The architecture and the implemented platform is an excellent alternative for
+%locally or a cloud-based deployment, 
+% thus proving that cloud-native bioinspired algorithms perform better in their "natural" environment that other kind of algorithms - JJ 
 \end{abstract}
 
 \begin{keyword}
