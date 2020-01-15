@@ -128,11 +128,6 @@ multi-population algorithms, recent works propose an asynchronous communication
 through a central repository \cite{sofea:cec2012, JSON} or message queues
 \cite{salza2019speed, guervos2018introducing}, in this work we follow this
 practice.
-When designing efficient multi-population algorithms, researchers need to
-consider additional issues \cite{Ma2019}. These include the number and size of subpopulations,
-the interaction between them, the search area of subpopulations, and the search
-strategy and parametrization of each subpopulation. We must take into account
-these high-level issues when designing a parallel architecture. 
 
 The trend concerning the parallel execution multi-population algorithms go from
 earlier hardware-based implementations using transputers
@@ -196,8 +191,13 @@ more flexible, loosely-coupled, and scalable. % Some properies and reference - M
 % objectives of the paper (which need to be clarified) and eventually
 % prove the contribution of every one of them to the final result - JJ
 
-Researchers and algorithm designers willing to  adapt to the cloud their
-multi-population solutions face the following challenges:
+When designing efficient multi-population algorithms, researchers need to
+consider additional issues \cite{Ma2019}. These include the number and size of subpopulations,
+the interaction between them, the search area of subpopulations, and the search
+strategy and parametrization of each subpopulation. We must take into account
+these high-level issues when designing a parallel architecture. Researchers 
+and algorithm designers willing to  adapt to the cloud their
+multi-population solutions face the additional challenges:
 \begin{itemize}
     \item They need to change their current solutions to a reactive architecture in which processes
     communicate with each other by exchanging messages asynchronously and react
@@ -228,10 +228,13 @@ defining and running experiments as multi-container applications.
 We preferred the use of a container-based application for this prototype because
 it is more suitable for development and replication without the need for
 additional components. Nevertheless, the application is compatible with other
-orchestration and deployment technologies if more scalabilty like Docker Swarm
-and Kubernetes with additional configuration.  
-Docker Container images host the stateless functions responsible for running algorithms
-on subpopulations(these can be used directly in a FaaS implementation).
+orchestration and deployment technologies if more scalabilty is needed. 
+With additional configuration settings, applications can be deployed 
+to a Docker Swarm or a Kubernetes system.  
+
+Docker Container images host the stateless functions responsible for running 
+a search strategy on subpopulations, these functions could also be ported
+directly to a Function as a Service (FaaS) \cite{Roberts2016} implementation.
 % Need to improve the next paragraph or maybe move it to another place - Mario
 Researchers then define the configuration of services used by
 a multi-population algorithm using a YAML file. Any researcher can deploy and
