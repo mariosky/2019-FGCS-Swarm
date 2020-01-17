@@ -389,7 +389,37 @@ PSO
     PSO AWS \cite{li2015parallel}
 
 \section{Proposed Method} 
-\label{method}
+\label{method} 
+
+In this section, we present the design
+and a container-based implementation of the model we propose for the execution
+of multi-population based algorithms. We follow the requirements outlined in
+Section \ref{multi} and the general design principles of cloud-native
+applications we have mention earlier. As a first step, we describe the general
+architecture first, and then we describe each component in detail. The primary
+data element used throughout the system is the subpopulation, and at a higher
+level, we can view the system as a continuous stream of subpopulations flowing
+from one process to the other. By "continuous stream," we mean that ideally,
+everything must happen asynchronously without components needing to wait for
+others. In this kind of system, this streaming functionality is normally
+implemented by using a message queue system. For instance, if one process needs
+to communicate a subpopulation to another, it must pack the sub-population into
+a message, and then push the message asynchronously to the queuing system; this
+means that after the process pushes the message, it continues its execution
+without waiting for a result. On the other end, a recipient subscribes to the
+message queue by defining an event handler method that is triggered when a
+message is pushed to the queue. The two components at each end of the queue are
+Producers that push messages to the queue and Consumers that pull them. This
+pattern is an essential component of a reactive architecture because it is
+highly scalable; one of the reasons for this are stateless functions. We can
+define stateless functions as methods that do not have side effects, meaning
+they do not need to read, keep, or modify data outside of the method. If
+Consumers are implemented using stateless functions, then there is no difference
+in having one or many copies of the function pulling work from the queue at the
+same time, because no side effects are resulting from the concurrency.  
+Based on a reactive architecture we proposed in a previous work
+\cite{guervos2018introducing}, we now describe the general architecture shown in
+Figure .
 
 \section{Experimental Setup} 
 \label{setup}
