@@ -377,8 +377,57 @@ PSO
     PSO AWS \cite{li2015parallel}
 
 \section{Proposed Method} 
-\label{method}
-This paragraph will be moved to the Proposed Method section - Mario
+\label{method} 
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth]{kafkEO}
+    \caption{Example of a parametric plot ($\sin (x), \cos(x), x$)}
+    \label{fig:kafkEO}
+\end{figure}
+
+In this section, we present the design
+and a container-based implementation of the model we propose for the execution
+of multi-population based algorithms. We follow the requirements outlined in
+Section \ref{multi} and the general design principles of cloud-native
+applications we have mention earlier. As a first step, we describe the general
+architecture first, and then we describe each component in detail. 
+
+The primary data element used throughout the system is the subpopulation, and at a higher
+level, we can view the system as a continuous stream of subpopulations flowing
+from one process to the other. By "continuous stream," we mean that ideally,
+everything must happen asynchronously without components needing to wait for
+others. In this kind of system, this streaming functionality is normally
+implemented by using a message queue system. For instance, if one process needs
+to communicate a subpopulation to another, it must pack the sub-population into
+a message, and then push the message asynchronously to the queuing system; this
+means that after the process pushes the message, it continues its execution
+without waiting for a result. On the other end, the recipient subscribes to the
+message queue by defining an event handler method that is going to be triggered when a
+message is pushed to the message queue. The two components at each end of the queue are
+Producers that push messages to the queue and Consumers that pull them. This
+pattern is an essential component of a reactive architecture because it is
+highly scalable; one of the reasons for this are stateless functions. We can
+define stateless functions as methods that do not have side effects, meaning
+they do not need to read, keep, or modify data outside of the method. If
+Consumers are implemented using stateless functions, then there is no difference
+netween having one or many copies of the same function pulling work from the queue all at the
+same time, because no side effects are going to result from the concurrency.
+Based un these general principles we define next the proposed model.
+
+\subsection{Event Driven Model} 
+\label{edm}
+Based on a reactive architecture we proposed in a previous work
+\cite{guervos2018introducing}, we now describe the general architecture shown in
+Figure \ref{fig:kafkEO}. Again, we can explain the general model using the analogy
+of Producers and Consumers of messages using a queue. First, we can see that
+there are two queues, one labeled Input, and the other one Output. In the diagram, 
+push operations on a queue are represented by solid arrows connecting to the left side
+of the box, and pull or pop operations as solid arrows leaving from the right side.
+
+
+
+
 Based on a reactive architecture \cite{guervos2018introducing} , each
 subpopulation is represented as an event message that is pushed asynchronously
 into a message queue. Incoming messages trigger stateless functions that receive
@@ -393,13 +442,9 @@ the message queue, creating a loop. The cycle stops when the controller receives
 a subpopulation containing a candidate solution that satisfies a particular
 condition, or a maximum number of messages were received.
 
-\subsection{Event Driven Model} 
-\label{edm}
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=\textwidth]{kafkEO}
-    \caption{Example of a parametric plot ($\sin (x), \cos(x), x$)}
-\end{figure}
+
+
+
 
 \subsection{Workers} 
 \label{edm}
@@ -427,6 +472,7 @@ condition, or a maximum number of messages were received.
     \includegraphics[width=\textwidth]{worker}
     \caption{Example of a parametric plot ($\sin (x), \cos(x), x$)}
 \end{figure}
+
 
 
 \section{Experimental Setup} 
