@@ -1,6 +1,7 @@
 \documentclass[review]{elsarticle}
 
 \usepackage{lineno,hyperref}
+\graphicspath{ {./images/} }
 
 \modulolinenumbers[5]
 
@@ -161,20 +162,7 @@ properties of a reactive system \cite{boner2014reactive} and they are commonly
 more flexible, loosely-coupled, and scalable. % Some properies and reference - Mario  
 % Again, you have to justify the need for a reactive architecture and define it before this paragraph - JJ
 
-% This paragraph will be moved to the Proposed Method section - Mario
-% Based on a reactive architecture \cite{guervos2018introducing} , each
-% subpopulation is represented as an event message that is pushed asynchronously
-% into a message queue. Incoming messages trigger stateless functions that receive
-% the subpopulation and proceed to run an algorithm, using the parameters and
-% population included in the message. After the specified number of iterations,
-% each stateless function returns the evolved subpopulation by again pushing a
-% message to another queue, used for receiving the resulting subpopulations.
-% Subpopulations are received from the queue by a controller that is responsible
-% for mixing the individuals from different subpopulations and producing new
-% subpopulations. These new subpopulations are pushed again by the controller into
-% the message queue, creating a loop. The cycle stops when the controller receives
-% a subpopulation containing a candidate solution that satisfies a particular
-% condition, or a maximum number of messages were received.
+
 
 % There is a big gap here where you go from generic considerations
 % about cloud computing to the presentation of this method. In the
@@ -390,6 +378,56 @@ PSO
 
 \section{Proposed Method} 
 \label{method}
+This paragraph will be moved to the Proposed Method section - Mario
+Based on a reactive architecture \cite{guervos2018introducing} , each
+subpopulation is represented as an event message that is pushed asynchronously
+into a message queue. Incoming messages trigger stateless functions that receive
+the subpopulation and proceed to run an algorithm, using the parameters and
+population included in the message. After the specified number of iterations,
+each stateless function returns the evolved subpopulation by again pushing a
+message to another queue, used for receiving the resulting subpopulations.
+Subpopulations are received from the queue by a controller that is responsible
+for mixing the individuals from different subpopulations and producing new
+subpopulations. These new subpopulations are pushed again by the controller into
+the message queue, creating a loop. The cycle stops when the controller receives
+a subpopulation containing a candidate solution that satisfies a particular
+condition, or a maximum number of messages were received.
+
+\subsection{Event Driven Model} 
+\label{edm}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth]{kafkEO}
+    \caption{Example of a parametric plot ($\sin (x), \cos(x), x$)}
+\end{figure}
+
+\subsection{Workers} 
+\label{edm}
+
+\subsection{Controller} 
+\label{edm}
+
+\subsection{Experimental Process} 
+\label{edm}
+
+
+
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth]{experiment_flow}
+    \caption{Example of a parametric plot ($\sin (x), \cos(x), x$)}
+\end{figure}
+
+
+
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth]{worker}
+    \caption{Example of a parametric plot ($\sin (x), \cos(x), x$)}
+\end{figure}
+
 
 \section{Experimental Setup} 
 \label{setup}
