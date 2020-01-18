@@ -386,6 +386,20 @@ PSO
     \label{fig:kafkEO}
 \end{figure}
 
+% Based on a reactive architecture \cite{guervos2018introducing} , each
+% subpopulation is represented as an event message that is pushed asynchronously
+% into a message queue. Incoming messages trigger stateless functions that receive
+% the subpopulation and proceed to run an algorithm, using the parameters and
+% population included in the message. After the specified number of iterations,
+% each stateless function returns the evolved subpopulation by again pushing a
+% message to another queue, used for receiving the resulting subpopulations.
+% Subpopulations are received from the queue by a controller that is responsible
+% for mixing the individuals from different subpopulations and producing new
+% subpopulations. These new subpopulations are pushed again by the controller into
+% the message queue, creating a loop. The cycle stops when the controller receives
+% a subpopulation containing a candidate solution that satisfies a particular
+% condition, or a maximum number of messages were received.
+
 In this section, we present the design
 and a container-based implementation of the model we propose for the execution
 of multi-population based algorithms. We follow the requirements outlined in
@@ -458,40 +472,74 @@ to a migration process, where subpopulations are mixed with each other. New popu
 are generated from this migration, and they are again pushed to the Input queue to continue 
 in a loop. The Controller is also responsible of logging the metadata recived with the
 messages.  
-           
 \end{enumerate}
 
+This reactive architecture has the following advantages:
 
+An important aspect of proposal is the decoupling of the population and 
+the population-based algorithm. It is common that in a classic island-based algorithm
+each island is executed in a separate processing node, i.e. in a virtual machine, cpu,
+or thread. In this case we can have just one processing node, or many nodes, each 
+running a different search strategy, or using its own parameters. 
 
+Also, the reactive controller, gives designers more control over the milti-population algorithm.
+In this process, designers can dynamicly change the number of populations, population parameters,
+and migration details on-the-fly.
 
+Another advantege is that algorithm designers have many options for implementing this simple architecure. 
+The same basic components can be implmented as a single multithreaded program, or 
+as a highly scalable serverless cloud application. Most modern languages include 
+constructs for asynchronous programming using queues or channels, for a multi-threaded
+execution.
 
-Based on a reactive architecture \cite{guervos2018introducing} , each
-subpopulation is represented as an event message that is pushed asynchronously
-into a message queue. Incoming messages trigger stateless functions that receive
-the subpopulation and proceed to run an algorithm, using the parameters and
-population included in the message. After the specified number of iterations,
-each stateless function returns the evolved subpopulation by again pushing a
-message to another queue, used for receiving the resulting subpopulations.
-Subpopulations are received from the queue by a controller that is responsible
-for mixing the individuals from different subpopulations and producing new
-subpopulations. These new subpopulations are pushed again by the controller into
-the message queue, creating a loop. The cycle stops when the controller receives
-a subpopulation containing a candidate solution that satisfies a particular
-condition, or a maximum number of messages were received.
+On the other hand, there are several caveats as well:
 
-
-
-
+It is more costly to move entire subpopulations as messages than only passing certain individuals 
+from a process to another. Designers must conmsider this cost when working with large
+individuals, and if possible send sub-populations using several messages, use compression or 
+adjust the size of subpopulations. Pool-based algorithms also suffer from this drawback, but 
+web based immplementations have been working with continous optimization problems of 1000 dimensions.
+But, in other cases this is not a viable approach. 
 
 \subsection{Workers} 
 \label{edm}
 
-\subsection{Controller} 
+\subsection{Comparasion} 
 \label{edm}
+
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth]{classicisland}
+    \caption{Example of a parametric plot ($\sin (x), \cos(x), x$)}
+    \label{fig:kafkEO}
+\end{figure}
+
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth]{pool_island}
+    \caption{Example of a parametric plot ($\sin (x), \cos(x), x$)}
+    \label{fig:kafkEO}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth]{population_pool}
+    \caption{Example of a parametric plot ($\sin (x), \cos(x), x$)}
+    \label{fig:kafkEO}
+\end{figure}
+
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth]{population_message}
+    \caption{Example of a parametric plot ($\sin (x), \cos(x), x$)}
+    \label{fig:kafkEO}
+\end{figure}
 
 \subsection{Experimental Process} 
 \label{edm}
-
 
 
 
