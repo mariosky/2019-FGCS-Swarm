@@ -23,56 +23,33 @@
 \address[granada]{Universidad de Granada, Granada, Spain}
 
 \begin{abstract} 
-Multi-population based methods have been used extensively in
+Splitting a population into multiple instances is a technique that has been used extensively in
 recent years to improve the performance of nature-inspired optimization
-algorithms. These methods are parallel and asynchronous by nature and researchers
-leverage this to scale implementations 
-applying distributed, multi-threaded, parallel, and cloud-based computing. 
-% scale implementations with ... implementations. Please rephrase - JJ 
-% done - Mario
-However, the design  of these cloud-native,  
-distributed, multi-population algorithms is not a trivial task. Designers need
-to adapt their solutions 
-% design of algorithms is not trivial... designer need to adapt the algorithms... Maybe rephrase to avoid repetition - JJ 
-to leverage
+algorithms. Work on several populations can be done in parallel, and
+also asynchronously, which can be leveraged to create scalable
+implementations based on, among other methods, distributed, multi-threaded, parallel, and cloud-based computing. 
+% I have rephrased all this. Please check it out - JJ
+The design of these cloud-native, distributed, multi-population
+algorithms is not a trivial task. Coming from monolithic
+(single-instance) solutions, adaptations at several levels, from the
+algorithmic to the functional, must be made to leverage
 the scalability, elasticity, fault-tolerance, reproducibility, and
-cost-effectiveness of cloud systems while conserving the intended functionality.
-% I am removing the native part above, because is also very repetetive - Mario 
-% Something about "this is the problem we want to address... " to link the previous sentence with this one - JJ 
-Furthermore, currently, there are no
-cloud-native solutions that support basic algorithm design practices that can make
-multi-population methods more efficient: having multiple search strategies, and
-varying the number and size of subpopulations. We address these problems in this work,
-by presenting the design and implementation of a cloud-native 
-container-based % again maybe it's better cloud-native instead of reactive - JJ
-application for the execution of ensemble multi-population algorithms. Researchers can
-use the application to execute multiple experiments, both locally or in a cloud
-environment, and deploy experiments by specifying the infrastructure as part of
-an experiment definition so that results are easily reproducible.
-% A sentence on how this implementation is better than the state of the art - JJ 
-% Added a comment above - Mario, 
-% But maybe we need to say it again? - Mario
-% For instance "Generally the current implementations include a single algorithm, which is bad because... " - JJ 
-% Also "Current implementations are more or less functional equivalent 
-%to parallel, including the fact that they run copies of the same, parametrized, algorithm... 
-% If this is too long, maybe just some reference about 
-%"current implementation do not leverage the fact that (you can use different algorithms,
-% and differently parametrized...) and then qualify this in the introduction - JJ
-State of the art approaches use a single-algorithm implementation, and this might
-not be the best solution. We compared the speedup, execution time, and the number
-of evaluations between a single and an ensemble approach by using Genetic Algorithms (GAs)
-and Particle Swarm Optimization (PSO) algorithms against a benchmark for the optimization
-of continuous functions. Experiments show that the framework allows the ensemble 
-to outperform single-algorithm versions.  
-% We also run experiments to see the effect of population size for seveal problem sizes  
-% Against NUMBER OF WORKERS (this concept is not mentioned yet)
-% We can add something like:      
-Moreover, we evaluated the effect other design parameters had on the
-performance, in particular, the number and the size of populations concerning
-the problem size. The architecture and the implemented platform is an excellent
+cost-effectiveness of cloud systems while, at the same time,
+conserving the intended functionality. Instead of an evolutive
+approach, in this paper we propose to create from scratch a
+cloud-native optimization framework that is able to include multiple
+algorithms and use few parameters to work. This solution goes beyond
+current state of the art via a framework that is able to support
+different algorithms at the same time, work asynchronously, and also
+be easily deployable to any cloud platform. We evaluate the
+performance and scalability of this solution, together with the effect
+other design parameters had on the 
+performance, in particular, the number and the size of populations
+with respect to problem size. The architecture and the implemented platform is an excellent
 alternative for locally or in the cloud, thus proving that cloud-native
 bioinspired algorithms perform better in their "natural" environment than other
-kinds of algorithms.
+kinds of algorithms, and setting a new baseline for scaling and
+performance in the cloud.
 \end{abstract}
 
 \begin{keyword}
@@ -358,7 +335,7 @@ parallel, asynchronous, heterogeneous, and parameter-free algorithms in a scalab
 \section{State of the Art} 
 \label{soa}
 Hadoop 
-    Comparasion \cite{ferrucci2018using}
+    Comparison \cite{ferrucci2018using}
     Hadoop\cite{fazenda2012} 
     FlexGP \cite{FlexGP}, 
     elephant56 \cite{salza2016elephant56},
