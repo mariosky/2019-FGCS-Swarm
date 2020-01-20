@@ -46,7 +46,7 @@ performance and scalability of this solution, together with the effect
 other design parameters had on the 
 performance, in particular, the number and the size of populations
 with respect to problem size. The architecture and the implemented platform is an excellent
-alternative for locally or in the cloud, thus proving that cloud-native
+alternative for running locally or in the cloud, thus proving that cloud-native
 bioinspired algorithms perform better in their "natural" environment than other
 kinds of algorithms, and setting a new baseline for scaling and
 performance in the cloud.
@@ -359,12 +359,6 @@ PSO
 \section{Proposed Method} 
 \label{method} 
 
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=\textwidth]{kafkEOsmall}
-    \caption{Example of a parametric plot ($\sin (x), \cos(x), x$)} % This caption? - JJ
-    \label{fig:kafkEO}
-\end{figure}
 
 % Based on a reactive architecture \cite{guervos2018introducing} , each
 % subpopulation is represented as an event message that is pushed asynchronously
@@ -392,6 +386,9 @@ level, we can view the system as a continuous stream of subpopulations
 flowing
 % We talk about "multi-population" elsewhere, including the
 % abstract. We should unify terminology - JJ
+% "multi-population" is the whole thing, a subpopulation is a member of that.
+% "A multi-population has many subpopulations or should we call them just populations?"
+% I will add a comment about this in the Multi-population section - Mario
 from one process to the other. By "continuous stream," we mean that ideally,
 everything must happen asynchronously without components needing to wait for
 others. In this kind of system, this streaming functionality is normally
@@ -399,7 +396,8 @@ implemented by using a message queue system. For instance, if one process needs
 to communicate a subpopulation to another, it must pack the sub-population into
 a message, and then send the message asynchronously % I don't know if
                                 % asynchronously applies here. It's
-                                % simply sent - JJ
+                                % simply sent - JJ 
+                                % Meaning it does not wait for a respone, it continues doing other stuff - Mario 
 to the queuing system; this
 means that after the process pushes the message, it continues its execution
 without waiting for a result. On the other end, the recipient subscribes to the
@@ -418,6 +416,16 @@ concurrency.
 % introduction - JJ 
 Based on these general principles we define next the proposed model.
 
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth]{kafkEOsmall}
+    \caption{The proposed general architecture, 
+     showing each process in a swimlane, message-dataflow,
+     message queues, and high-level tasks for each process.} % This caption? - JJ
+    \label{fig:kafkEO}
+\end{figure}
+
 \subsection{Event Driven Model} 
 \label{edm}
 Based on a reactive architecture we proposed in a previous work
@@ -427,6 +435,15 @@ of Producers and Consumers of messages. First, we can see that
 there are two queues, one labeled Input, and the other one Output. In the diagram, 
 push operations on a queue are represented by solid arrows connecting to the left side
 of the box, and pull or pop operations as solid arrows leaving from the right side.
+Also, the architecture has at least four processes indicated in the diagram as
+swimlanes: First, the Setup process, responsible for the reading a configuration
+file, and creating the initial subpopulations. Second, a Controller process,
+responsible for the migration between subpopulations, and keeping track of the
+iterations of the algorithm. The Message Queue process runs the Input and Output
+queues. Finally, there is at least one Stateless Function process responsible
+for running the isolated algorithms. In the example, two processes PSO and GA,
+are shown. 
+
 The algorithm starts with the Setup process pulling a configuration message from
 the experiements queue, this is not shown in the diagram. The configuration messsage 
 includes all the parameters needed to execute the algorithm, among other things,
@@ -441,22 +458,29 @@ parameters found in the configuration structure. The population at this moment i
 static data, including each individual inside. Each subpopulation includes a metadata
 section where its algorithm and execution parameters are specified. For instance, 
 for a GA, the mutation rate, type of crossover operator, and other values are indicated.
-Each subpopulation is then pushed to the Input queue, so they can be consumed 
-by Stateless functions responsible for the execution of the search.  % Why the caps in Stateless? - JJ
+
+\item Each subpopulation is then pushed to the Input queue, so they can be consumed 
+by Stateless functions responsible for the execution of the search.  % Why the caps in Stateless? - JJ  
+% It refers to the swimlines in the diagram, maybe I should point it out  - Mario
+% Added a comment above. - Mario
 
 \item One or more Stateless functions are constantly pulling subpopulation messages
 from the Input queue. Taking the population data and metadata as parameters, these 
 functions are responsible for the actual execution of the optimization algorithm. 
 They take the current state of the population and run the algorithm for a certain 
-number of iterations. Once they finish the execution, the population state
+number of iterations. 
+
+\item Once they finish the execution, the population state
 is packed again along with aditional metadata about the execution of the algorithm.
-The resulting populations is now pushed to the Output queue. Once finished, another 
+The resulting populations are now pushed to the Output queue. Once finished, another 
 subpopulation is pulled from the queue.
 
 \item The Controller process is responsible for keeping track of the progress of 
 the search. It pulls current subpopulations from the Output queue, inspects the metadata 
 and if an optimal solution has been found or the maximum number of iteration has been
-reached it signals the stop of the execution. Otherwise, it passes the stream of messages 
+reached it signals the stop of the execution. 
+
+\item Otherwise, it passes the stream of messages 
 to a migration process, where subpopulations are mixed with each other. New populations 
 are generated from this migration, and they are again pushed to the Input queue to continue 
 in a loop. The Controller is also responsible of logging the metadata recived with the
@@ -472,7 +496,7 @@ or thread. In this case we can have just one processing node, or many nodes, eac
 running a different search strategy, or using its own parameters. 
 \item 
 Also, the reactive controller gives designers more control over the multi-population algorithm.
-In this process, designers can dynamicly change the number of populations, population parameters,
+In this process, designers can dynamically change the number of populations, population parameters,
 and migration details on-the-fly.
 \item 
 Another advantege is that algorithm designers have many options for implementing this simple architecture. 
