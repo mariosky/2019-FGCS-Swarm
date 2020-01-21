@@ -507,6 +507,13 @@ constructs for asynchronous programming using queues or channels, for a multi-th
 execution.
 \end{itemize}
 
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=\textwidth]{population_message}
+    \caption{Population State and dataflow between processing nodes of a message-based algorithm.}
+    \label{fig:population_message}
+\end{figure}
+
 On the other hand, there are several caveats as well:
 It is more costly to move entire subpopulations as messages than only passing certain individuals 
 from a process to another. Designers must conmsider this cost when working with large
@@ -515,18 +522,33 @@ adjust the size of subpopulations. Pool-based algorithms also suffer from this d
 web based immplementations have been working with continous optimization problems of 1000 dimensions.
 But, in other cases this is not a viable approach. 
 
-
-
-\subsection{Comparison} 
-\label{comparison}
-
-
 \begin{figure}[ht]
     \centering
     \includegraphics[width=\textwidth]{classicisland}
     \caption{ Population State and dataflow between processing nodes of a classic Island-based multi-population algorithm. }
     \label{fig:classicisland}
 \end{figure}
+
+\subsection{Comparison} 
+\label{comparison}
+
+Next, we compare the message-driven architecture we presented against four other
+proposals for multi-population algorithms found in the literature. We center the
+comparison on the coupling and communication between the main components:
+Subpopulations, Processing Nodes, and Algorithms.  In Figure \ref{fig:population_message} we show the
+main components of a message-driven architecture. We can see that the algorithm
+and the subpopulations are separated, and the Population Queue keeps the state
+of subpopulations. While algorithms only need the subpopulations as parameters
+for their execution.  In contrast, in the classic Island model shown in Figure
+\ref{fig:classicisland}, algorithms are coupled with a subpopulation, and the same processing
+node keeps both the algorithm process and the state of the subpopulation.  Other
+processing nodes follow the same configuration and form of execution, and they
+only pass specific individuals between them.  In this model, adding additional
+processing nodes, on-runtime, can be more difficult, because they need to have
+an addressing mechanism. % JJ, help I don't know if this is clearly understood, a mean like a DNS - Mario
+
+
+
 
 
 \begin{figure}[ht]
@@ -544,13 +566,7 @@ But, in other cases this is not a viable approach.
 \end{figure}
 
 
-\begin{figure}[ht]
-    \centering
-    \includegraphics[width=\textwidth]{population_message}
-    \caption{Population State and dataflow between processing nodes of the EvoSpace algorithm.} % Er, same caption. Better insert it now, or we might roftet... Also, same label. - JJ
-    % Ok, it was a "temporal" Copy-Paste solution - Mario
-    \label{fig:population_message}
-\end{figure}
+
 
 \subsection{Workers} 
 \label{edm}
