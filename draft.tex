@@ -1,6 +1,7 @@
 \documentclass[review]{elsarticle}
 
 \usepackage{lineno,hyperref}
+\usepackage{rotating}
 \graphicspath{ {./images/} }
 
 \modulolinenumbers[5]
@@ -417,14 +418,14 @@ concurrency.
 Based on these general principles we define next the proposed model.
 
 
-\begin{figure}[h]
+\begin{sidewaysfigure}
     \centering
     \includegraphics[width=\textwidth]{kafkEOsmall}
     \caption{The proposed general architecture, 
      showing each process in a swimlane, message-dataflow,
      message queues, and high-level tasks for each process.} % This caption? - JJ
     \label{fig:kafkEO}
-\end{figure}
+\end{sidewaysfigure}
 
 \subsection{Event Driven Model} 
 \label{edm}
@@ -514,14 +515,13 @@ adjust the size of subpopulations. Pool-based algorithms also suffer from this d
 web based immplementations have been working with continous optimization problems of 1000 dimensions.
 But, in other cases this is not a viable approach. 
 
-\subsection{Workers} 
-\label{edm}
+
 
 \subsection{Comparison} 
-\label{edm}
+\label{comparison}
 
 
-\begin{figure}[h]
+\begin{figure}[ht]
     \centering
     \includegraphics[width=\textwidth]{classicisland}
     \caption{ Population State and dataflow between processing nodes of a classic Island-based multi-population algorithm. }
@@ -529,14 +529,14 @@ But, in other cases this is not a viable approach.
 \end{figure}
 
 
-\begin{figure}[h]
+\begin{figure}[ht]
     \centering
     \includegraphics[width=\textwidth]{pool_island}
     \caption{Population State and dataflow between processing nodes of a Pool-based multi-population algorithm.}
     \label{fig:pool_island}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[ht]
     \centering
     \includegraphics[width=\textwidth]{population_pool}
     \caption{Population State and dataflow between processing nodes of the EvoSpace algorithm.}
@@ -544,7 +544,7 @@ But, in other cases this is not a viable approach.
 \end{figure}
 
 
-\begin{figure}[h]
+\begin{figure}[ht]
     \centering
     \includegraphics[width=\textwidth]{population_message}
     \caption{Population State and dataflow between processing nodes of the EvoSpace algorithm.} % Er, same caption. Better insert it now, or we might roftet... Also, same label. - JJ
@@ -552,21 +552,25 @@ But, in other cases this is not a viable approach.
     \label{fig:population_message}
 \end{figure}
 
+\subsection{Workers} 
+\label{edm}
+
+
 \subsection{Experimental Process} 
 \label{edm}
 
 
 
-\begin{figure}[h]
+\begin{sidewaysfigure}
     \centering
     \includegraphics[width=\textwidth]{experiment_flow}
     \caption{EvoSwarm Workflow}
-\end{figure}
+\end{sidewaysfigure}
 
 
 
 
-\begin{figure}[h]
+\begin{figure}[ht]
     \centering
     \includegraphics[width=\textwidth]{worker}
     \caption{Serverless function implementation details. Showing the worker algorithm in each container}
