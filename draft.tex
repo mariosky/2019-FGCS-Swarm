@@ -259,7 +259,8 @@ follows:
 The organization of the paper is as follows. First, in Section \ref{multi}, we present a
 background of the fundamental issues of integrating nature-inspired optimization
 and multi-population methods. Section \ref{soa} presents state of the art relevant to
-our work. In Section \ref{method}, we present the proposed method.  Section \ref{setup} describes
+our work. In Section \ref{method}, we present the proposed method and the container-based
+application in Section \ref{docker} .  Section \ref{setup} describes
 the design of the empirical evaluation we designed to assess the effectiveness
 of the method, and in Section \ref{results}, we report and discuss the results. Finally, we
 offer the conclusions of this paper and suggestions on future work in Section \ref{conclusions}.
@@ -359,7 +360,6 @@ PSO
 
 \section{Proposed Method} 
 \label{method} 
-
 
 % Based on a reactive architecture \cite{guervos2018introducing} , each
 % subpopulation is represented as an event message that is pushed asynchronously
@@ -529,7 +529,7 @@ But, in other cases this is not a viable approach.
     \label{fig:classicisland}
 \end{figure}
 
-\subsection{Comparison} 
+\subsection{Comparison with other cloud-based works} 
 \label{comparison}
 
 Next, we compare the message-driven architecture we presented against four other
@@ -539,17 +539,17 @@ Subpopulations, Processing Nodes, and Algorithms.  In Figure \ref{fig:population
 main components of a message-driven architecture. We can see that the algorithm
 and the subpopulations are separated, and the Population Queue keeps the state
 of subpopulations. While algorithms only need the subpopulations as parameters
-for their execution.  In contrast, in the classic Island model shown in Figure
+for their execution.
+
+% We need to add references to the respective papers - Mario
+
+In contrast, in the classic Island model shown in Figure
 \ref{fig:classicisland}, algorithms are coupled with a subpopulation, and the same processing
 node keeps both the algorithm process and the state of the subpopulation.  Other
 processing nodes follow the same configuration and form of execution, and they
 only pass specific individuals between them.  In this model, adding additional
 processing nodes, on-runtime, can be more difficult, because they need to have
 an addressing mechanism. % JJ, help I don't know if this is clearly understood, a mean like a DNS - Mario
-
-
-
-
 
 \begin{figure}[ht]
     \centering
@@ -558,6 +558,26 @@ an addressing mechanism. % JJ, help I don't know if this is clearly understood, 
     \label{fig:pool_island}
 \end{figure}
 
+A typical design pattern used to alleviate the above drawbacks is the use of a
+central repository or pool of individuals that is available to all processing
+nodes.  In Figure \ref{fig:pool_island} we show the main components of a pool-based
+multi-population algorithm. Although algorithms and subpopulation state remains
+coupled, now, processing nodes do not communicate directly with each other.
+Instead, they interchange individuals with the pool. Communication between nodes
+is not affected if the system adds or removes nodes because they do not know
+about each other.  Since the state of the global population is stored in
+external processing nodes, the system needs additional communication and
+processing for keeping track of each subpopulation.
+
+We show another pool-based approach in Figure  \ref{fig:population_pool}. In
+this design, the global population is stored in a central repository, while
+isolated algorithms take random samples of the global population and use this
+temporal subpopulation as parameters. An advantage of this design is that the
+sampling provides a type of migration between isolated subpopulations. A problem
+found is that when a processing node returns a subpopulation to the pool, the
+state of the subpopulation is lost. But having the algorithm decoupled opens the
+possibility of having a serverless-function implementation.   
+
 \begin{figure}[ht]
     \centering
     \includegraphics[width=\textwidth]{population_pool}
@@ -565,10 +585,27 @@ an addressing mechanism. % JJ, help I don't know if this is clearly understood, 
     \label{fig:population_pool}
 \end{figure}
 
+\section{Container-based application} 
+\label{docker}
+
+We have mentioned several advantages of a cloud-native application for running
+multi-population based algorithms, but there are in our experience several
+practical issues of this approach. In general, cloud platforms have free-tiers
+for their services, and many offer academic discounts to students. But once we
+pass to the pay-as-you-go tier, computing resources need to be managed.  First,
+in many cases, there is a credit-card need to guarantee the payment of the
+resources consumed and someone responsible for assigning quotas and, more
+importantly, special keys for using the cloud's API.  If these keys are
+compromised or shared by their holders,  additional costs or administrative
+procedures are in order. For those cases when a prototype platform is needed,
+for instance, students developing a new algorithm variant or experimenting with
+a published work, a container-based platform can be more practical.
+
+\subsection{Containers} 
+\label{edm}
 
 
-
-\subsection{Workers} 
+\subsection{Docker compose} 
 \label{edm}
 
 
@@ -582,8 +619,6 @@ an addressing mechanism. % JJ, help I don't know if this is clearly understood, 
     \includegraphics[width=\textwidth]{experiment_flow}
     \caption{EvoSwarm Workflow}
 \end{sidewaysfigure}
-
-
 
 
 \begin{figure}[ht]
