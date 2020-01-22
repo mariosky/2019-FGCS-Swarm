@@ -3,6 +3,7 @@
 \usepackage{lineno,hyperref}
 \usepackage{rotating}
 \usepackage{algpseudocode,algorithm}
+\usepackage{hyperref}
 
 \graphicspath{ {./images/} }
 
@@ -626,6 +627,24 @@ description of the technology we used.
 
 \subsection{Controller Container} 
 \label{controller}
+
+The controller is an essential component of the architecture (Figure \ref{fig:kafkEO})
+because it is responsible for maintaining the evolutionary loop. It takes newly
+evolved populations from the Output Queue, mixes them,   and produces new
+messages from the result. At the same time, it must keep track of two conditions
+for ending the loop: the number of messages it has received reaches a maximum
+value, or the error of the best solution reaches a specific size.  Finally, it
+must filter out remnant messages from other experients. Messages from other
+experiments can remain in the queues because of the asynchronous nature of the
+system.  We chose to implement the controller in Python but using an API
+specialized in asynchronous event-driven programming over data streams.  The
+open-source library is called Reactive Extensions for Python (RxPY)
+\url{https://github.com/ReactiveX/RxPY} based on the Observer pattern
+\cite{gamma1995design} and functional programming.  
+
+
+
+
 \begin{figure}[ht]
     \centering
     \includegraphics[width=\textwidth]{marble_controller}
@@ -647,18 +666,17 @@ description of the technology we used.
 Figure \ref{fig:worker}.
 
 \begin{algorithm}
-    \caption{<your caption for this algorithm>}
-    \label{<your label for references later in your document>}
+    \caption{Migration}
+    \label{read}
     \begin{algorithmic}[1]
-            \Procedure{Euclid}{$a,b$}\Comment{The g.c.d. of a and b}
-            \State $r\gets a\bmod b$
-            \While{$r\not=0$}\Comment{We have the answer if r is 0}
-            \State $a\gets b$
-            \State $b\gets r$
-            \State $r\gets a\bmod b$
-            \EndWhile\label{euclidendwhile}
-            \State \textbf{return} $b$\Comment{The gcd is b}
-            \EndProcedure
+        \Procedure{cxBestFromEach}{$pop_1,pop_2$}
+            \State $pop_1.sort()$
+            \State $pop_2.sort()$
+            \State $size\gets min(len(pop_1), len(pop_2))$
+            \State $cxpoint\gets (size-1)/2$
+            \State $pop_1[cxpoint:]\gets pop_2[:cxpoint+2]$
+            \State \textbf{return} $pop_1$
+        \EndProcedure
             
     \end{algorithmic}
 \end{algorithm}
@@ -667,6 +685,7 @@ Figure \ref{fig:worker}.
 
 \subsection{Experimental Process} 
 \label{experiment_flow}
+
 
 \begin{sidewaysfigure}
     \centering
