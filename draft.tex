@@ -2,7 +2,7 @@
 
 \usepackage{lineno,hyperref}
 \usepackage{rotating}
-\usepackage{algorithm}
+\usepackage{algpseudocode,algorithm}
 
 \graphicspath{ {./images/} }
 
@@ -626,6 +626,13 @@ description of the technology we used.
 
 \subsection{Controller Container} 
 \label{controller}
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=\textwidth]{marble_controller}
+    \caption{Marble diagram for the Reactive Python implementation of the Controller}
+    \label{fig:marble_controller}
+\end{figure}
+
 
 \begin{figure}[ht]
     \centering
@@ -638,6 +645,23 @@ description of the technology we used.
 \label{workers}
 
 Figure \ref{fig:worker}.
+
+\begin{algorithm}
+    \caption{<your caption for this algorithm>}
+    \label{<your label for references later in your document>}
+    \begin{algorithmic}[1]
+            \Procedure{Euclid}{$a,b$}\Comment{The g.c.d. of a and b}
+            \State $r\gets a\bmod b$
+            \While{$r\not=0$}\Comment{We have the answer if r is 0}
+            \State $a\gets b$
+            \State $b\gets r$
+            \State $r\gets a\bmod b$
+            \EndWhile\label{euclidendwhile}
+            \State \textbf{return} $b$\Comment{The gcd is b}
+            \EndProcedure
+            
+    \end{algorithmic}
+\end{algorithm}
 
 
 
