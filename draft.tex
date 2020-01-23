@@ -259,7 +259,7 @@ follows:
                           % also). - JJ
 \end{itemize}
 
-The organization of the paper is as follows. First, in Section \ref{multi}, we present a
+The organization of the paper is as follows: First, in Section \ref{multi}, we present a
 background of the fundamental issues of integrating nature-inspired optimization
 and multi-population methods. Section \ref{soa} presents state of the art relevant to
 our work. In Section \ref{method}, we present the proposed method and the container-based
@@ -268,8 +268,6 @@ the design of the empirical evaluation we designed to assess the effectiveness
 of the method, and in Section \ref{results}, we report and discuss the results. Finally, we
 offer the conclusions of this paper and suggestions on future work in Section \ref{conclusions}.
 
-
-% A state of the art should be included here too - JJ
 
 \section{Multi-population methods} % Is this part of the state of the
 \label{multi}
@@ -382,17 +380,20 @@ In this section, we present the design
 and a container-based implementation of the model we propose for the execution
 of multi-population based algorithms. We follow the requirements outlined in
 Section \ref{multi} and the general design principles of cloud-native
-applications we have mention earlier. As a first step, we describe the general
-architecture first, and then we describe each component in detail. 
+applications we have mentioned earlier. As a first step, we describe the general
+architecture first, and then  every component in detail. 
 
-The primary data element used throughout the system is the subpopulation, and at a higher
+The most elemental data structure used throughout the system is the subpopulation; and at a higher
 level, we can view the system as a continuous stream of subpopulations
 flowing
 % We talk about "multi-population" elsewhere, including the
 % abstract. We should unify terminology - JJ
 % "multi-population" is the whole thing, a subpopulation is a member of that.
 % "A multi-population has many subpopulations or should we call them just populations?"
-% I will add a comment about this in the Multi-population section - Mario
+% I will add a comment about this in the Multi-population section -
+% Mario
+% use the usual "multi-deme" terminology. A population has different
+% sub-populations nad uses a multi-deme implementation - JJ
 from one process to the other. By "continuous stream," we mean that ideally,
 everything must happen asynchronously without components needing to wait for
 others. In this kind of system, this streaming functionality is normally
@@ -401,21 +402,26 @@ to communicate a subpopulation to another, it must pack the sub-population into
 a message, and then send the message asynchronously % I don't know if
                                 % asynchronously applies here. It's
                                 % simply sent - JJ 
-                                % Meaning it does not wait for a respone, it continues doing other stuff - Mario 
+                                % Meaning it does not wait for a
+                                % respone, it continues doing other
+                                % stuff - Mario
+% That's rather "fire and forget". Or simply say it's sent without
+% waiting for a response - JJ
 to the queuing system; this
 means that after the process pushes the message, it continues its execution
 without waiting for a result. On the other end, the recipient subscribes to the
 message queue by defining an event handler method that is going to be triggered when a
-message is pushed to the message queue. The two components at each end of the queue are
+message is pushed to it. The two components at each end of the queue are
 Producers that push messages to the queue and Consumers that pull them. This
-pattern is an essential component of a reactive architecture because it is
-highly scalable; one of the reasons for this are stateless functions. We can
-define stateless functions as methods that do not have side effects, meaning
-they do not need to read, keep, or modify data outside of the method. If
-Consumers are implemented using stateless functions, then there is no difference
+pattern is an essential component of a reactive architecture and makes
+it 
+highly scalable; one of the reasons for this is the use of functions
+that have no secondary effects or access global storage, that is,
+stateless functions. These functions do not need to read, keep, or modify data outside of the method. If
+Consumers are implemented using stateless functions, and thus, there is no difference
 between having one or many copies of the same function pulling work from the queue all at the
-same time, because no side effects are going to result from the
-concurrency.
+same time, because no side effects, including unwanted resource
+locking problems,  are going to result from this concurrency.
 % This is important and we should probably mention that in the
 % introduction - JJ 
 Based on these general principles we define next the proposed model.
@@ -423,10 +429,10 @@ Based on these general principles we define next the proposed model.
 
 \begin{sidewaysfigure}
     \centering
-    \includegraphics[width=\textwidth]{kafkEOsmall}
+    \includegraphics[width=\textwidth]{KafkEOsmall}
     \caption{The proposed general architecture, 
      showing each process in a swimlane, message-dataflow,
-     message queues, and high-level tasks for each process.} % This caption? - JJ
+     message queues, and high-level tasks for each process.} 
     \label{fig:kafkEO}
 \end{sidewaysfigure}
 
@@ -453,7 +459,8 @@ the experiements queue, this is not shown in the diagram. The configuration mess
 includes all the parameters needed to execute the algorithm, among other things,
 the number of subpopulations, the number of individuals, and the number of iterations
 of the algorithm. We give more details about the configuration data structure
-in Section []. Once the configuration is read, we can follow the path of 
+in Section []. % Missing
+Once the configuration is read, we can follow the path of 
 messagess as follows:
 
 \begin{enumerate}
@@ -595,17 +602,24 @@ We have mentioned several advantages of a cloud-native application for running
 multi-population based algorithms, but there are in our experience several
 practical issues of this approach. In general, cloud platforms have free-tiers
 for their services, and many offer academic discounts to students. But once we
-pass to the pay-as-you-go tier, computing resources need to be managed.  First,
-in many cases, there is a credit-card need to guarantee the payment of the
+pass to the pay-as-you-go tier, computing resources need to be
+managed, and, where possible, its cost minimized.  First,
+in many cases,  a credit-card is needed to guarantee the payment of the
 resources consumed and someone responsible for assigning quotas and, more
 importantly, special keys for using the cloud's API.  If these keys are
 compromised or shared by their holders,  additional costs or administrative
 procedures are in order. For those cases when a prototype platform is needed,
 for instance, students developing a new algorithm variant or experimenting with
-a published work, a container-based platform can be more practical.Container
+a published work, a container-based platform can be more practical. Container
 technology enables researchers the local deployment of all the infrastructure
 needed to run the experiments. Later, if needed, the same deployment could be
 deployed to the cloud.
+% I don't see this line of argument. You can do exactly the same with
+% virtual machines instead of containers. Also, you can test a virtual
+% infrastructure locally and then only when it's needed deploy it to
+% the cloud. If you want to give good reasons for using containers
+% instead of virtual machines, there are quite a lot non-economic ones
+% - JJ
 
 In this section, we propose a design of a reactive container-based application
 for executing multi-population based optimization experiments.  For the design,
@@ -625,6 +639,9 @@ description of the technology we used.
 \subsection{Redis Container} 
 \label{redis}
 
+% Do we need a description of every container? Wouldn't a general
+% description of the containers used be enough? - JJ
+
 \subsection{Controller Container} 
 \label{controller}
 
@@ -633,7 +650,7 @@ because it is responsible for maintaining the evolutionary loop. It takes newly
 evolved populations from the Output Queue, mixes them,   and produces new
 messages from the result. At the same time, it must keep track of two conditions
 for ending the loop: the number of messages it has received reaches a maximum
-value, or the error of the best solution reaches a specific size.  Finally, it
+value, or the error of the best solution goes below a specific threshold.  Finally, it
 must filter out remnant messages from other experients. Messages from other
 experiments can remain in the queues because of the asynchronous nature of the
 system.  We chose to implement the controller in Python but using an API
