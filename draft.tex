@@ -145,22 +145,6 @@ more flexible, loosely-coupled, and scalable. % Some properies and reference - M
 % Again, you have to justify the need for a reactive architecture and define it before this paragraph - JJ
 
 
-
-% There is a big gap here where you go from generic considerations
-% about cloud computing to the presentation of this method. In the
-% middle, there should be motivation for it, what are you trying to
-% address precisely, and how you intend to address it. "Approaching
-% multi-population algorithms in cloud computing" is not nearly
-% enough. There are several points here, and every one of them needs
-% to be addressed and justified
-% * Using containers as opposed to a serverless architecture or a
-% virtual-machine based one.
-% * Combining several metaheuristics instead of using a single one.
-% * Reducing the amount of parameters.
-% There needs to be a motivation for every one, relate them to the
-% objectives of the paper (which need to be clarified) and eventually
-% prove the contribution of every one of them to the final result - JJ
-
 When designing efficient multi-population algorithms, researchers need to
 consider additional issues \cite{Ma2019}. These include the number and size of subpopulations,
 the interaction between them, the search area of subpopulations, and the search
@@ -362,20 +346,6 @@ PSO
 \section{Proposed Method} 
 \label{method} 
 
-% Based on a reactive architecture \cite{guervos2018introducing} , each
-% subpopulation is represented as an event message that is pushed asynchronously
-% into a message queue. Incoming messages trigger stateless functions that receive
-% the subpopulation and proceed to run an algorithm, using the parameters and
-% population included in the message. After the specified number of iterations,
-% each stateless function returns the evolved subpopulation by again pushing a
-% message to another queue, used for receiving the resulting subpopulations.
-% Subpopulations are received from the queue by a controller that is responsible
-% for mixing the individuals from different subpopulations and producing new
-% subpopulations. These new subpopulations are pushed again by the controller into
-% the message queue, creating a loop. The cycle stops when the controller receives
-% a subpopulation containing a candidate solution that satisfies a particular
-% condition, or a maximum number of messages were received.
-
 In this section, we present the design
 and a container-based implementation of the model we propose for the execution
 of multi-population based algorithms. We follow the requirements outlined in
@@ -394,12 +364,20 @@ flowing
 % Mario
 % use the usual "multi-deme" terminology. A population has different
 % sub-populations nad uses a multi-deme implementation - JJ
+% Let's talk about it, I am using the Multi-population terminology 
+% maybe multi-dem is more common in the EA community but not 
+% much in the Swarm Intelligence side?  
+% Any how, we decide and explain the difference so readers of both 
+% camps are Ok with it. 
+% I prefer the use of population and something like the global population - Mario
+
 from one process to the other. By "continuous stream," we mean that ideally,
 everything must happen asynchronously without components needing to wait for
 others. In this kind of system, this streaming functionality is normally
 implemented by using a message queue system. For instance, if one process needs
 to communicate a subpopulation to another, it must pack the sub-population into
-a message, and then send the message asynchronously % I don't know if
+a message, and then send the message 
+% I don't know if
                                 % asynchronously applies here. It's
                                 % simply sent - JJ 
                                 % Meaning it does not wait for a
@@ -407,7 +385,8 @@ a message, and then send the message asynchronously % I don't know if
                                 % stuff - Mario
 % That's rather "fire and forget". Or simply say it's sent without
 % waiting for a response - JJ
-to the queuing system; this
+% corrected - Mario
+to the queuing system without waiting for a response; this
 means that after the process pushes the message, it continues its execution
 without waiting for a result. On the other end, the recipient subscribes to the
 message queue by defining an event handler method that is going to be triggered when a
@@ -459,7 +438,7 @@ the experiements queue, this is not shown in the diagram. The configuration mess
 includes all the parameters needed to execute the algorithm, among other things,
 the number of subpopulations, the number of individuals, and the number of iterations
 of the algorithm. We give more details about the configuration data structure
-in Section []. % Missing
+in Section \ref{experiment_flow}. % Missing  % added 
 Once the configuration is read, we can follow the path of 
 messagess as follows:
 
@@ -620,6 +599,7 @@ deployed to the cloud.
 % the cloud. If you want to give good reasons for using containers
 % instead of virtual machines, there are quite a lot non-economic ones
 % - JJ
+% OK, I will add an issue - Mario 
 
 In this section, we propose a design of a reactive container-based application
 for executing multi-population based optimization experiments.  For the design,
@@ -636,11 +616,10 @@ description of the technology we used.
 \label{compose}
 % TO DO
 
-\subsection{Redis Container} 
-\label{redis}
 
 % Do we need a description of every container? Wouldn't a general
-% description of the containers used be enough? - JJ
+% description of the containers used be enough? - JJ 
+% Ok, I think only workers and the controller need to be described in detail - Mario 
 
 \subsection{Controller Container} 
 \label{controller}
@@ -656,8 +635,10 @@ experiments can remain in the queues because of the asynchronous nature of the
 system.  We chose to implement the controller in Python but using an API
 specialized in asynchronous event-driven programming over data streams.  The
 open-source library is called Reactive Extensions for Python (RxPY)
-\url{https://github.com/ReactiveX/RxPY} based on the Observer pattern
-\cite{gamma1995design} and functional programming.  
+\url{https://github.com/ReactiveX/RxPY}an it is based on the Observer pattern
+\cite{gamma1995design} and functional programming.
+
+
 
 
 
