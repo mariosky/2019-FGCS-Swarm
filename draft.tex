@@ -615,7 +615,7 @@ description of the technology we used.
 \subsection{Docker Compose} 
 \label{compose}
 % TO DO
-
+ 
 
 % Do we need a description of every container? Wouldn't a general
 % description of the containers used be enough? - JJ 
@@ -650,7 +650,7 @@ sequence of items, and all the subscribed observers react to each emission. The
 ReactiveX library includes several reactive operators that we can use to
 transform and combine sequences of items. These operators provide reactive
 extensions that allow us to compose asynchronous sequences together in a
-declarative manner. In Figure /ref{marble}, we use a so-called marble diagram to
+declarative manner. In Figure \ref{fig:marble_controller}, we use a so-called marble diagram to
 represent the composition of Observables and reactive extensions operators. We
 represent the timeline of an Observable as a horizontal arrow, which indicates
 that time flows from left to right. In the diagram, items are represented as
@@ -662,38 +662,41 @@ this approach is more elegant than nested callbacks, that are more difficult
 to code and debug. 
 
 Now we proceed to explain the reactive implementation of the controller.
-In Figure /ref{marble}, we  have the following composition of Observables:
+In Figure \ref{fig:marble_controller}, we  have the following composition of Observables:
 
 \begin{enumerate}
 
 \item The controller continually pulls new messages from the Output 
-message queue. These messages are instantly emitted by the consumed\_messages 
+message queue. These messages are instantly emitted by the  \texttt{consumed\_messages}
 Observable. In this particular period, we can see that the stream receives 
 two populations from another experiment, and are shown as two red marbles.  
 The filter operator removes all messages that belong to a different experiment; 
 in this case, we are only interested in blue marbles. 
 
-\item The max\_iterations parameter indicates the number of populations that
+\item The \texttt{max\_iterations} parameter indicates the number of populations that
 are going to be accepted. When this number of messages is reached, we must
-end the loop. In this example, max\_iterations = 6,  the take operator 
+end the loop. In this example, \texttt{max\_iterations = 6},  the take operator 
 assures that only 6 messages are received. After the Observable emits 
 the sixth message, it triggers the completed event.
 
-\item Many observers can be subscribed to the valid\_messages Observable because it
+\item Many observers can be subscribed to the \texttt{valid\_messages}  Observable because it
 emits all the valid items. At the moment, there are to additional methods
 subscribed that we are not showing, one for logging and the other for monitoring
 the search.
 
-\item The buffer\_with\_count(3) operator, waits until it receives 
+\item The   \texttt{buffer\_with\_count(3)} operator, waits until it receives 
 three valid messages to emit a single message that contains a list with
-the previous three. The migration method requires that list to mix them.
+the previous three. The migration method requires that list to mix them. 
+In our previous work, we needed a local buffer for storing a certain 
+number of populations to mix them with others. This design has the advantage
+of not needing extra memory, and it integrates better with the reactive paradigm.
+A possible disadvantage can be that it only mixes contiguous populations,
+but this can be mitigated with a larger buffer.
 
-\item The population\_mixer method pushes new populations to the messages Observable,
-a publish(population) observer is responsible for pushing 
+\item The  \texttt{population\_mixer} method pushes new populations to the messages Observable,
+a  \texttt{publish(population)} observer is responsible for pushing 
 the newly generated populations back to the Input Message Queue.
-
 \end{enumerate}
-
 
 
 
@@ -724,8 +727,6 @@ Figure \ref{fig:worker}.
             
     \end{algorithmic}
 \end{algorithm}
-
-
 
 \subsection{Experimental Process} 
 \label{experiment_flow}
