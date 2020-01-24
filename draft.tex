@@ -633,12 +633,24 @@ value, or the error of the best solution goes below a specific threshold.  Final
 must filter out remnant messages from other experients. Messages from other
 experiments can remain in the queues because of the asynchronous nature of the
 system.  We chose to implement the controller in Python but using an API
-specialized in asynchronous event-driven programming over data streams.  The
-open-source library is called Reactive Extensions for Python (RxPY)
-\url{https://github.com/ReactiveX/RxPY}an it is based on the Observer pattern
-\cite{gamma1995design} and functional programming.
+specialized in asynchronous event-driven programming over data streams.  
+The open-source library is called Reactive Extensions (ReactiveX) for Python 
+\url{https://github.com/ReactiveX/RxPY} an it is based on the Observer 
+pattern \cite{gamma1995design} and functional programming.
 
-
+In ReactiveX, an observer object subscribes to an Observable. Observables emit a
+sequence of items, and all the subscribed observers react to each emission. The
+ReactiveX library includes several reactive operators that we can use to
+transform and combine sequences of items. These operators provide reactive
+extensions that allow us to compose asynchronous sequences together in a
+declarative manner. In Figure /ref{marble}, we use a so-called marble diagram to
+represent the composition of Observables and reactive extensions operators. We
+represent the timeline of an Observable as a horizontal arrow, which indicates
+that time flows from left to right. In the diagram, items are represented as
+marbles. The position of each marble indicates the point in time when they were
+emitted by the Observable. Reactive operators are represented as text boxes,
+showing the transformation to be applied. Normally, a transformation results in
+another Observable, again emitting the results.
 
 
 
