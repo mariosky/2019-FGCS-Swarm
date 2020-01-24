@@ -638,6 +638,13 @@ The open-source library is called Reactive Extensions (ReactiveX) for Python
 \url{https://github.com/ReactiveX/RxPY} an it is based on the Observer 
 pattern \cite{gamma1995design} and functional programming.
 
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=\textwidth]{marble_controller}
+    \caption{Marble diagram for the Reactive Python implementation of the Controller}
+    \label{fig:marble_controller}
+\end{figure}
+
 In ReactiveX, an observer object subscribes to an Observable. Observables emit a
 sequence of items, and all the subscribed observers react to each emission. The
 ReactiveX library includes several reactive operators that we can use to
@@ -650,17 +657,44 @@ that time flows from left to right. In the diagram, items are represented as
 marbles. The position of each marble indicates the point in time when they were
 emitted by the Observable. Reactive operators are represented as text boxes,
 showing the transformation to be applied. Normally, a transformation results in
-another Observable, again emitting the results.
+another Observable, again emitting new results.  For asynchronous programming, 
+this approach is more elegant than nested callbacks, that are more difficult 
+to code and debug. 
+
+Now we proceed to explain the reactive implementation of the controller.
+In Figure /ref{marble}, we  have the following composition of Observables:
+
+\begin{enumerate}
+
+\item The controller continually pulls new messages from the Output 
+message queue. These messages are instantly emitted by the consumed\_messages 
+Observable. In this particular period, we can see that the stream receives 
+two populations from another experiment, and are shown as two red marbles.  
+The filter operator removes all messages that belong to a different experiment; 
+in this case, we are only interested in blue marbles. 
+
+\item The max\_iterations parameter indicates the number of populations that
+are going to be accepted. When this number of messages is reached, we must
+end the loop. In this example, max\_iterations = 6,  the take operator 
+assures that only 6 messages are received. After the Observable emits 
+the sixth message, it triggers the completed event.
+
+\item Many observers can be subscribed to the valid\_messages Observable because it
+emits all the valid items. At the moment, there are to additional methods
+subscribed that we are not showing, one for logging and the other for monitoring
+the search.
+
+\item The buffer\_with\_count(3) operator, waits until it receives 
+three valid messages to emit a single message that contains a list with
+the previous three. The migration method requires that list to mix them.
+
+\item The population\_mixer method pushes new populations to the messages Observable,
+a publish(population) observer is responsible for pushing 
+the newly generated populations back to the Input Message Queue.
+
+\end{enumerate}
 
 
-
-
-\begin{figure}[ht]
-    \centering
-    \includegraphics[width=\textwidth]{marble_controller}
-    \caption{Marble diagram for the Reactive Python implementation of the Controller}
-    \label{fig:marble_controller}
-\end{figure}
 
 
 \begin{figure}[ht]
