@@ -433,7 +433,7 @@ for running the isolated algorithms. In the example, two processes PSO and GA,
 are shown. 
 
 The algorithm starts with the Setup process pulling a configuration message from
-the experiements queue, this is not shown in the diagram. The configuration messsage 
+the experiments queue, this is not shown in the diagram. The configuration message 
 includes all the parameters needed to execute the algorithm, among other things,
 the number of subpopulations, the number of individuals, and the number of iterations
 of the algorithm. We give more details about the configuration data structure
@@ -442,7 +442,7 @@ Once the configuration is read, we can follow the path of
 messagess as follows:
 
 \begin{enumerate}
-\item In this step, the specified number of subpopulations is created acording to the 
+\item In this step, the specified number of subpopulations is created according to the 
 parameters found in the configuration structure. The population at this moment is just
 static data, including each individual inside. Each subpopulation includes a metadata
 section where its algorithm and execution parameters are specified. For instance, 
@@ -460,7 +460,7 @@ They take the current state of the population and run the algorithm for a certai
 number of iterations. 
 
 \item Once they finish the execution, the population state
-is packed again along with aditional metadata about the execution of the algorithm.
+is packed again along with additional metadata about the execution of the algorithm.
 The resulting populations are now pushed to the Output queue. Once finished, another 
 subpopulation is pulled from the queue.
 
@@ -488,8 +488,8 @@ Also, the reactive controller gives designers more control over the multi-popula
 In this process, designers can dynamically change the number of populations, population parameters,
 and migration details on-the-fly.
 \item 
-Another advantege is that algorithm designers have many options for implementing this simple architecture. 
-The same basic components can be implmented as a single multithreaded program, or 
+Another advantage is that algorithm designers have many options for implementing this simple architecture. 
+The same basic components can be implmented as a single multi-threaded program, or 
 as a highly scalable serverless cloud application. Most modern languages include 
 constructs for asynchronous programming using queues or channels, for a multi-threaded
 execution.
@@ -504,10 +504,10 @@ execution.
 
 On the other hand, there are several caveats as well:
 It is more costly to move entire subpopulations as messages than only passing certain individuals 
-from a process to another. Designers must conmsider this cost when working with large
+from a process to another. Designers must consider this cost when working with large
 individuals, and if possible send sub-populations using several messages, use compression or 
 adjust the size of subpopulations. Pool-based algorithms also suffer from this drawback, but 
-web based immplementations have been working with continous optimization problems of 1000 dimensions.
+web based implementations have been working with continuous optimization problems of 1000 dimensions.
 But, in other cases this is not a viable approach. 
 
 \begin{figure}[ht]
@@ -525,7 +525,7 @@ proposals for multi-population algorithms found in the literature. We center the
 comparison on the coupling and communication between the main components:
 Subpopulations, Processing Nodes, and Algorithms.  In Figure \ref{fig:population_message} we show the
 main components of a message-driven architecture. We can see that the algorithm
-and the subpopulations are separated, and the Population Queue keeps the state
+and subpopulations are separated, and the Population Queue keeps the state
 of subpopulations. While algorithms only need the subpopulations as parameters
 for their execution.
 
@@ -564,7 +564,7 @@ temporal subpopulation as parameters. An advantage of this design is that the
 sampling provides a type of migration between isolated subpopulations. A problem
 found is that when a processing node returns a subpopulation to the pool, the
 state of the subpopulation is lost. But having the algorithm decoupled opens the
-possibility of having a serverless-function implementation.   
+possibility of a serverless-function implementation.   
 
 \begin{figure}[ht]
     \centering
@@ -629,7 +629,7 @@ evolved populations from the Output Queue, mixes them,   and produces new
 messages from the result. At the same time, it must keep track of two conditions
 for ending the loop: the number of messages it has received reaches a maximum
 value, or the error of the best solution goes below a specific threshold.  Finally, it
-must filter out remnant messages from other experients. Messages from other
+must filter out remnant messages from other experiments. Messages from other
 experiments can remain in the queues because of the asynchronous nature of the
 system.  We chose to implement the controller in Python but using an API
 specialized in asynchronous event-driven programming over data streams.  
