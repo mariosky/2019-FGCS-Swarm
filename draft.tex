@@ -69,7 +69,7 @@ Multi-population \sep Nature-inspired algorithm \sep Parallel Genetic Algorithms
 
 \section{Introduction}
 
-In the last decades, nature-inspired optimization algorithms have been succesfully
+In the last decades, nature-inspired optimization algorithms have been successfully
 applied to solve complex real-world problems \cite{yang2014nature}. Algorithms
 inspired by natural processes include evolutionary algorithms (EAs)
 \cite{back1996evolutionary} and swarm intelligence (SI) \cite{kennedy2006swarm},
@@ -172,7 +172,7 @@ multi-population solutions face the additional challenges:
     worker processes and their capabilities.  
 \end{itemize}
 
-Taking these factors into account, in this work, we present EcoSwarm, 
+Taking these factors into account, in this work, we present EvoSwarm, 
 a multi-container Docker application that reactively processes isolated and
 heterogeneous subpopulations. The platform uses the Docker Compose tool for
 defining and running experiments as multi-container applications. 
@@ -182,7 +182,7 @@ defining and running experiments as multi-container applications.
 We preferred the use of a container-based application for this prototype because
 it is more suitable for development and replication without the need for
 additional components. Nevertheless, the application is compatible with other
-orchestration and deployment technologies if more scalabilty is needed. 
+orchestration and deployment technologies if more scalability is needed. 
 With additional configuration settings, applications can be deployed 
 to a Docker Swarm or a Kubernetes system.  
 
@@ -357,7 +357,7 @@ and run.
 Later approaches use microservices \cite{khalloof2018generic}, or were
 systematized \cite{salza2019speed} achieving speed-up through the
 creation of an abstraction layer over the evolutionary algorithm
-services, and also automatization of the whole workflow. This research
+services, and also automation of the whole workflow. This research
 bumped into some problems, since speedup is limited, mainly due to the
 non-automatic scaling of services and also the presence of a single
 master which is the one that runs the evolutionary
@@ -493,7 +493,7 @@ the number of subpopulations, the number of individuals, and the number of itera
 of the algorithm. We give more details about the configuration data structure
 in Section \ref{experiment_flow}. % Missing  % added 
 Once the configuration is read, we can follow the path of 
-messagess as follows:
+messages as follows:
 
 \begin{enumerate}
 \item In this step, the specified number of populations are created according to the 
@@ -526,7 +526,7 @@ reached it signals the stop of the execution.
 \item Otherwise, it passes the stream of messages 
 to a migration process, where subpopulations are mixed with each other. New populations 
 are generated from this migration, and they are again pushed to the Input queue to continue 
-in a loop. The \texttt{Controller} is also responsible of logging the metadata recived with the
+in a loop. The \texttt{Controller} is also responsible of logging the metadata received with the
 messages.  
 \end{enumerate}
 
@@ -534,7 +534,7 @@ This reactive architecture has the following advantages:\begin{itemize}
 \item 
 An important aspect of proposal is the decoupling of the population and 
 the population-based algorithm. It is common that in a classic island-based algorithm
-each island is executed in a separate processing node, i.e. in a virtual machine, cpu,
+each island is executed in a separate processing node, i.e. in a virtual machine, CPU,
 or thread. In this case we can have just one processing node, or many nodes, each 
 running a different search strategy, or using its own parameters. 
 \item 
@@ -543,7 +543,7 @@ In this process, designers can dynamically change the number of populations, pop
 and migration details on-the-fly.
 \item 
 Another advantage is that algorithm designers have many options for implementing this simple architecture. 
-The same basic components can be implmented as a single multi-threaded program, or 
+The same basic components can be implemented as a single multi-threaded program, or 
 as a highly scalable serverless cloud application. Most modern languages include 
 constructs for asynchronous programming using queues or channels, for a multi-threaded
 execution.
@@ -687,7 +687,7 @@ Each queue is a Redis List object, and we use
 the \texttt{LPOP} (left pop), and \texttt{RPOP} (right pop) commands for a queue like behavior.
 In those cases where we needed a blocking behavior, i.e., when a process needs
 to wait until a message is available, we used the blocking versions \texttt{BLPOP} and
-\texttt{BRPOP}. Redis in-memory operation are very fast, and all of the obove 
+\texttt{BRPOP}. Redis in-memory operation are very fast, and all of the above 
 operations have a time complexity of $\mathcal{O}(1)$. We use the official 
 \texttt{redis:alpine} container image from DockerHub.  
 
@@ -879,9 +879,9 @@ maximum number of FEs is $200,000$
 The COCO framework offers several tools to compare the performance of
 algorithms, generating data sets, tables, and reports for an experiment. There
 is a repository\footnote{\url{https://coco.gforge.inria.fr/doku.php?id=algorithms-bbob}} 
-of more than 200 results for the noiseless BOBB testbed, collected from 
+of more than 200 results for the noiseless BBOB testbed, collected from 
 BBOB workshops and special sessions between the years 2009 and2019. The
-EvoSwarm application includes an adapted version of the noiseless BOBB testbed,
+EvoSwarm application includes an adapted version of the noiseless BBOB testbed,
 compatible with the scripts of the framework, to compare with other algorithms
 in the repository.
 
@@ -954,7 +954,7 @@ heterogeneous workers; in these parameters, the range of values is specified.
       \multicolumn{3}{|l|}{Benchmark Functions}          & \texttt{list}    & \texttt{[1, 2, 3, 4, 5]} \\ \hline
       \multicolumn{3}{|l|}{Dimensions}                   & \texttt{list}    & \texttt{[10, 20, 40]}        \\ \hline
       \multicolumn{3}{|l|}{Crossover Probability Range}  & \texttt{list}    & \texttt{[0.2, 0.6]}      \\ \hline
-      \multicolumn{3}{|l|}{Mutation  Probability Rrange} & \texttt{list}    & \texttt{[0.1, 0.3]}      \\ \hline
+      \multicolumn{3}{|l|}{Mutation  Probability Range} & \texttt{list}    & \texttt{[0.1, 0.3]}      \\ \hline
       \multicolumn{5}{|c|}{Dimensions}                                                      \\ \hline  
       Dimension               & Generations & Population Size & Populations  &     Iterations    \\ \hline
               10              & 50      & 140                 &      5                 & 30                \\ \hline
