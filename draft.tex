@@ -4,6 +4,7 @@
 \usepackage{rotating}
 \usepackage{algpseudocode,algorithm}
 \usepackage{hyperref}
+\usepackage{listings}
 
 \graphicspath{ {./images/} }
 
@@ -11,7 +12,7 @@
 
 \journal{Future Generation Computer Systems}
 \begin{document}
-
+\lstset{language=Python} 
 \begin{frontmatter}
 
 \title{An Event-based Architecture for Multi-population Optimization Algorithms}
@@ -820,24 +821,25 @@ maximum number of FEs is $200,000$
 
 The COCO framework offers several tools to compare the performance of
 algorithms, generating data sets, tables, and reports for an experiment. There
-is a repository of more than 200 results for the noiseless BOBB testbed,
-collected from BBOB workshops and special sessions between the years 2009 and
-2019 \url{https://coco.gforge.inria.fr/doku.php?id=algorithms-bbob}. The
+is a repository\footnote{\url{https://coco.gforge.inria.fr/doku.php?id=algorithms-bbob}} 
+of more than 200 results for the noiseless BOBB testbed, collected from 
+BBOB workshops and special sessions between the years 2009 and2019. The
 EvoSwarm application includes an adapted version of the noiseless BOBB testbed,
 compatible with the scripts of the framework, to compare with other algorithms
 in the repository.
 
-To validate the heterogeneous multi-population setting, we compare between
-homogeneous and an ensemble of multi-populations, using Genetic Algorithms
-(GAs) and Particle Swarm Optimization (PSO). For the GA implementation, we used
-the DEAP library \cite{fortin2012deap} and for the PSO, the EvoloPy library
-\cite{faris2016evolopy}. Both Python libraries are open-source. In EvoSwarm 
-these two algorithms are implemented as stateless functions. 
+To test the heterogeneous multi-population capabilities,  we compare the
+performance between a homogeneous and an ensemble of multi-populations, using
+Genetic Algorithms (GAs) and Particle Swarm Optimization (PSO). For the GA
+implementation, we used the DEAP library \cite{fortin2012deap} and for the  PSO,
+the EvoloPy library \cite{faris2016evolopy}. Both Python libraries are
+open-source. In EvoSwarm these two algorithms are implemented as stateless
+functions.  
 
-
-We show the parameters for each algorithm, GA in Table \ref{tab:GAparams} and
-for PSO in Table \ref{tab:PSOparams}. We obtained these parameters in a
-previous work \cite{}. To obtain the parameters, we tested first on the
+Next, we show the parameters for each algorithm, in Table \ref{tab:GAparams} 
+for the GA and in Table \ref{tab:PSOparams} for PSO. We obtained these parameters 
+following the same method as in a previous work \cite{garcia2017benchmarking}. 
+To obtain the parameters, we tested first on the
 Rastrigin separable function with five dimensions. After about fifteen
 experiments, the most challenging targets were achieved for this particular
 function. We tested again with functions one to three, and after obtaining
@@ -853,11 +855,11 @@ heterogeneous workers; in these parameters, the range of values is specified.
   \small
   \begin{tabular}{|l|c|}
     \hline
-    Selection & Tournament size=12\\ \hline
-    Mutation & Gaussian $\mu=0.0$, $\sigma=0.5$, indbp=0.05  \\ \hline
-    Mutation Probability & [0.1,0.3]  \\ \hline
-    Crossover & Two Point  \\ \hline
-    Crossover Probability& [0.2,0.6]  \\ \hline
+    Selection & Tournament size=12                            \\ \hline
+    Mutation & Gaussian $\mu=0.0$, $\sigma=0.5$, indbp=0.05   \\ \hline
+    Mutation Probability & [0.1,0.3]                          \\ \hline
+    Crossover & Two Point                                     \\ \hline
+    Crossover Probability  & [0.2,0.6]                          \\ \hline
   \end{tabular}
 \end{table}
 
@@ -877,11 +879,39 @@ heterogeneous workers; in these parameters, the range of values is specified.
   \end{tabular}
 \end{table}
 
+
+% Experiment configuration 
+
+\begin{table}
+    \small
+    \caption{ Experiment configuration example 
+    }
+    \label{tab:params}
+    \centering
+    \small
+    \begin{tabular}{|l|l|l|l|l|}
+      \hline
+      \multicolumn{3}{|l|}{Parameter}                   & Type             & Example         \\ \hline
+      \multicolumn{3}{|l|}{Worker Containers (Docker Compose)}        & \texttt{int}     & \texttt{8} \\ \hline
+      \multicolumn{3}{|l|}{GA-PSO Ratio}                 & \texttt{decimal} & \texttt{0.5}    \\  \hline
+      \multicolumn{3}{|l|}{Benchmark Functions}          & \texttt{list}    & \texttt{[1, 2, 3, 4, 5]} \\ \hline
+      \multicolumn{3}{|l|}{Dimensions}                   & \texttt{list}    & \texttt{[10, 20, 40]}        \\ \hline
+      \multicolumn{3}{|l|}{Crossover Probability Range}  & \texttt{list}    & \texttt{[0.2, 0.6]}      \\ \hline
+      \multicolumn{3}{|l|}{Mutation  Probability Rrange} & \texttt{list}    & \texttt{[0.1, 0.3]}      \\ \hline
+      \multicolumn{5}{|c|}{Dimensions}                                                      \\ \hline  
+      Dimension               & Generations & Population Size & Populations  &     Iterations    \\ \hline
+              10              & 50      & 140                 &      5                 & 30                \\ \hline
+              20              & 66      & 200                 &      5                 & 30               \\ \hline
+              40              & 80      & 250                 &      5                 & 40                \\ \hline
+    \end{tabular}
+\end{table}
+
+
 \begin{table}
     \small
     \caption{10 Populations experiment parameters
     }
-    \label{tab:params:workers}
+    \label{tab:params:10}
     \centering
     \small
     \begin{tabular}{|l|c|c|c|c|c|c|}
@@ -898,7 +928,7 @@ heterogeneous workers; in these parameters, the range of values is specified.
     \small
     \caption{5 Populations experiment parameters
     }
-    \label{tab:params:workers}
+    \label{tab:params:5}
     \centering
     \small
     \begin{tabular}{|l|c|c|c|c|c|c|}
