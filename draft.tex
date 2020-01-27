@@ -322,6 +322,57 @@ parallel, asynchronous, heterogeneous, and parameter-free algorithms in a scalab
 
 \section{State of the Art} 
 \label{soa}
+
+Although on first sight containers look like simply a method that
+allows easy shipping of applications, they are much more than
+that. One of the first features that make them interesting is their
+ephemerality: fast startup and teardown time make them usable for
+machine-independent and cloud deployment of simple, ephemeral and
+maybe stateless functions. On the other hand, containerization also
+allows, through the use of orchestration engines like Docker Swarm or
+Kubernetes, or through simple, non-self-scaling specifications using
+Docker Compose, a definition of all the relationships between
+different parts of the application, or services. The full realization
+of Docker-based architectures has led to the creation of a series of
+patterns that, together, conform cloud-native application development
+\cite{kratzke2017understanding}.
+
+However, in the field of evolutionary algorithms, this has been a slow
+realization, from the origins where Salza and Ferrucci
+\cite{salza2016approach,salza2016develop} proposed an architecture
+that carried evolutionary algorithms to the cloud, developed further
+in \cite{de2017parallel} which starts to introduce cloud native
+aspects such as the use of messaging queues and CoreOS as an operating
+system designed from the ground up for container utilization. The way
+these containers are organized, however, is rather classical in
+nature: a master-worker approach, communicated using RabbitMQ, where
+replicated workers perform the tasks in parallel. They called their
+approach AMQPGA, inspired by the protocol, AMQP, used by RabbitMQ, the
+messaging system. Other EAs topologies have also been used in the
+cloud: \cite{dziurzanski2020scalable} adapts an island model to a
+container architecture, in a system that is functionally equivalent to
+classical models, but with the added advantage of being easy to deploy
+and run.
+
+Later approaches use microservices \cite{khalloof2018generic}, or were
+systematized \cite{salza2019speed} achieving speed-up through the
+creation of an abstraction layer over the evolutionary algorithm
+services, and also automatization of the whole workflow. This research
+bumped into some problems, since speedup is limited, mainly due to the
+non-automatic scaling of services and also the presence of a single
+master which is the one that runs the evolutionary
+algorithms. However, this master-worker architecture can be turned
+around with other kind of evolutionary architectures, such
+as pool-based systems
+\cite{valenzuela2015implementing,merelo2012sofea,sofea:cec2012} where
+a better match to the inherently heterogeneous nature of cloud-based
+architectures. Pool-based systems are closer to serverless systems
+\cite{malawski2017serverless}, and they pull from the pool and run
+whole algorithms, instead of just evaluation. The pool from where they
+pull is the common store of results, and can be accessed in an
+asynchronous way, which suits better the nature of cloud systems.
+
+
 % a lot of this has been done in the previous method... Maybe there's
 % not that much to do - JJ
 % Hadoop 
