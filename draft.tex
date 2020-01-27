@@ -419,21 +419,21 @@ Based on these general principles we define next the proposed model.
 Based on a reactive architecture we proposed in a previous work
 \cite{guervos2018introducing}, we now describe the general architecture shown in
 Figure \ref{fig:kafkEO}. Again, we can explain the model using the analogy
-of Producers and Consumers of messages. First, we can see that
-there are two queues, one labeled Input, and the other one Output. In the diagram, 
+of producers and consumers of messages. First, we can see that
+there are two queues, one labeled \texttt{Input}, and the other one \texttt{Output}. In the diagram, 
 push operations on a queue are represented by solid arrows connecting to the left side
-of the box, and pull or pop operations as solid arrows leaving from the right side.
+of the queue box, and pull or pop operations as solid arrows leaving from the right side.
 Also, the architecture has at least four processes indicated in the diagram as
-swimlanes: First, the Setup process, responsible for the reading a configuration
-file, and creating the initial subpopulations. Second, a Controller process,
+swimlanes: First, the \texttt{Setup} process, responsible for the reading a configuration
+file, and creating the initial subpopulations. Second, the \texttt{Controller} process,
 responsible for the migration between subpopulations, and keeping track of the
-iterations of the algorithm. The Message Queue process runs the Input and Output
-queues. Finally, there is at least one Stateless Function process responsible
-for running the isolated algorithms. In the example, two processes PSO and GA,
+iterations of the algorithm. The \texttt{Message Queue} process runs the \texttt{Input} and \texttt{Output}
+queues. Finally, there is at least one \texttt{Stateless Function} process responsible
+for running the isolated algorithms. In the example, two processes \texttt{PSO} and \texttt{GA},
 are shown. 
 
-The algorithm starts with the Setup process pulling a configuration message from
-the experiments queue, this is not shown in the diagram. The configuration message 
+The algorithm starts with the \texttt{Setup} process pulling a configuration message from
+the \texttt{Experiments} queue, this is not shown in the diagram. The configuration message 
 includes all the parameters needed to execute the algorithm, among other things,
 the number of subpopulations, the number of individuals, and the number of iterations
 of the algorithm. We give more details about the configuration data structure
@@ -442,19 +442,19 @@ Once the configuration is read, we can follow the path of
 messagess as follows:
 
 \begin{enumerate}
-\item In this step, the specified number of subpopulations is created according to the 
+\item In this step, the specified number of populations are created according to the 
 parameters found in the configuration structure. The population at this moment is just
 static data, including each individual inside. Each subpopulation includes a metadata
 section where its algorithm and execution parameters are specified. For instance, 
 for a GA, the mutation rate, type of crossover operator, and other values are indicated.
 
-\item Each subpopulation is then pushed to the Input queue, so they can be consumed 
+\item Each subpopulation is then pushed to the \texttt{Input} queue, so they can be consumed 
 by Stateless functions responsible for the execution of the search.  % Why the caps in Stateless? - JJ  
 % It refers to the swimlines in the diagram, maybe I should point it out  - Mario
 % Added a comment above. - Mario
 
-\item One or more Stateless functions are constantly pulling subpopulation messages
-from the Input queue. Taking the population data and metadata as parameters, these 
+\item One or more \texttt{Stateless functions} are constantly pulling subpopulation messages
+from the \texttt{Input} queue. Taking the population data and metadata as parameters, these 
 functions are responsible for the actual execution of the optimization algorithm. 
 They take the current state of the population and run the algorithm for a certain 
 number of iterations. 
@@ -464,15 +464,15 @@ is packed again along with additional metadata about the execution of the algori
 The resulting populations are now pushed to the Output queue. Once finished, another 
 subpopulation is pulled from the queue.
 
-\item The Controller process is responsible for keeping track of the progress of 
-the search. It pulls current subpopulations from the Output queue, inspects the metadata 
+\item The \texttt{Controller} process is responsible for keeping track of the progress of 
+the search. It pulls current populations from the \texttt{Output} queue, inspects the metadata 
 and if an optimal solution has been found or the maximum number of iteration has been
 reached it signals the stop of the execution. 
 
 \item Otherwise, it passes the stream of messages 
 to a migration process, where subpopulations are mixed with each other. New populations 
 are generated from this migration, and they are again pushed to the Input queue to continue 
-in a loop. The Controller is also responsible of logging the metadata recived with the
+in a loop. The \texttt{Controller} is also responsible of logging the metadata recived with the
 messages.  
 \end{enumerate}
 
@@ -503,10 +503,10 @@ execution.
 \end{figure}
 
 On the other hand, there are several caveats as well:
-It is more costly to move entire subpopulations as messages than only passing certain individuals 
+It is more costly to move entire populations as messages than only passing certain individuals 
 from a process to another. Designers must consider this cost when working with large
-individuals, and if possible send sub-populations using several messages, use compression or 
-adjust the size of subpopulations. Pool-based algorithms also suffer from this drawback, but 
+individuals, and if possible send populations using several messages, use compression or 
+adjust the size of populations. Pool-based algorithms also suffer from this drawback, but 
 web based implementations have been working with continuous optimization problems of 1000 dimensions.
 But, in other cases this is not a viable approach. 
 
@@ -523,10 +523,10 @@ But, in other cases this is not a viable approach.
 Next, we compare the message-driven architecture we presented against four other
 proposals for multi-population algorithms found in the literature. We center the
 comparison on the coupling and communication between the main components:
-Subpopulations, Processing Nodes, and Algorithms.  In Figure \ref{fig:population_message} we show the
+subpopulations, processing nodes, and algorithms.  In Figure \ref{fig:population_message} we show the
 main components of a message-driven architecture. We can see that the algorithm
-and subpopulations are separated, and the Population Queue keeps the state
-of subpopulations. While algorithms only need the subpopulations as parameters
+and subpopulations are separated, and the \texttt{Population queue} keeps the state
+of subpopulations. While algorithms only need the populations as parameters
 for their execution.
 
 % We need to add references to the respective papers - Mario
@@ -604,28 +604,41 @@ In this section, we propose a design of a reactive container-based application
 for executing multi-population based optimization experiments.  For the design,
 we followed the design patterns highlighted in the previous section, and again
 we can go back to Figure \ref{fig:kafkEO} and use it as a guide for explaining
-the main components and their interactions. But first, we give a brief
-description of the technology we used.
+the main components and their interactions. 
 
-\subsection{Containers} 
-\label{containers}
+% But first, we give a brief description of the technology we used. 
+
+% Add if needed
+%\subsection{Containers} 
+%\label{containers}
 % TO DO
 
-\subsection{Docker Compose} 
-\label{compose}
+%\subsection{Docker Compose} 
+%\label{compose}
 % TO DO
  
 
-% Do we need a description of every container? Wouldn't a general
-% description of the containers used be enough? - JJ 
-% Ok, I think only workers and the controller need to be described in detail - Mario 
+% Do we need a description of every container? Wouldn't a general 
+% description  of the containers used be enough? - JJ 
+% Ok, I thin only workers and the controller need to be described in detail - Mario 
+\subsection{Message Queue Container} 
+\label{message_container}
+
+In this work, we implemented all message
+queues in the Redis memory store. Each queue is a Redis List object, and we use
+the \texttt{LPOP} (left pop), and \texttt{RPOP} (right pop) commands for a queue like behavior.
+In those cases where we needed a blocking behavior, i.e., when a process needs
+to wait until a message is available, we used the blocking versions \texttt{BLPOP} and
+\texttt{BRPOP}. Redis in-memory operation are very fast, and all of the obove 
+operations have a time complexity of $\mathcal{O}(1)$. We use the official 
+\texttt{redis:alpine} container image from DockerHub.  
 
 \subsection{Controller Container} 
 \label{controller}
 
-The controller is an essential component of the architecture (Figure \ref{fig:kafkEO})
+The controller is an essential component of the architecture (see Figure \ref{fig:kafkEO})
 because it is responsible for maintaining the evolutionary loop. It takes newly
-evolved populations from the Output Queue, mixes them,   and produces new
+evolved populations from the \texttt{Output Queue}, mixes them,   and produces new
 messages from the result. At the same time, it must keep track of two conditions
 for ending the loop: the number of messages it has received reaches a maximum
 value, or the error of the best solution goes below a specific threshold.  Finally, it
@@ -644,19 +657,19 @@ pattern \cite{gamma1995design} and functional programming.
     \label{fig:marble_controller}
 \end{figure}
 
-In ReactiveX, an observer object subscribes to an Observable. Observables emit a
-sequence of items, and all the subscribed observers react to each emission. The
+In ReactiveX, an \texttt{observer} object subscribes to an \texttt{Observable} instance. 
+Observables emit a sequence of items, and all the subscribed observers react to each emission. The
 ReactiveX library includes several reactive operators that we can use to
 transform and combine sequences of items. These operators provide reactive
 extensions that allow us to compose asynchronous sequences together in a
-declarative manner. In Figure \ref{fig:marble_controller}, we use a so-called marble diagram to
-represent the composition of Observables and reactive extensions operators. We
-represent the timeline of an Observable as a horizontal arrow, which indicates
+declarative manner. In Figure \ref{fig:marble_controller}, we use a marble diagram to
+represent the composition of \texttt{Observables} and reactive extensions operators. We
+represent the timeline of an \texttt{Observable} as a horizontal arrow, which indicates
 that time flows from left to right. In the diagram, items are represented as
 marbles. The position of each marble indicates the point in time when they were
-emitted by the Observable. Reactive operators are represented as text boxes,
+emitted by the \texttt{Observable}. Reactive operators are represented as text boxes,
 showing the transformation to be applied. Normally, a transformation results in
-another Observable, again emitting new results.  For asynchronous programming, 
+another \texttt{Observable}, again emitting new results.  For asynchronous programming, 
 this approach is more elegant than nested callbacks, that are more difficult 
 to code and debug. 
 
@@ -664,10 +677,9 @@ Now we proceed to explain the reactive implementation of the controller.
 In Figure \ref{fig:marble_controller}, we  have the following composition of Observables:
 
 \begin{enumerate}
-
-\item The controller continually pulls new messages from the Output 
+\item The controller continually pulls new messages from the \texttt{Output} 
 message queue. These messages are instantly emitted by the  \texttt{consumed\_messages}
-Observable. In this particular period, we can see that the stream receives 
+\texttt{Observable}. In this particular period, we can see that the stream receives 
 two populations from another experiment, and are shown as two red marbles.  
 The filter operator removes all messages that belong to a different experiment; 
 in this case, we are only interested in blue marbles. 
@@ -675,29 +687,55 @@ in this case, we are only interested in blue marbles.
 \item The \texttt{max\_iterations} parameter indicates the number of populations that
 are going to be accepted. When this number of messages is reached, we must
 end the loop. In this example, \texttt{max\_iterations = 6},  the take operator 
-assures that only 6 messages are received. After the Observable emits 
+assures that only 6 messages are received. After the \texttt{Observable} emits 
 the sixth message, it triggers the completed event.
 
-\item Many observers can be subscribed to the \texttt{valid\_messages}  Observable because it
+\item Many observers can be subscribed to the \texttt{valid\_messages} \texttt{Observable} because it
 emits all the valid items. At the moment, there are to additional methods
 subscribed that we are not showing, one for logging and the other for monitoring
 the search.
 
 \item The   \texttt{buffer\_with\_count(3)} operator, waits until it receives 
 three valid messages to emit a single message that contains a list with
-the previous three. The migration method requires that list to mix them. 
+the previous three. The \texttt{population\_mixer}  method requires that list to mix them. 
 In our previous work, we needed a local buffer for storing a certain 
 number of populations to mix them with others. This design has the advantage
 of not needing extra memory, and it integrates better with the reactive paradigm.
 A possible disadvantage can be that it only mixes contiguous populations,
 but this can be mitigated with a larger buffer.
 
-\item The  \texttt{population\_mixer} method pushes new populations to the messages Observable,
-a  \texttt{publish(population)} observer is responsible for pushing 
-the newly generated populations back to the Input Message Queue.
+\item The \texttt{population\_mixer} receives a list of three populations,
+let us say [A, B, C], and calls the migration method shown in
+Algorithm \ref{alg:migration}  for [A, B], [B, C] and [A, C]. 
+The migration algorithm sorts both populations and generates
+a new population containing the best half from each.
+This migration method is similar to those used successfully in previous 
+works on pool-based algorithms \ref{fig:pool_island}.  
+Finally, the method pushes the new populations to the 
+\texttt{messages Observable}. From there, a
+\texttt{publish(population)} observer is responsible for pushing
+the newly generated populations back to the \texttt{Input} message queue.
 \end{enumerate}
 
+\begin{algorithm}
+    \caption{Migration}
+    \label{alg:migration}
+    \begin{algorithmic}[1]
+        \Procedure{cxBestFromEach}{$pop_1,pop_2$}
+            \State $pop_1.sort()$
+            \State $pop_2.sort()$
+            \State $size\gets min(len(pop_1), len(pop_2))$
+            \State $cxpoint\gets (size-1)/2$
+            \State $pop_1[cxpoint:]\gets pop_2[:cxpoint+2]$
+            \State \textbf{return} $pop_1$
+        \EndProcedure 
+    \end{algorithmic}
+\end{algorithm}
 
+
+
+In the next section, we follow the algorithm flow and describe the 
+implementation details of the \texttt{worker} containers. 
 
 \begin{figure}[ht]
     \centering
@@ -709,27 +747,17 @@ the newly generated populations back to the Input Message Queue.
 \subsection{Worker Containers} 
 \label{workers}
 
-Figure \ref{fig:worker}.
+Worker containers include a Python script called \texttt{main.py} running an
+infinite loop, continually trying to pull a new population to work on it. Once
+\texttt{main.py} receives a message containing configuration data, it creates a
+worker object responsible for initializing and running the specified stateless
+function (i.e., GA or PSO). Once the function returns a new population, the
+worker pushes the results to the \texttt{Output} queue, finishes, and passes
+the execution to the main loop. This process is shown in Figure
+\ref{fig:worker}.
 
-\begin{algorithm}
-    \caption{Migration}
-    \label{read}
-    \begin{algorithmic}[1]
-        \Procedure{cxBestFromEach}{$pop_1,pop_2$}
-            \State $pop_1.sort()$
-            \State $pop_2.sort()$
-            \State $size\gets min(len(pop_1), len(pop_2))$
-            \State $cxpoint\gets (size-1)/2$
-            \State $pop_1[cxpoint:]\gets pop_2[:cxpoint+2]$
-            \State \textbf{return} $pop_1$
-        \EndProcedure
-            
-    \end{algorithmic}
-\end{algorithm}
-
-\subsection{Experimental Process} 
+\subsection{Experimental Workflow in EvoSwarm} 
 \label{experiment_flow}
-
 
 \begin{sidewaysfigure}
     \centering
@@ -759,17 +787,130 @@ experiments, and all other plots used in this paper.  There is also a script to
 generate the files needed by the COCO framework \cite{hansen2016coco}, which can generate standard
 comparisons against other methods.
 
-
-
-
-
-
-
-
-
-
 \section{Experimental Setup} 
 \label{setup}
+
+We aimed to learn if the proposed solution can be an efficient solution to
+improve the scalability and performance of population-based optimization
+algorithms. Hence, in this section, we verify the following:
+
+\begin{itemize}
+ \item If we can improve the execution time of the algorithm by adding populations
+ and serverless functions to the system. In particular, what is the effect of
+ these changes on the scalability of the system? 
+ 
+\item Having a multi-population enabled platform, with heterogeneous populations and
+the support for mixing search strategies, can increase the performance of the
+search by needing fewer function evaluations than a homogeneous setting?
+
+\end{itemize}
+
+
+To validate these questions, we used benchmark functions from the Continuous
+Noiseless BBOB testbed, which is part of the Comparing Continuous Optimizers
+(COCO) framework \cite{hansen2016coco}. The testbed includes 24 real-parameter,
+single-objective benchmark functions, and the capability to provide additional
+instances of each function. Each instance of a function has a different optimal
+value. The standard benchmark of the testbed utilizes 15 instances per function
+over 2, 3, 5, 10, 20, and 40 dimensions. The maximum number of Function
+Evaluations (FEs) changes according to the dimension (D), and it is determined
+by the expression $10^5 \cdot D$. As an example, if we have $D = 2$, the
+maximum number of FEs is $200,000$
+
+
+The COCO framework offers several tools to compare the performance of
+algorithms, generating data sets, tables, and reports for an experiment. There
+is a repository of more than 200 results for the noiseless BOBB testbed,
+collected from BBOB workshops and special sessions between the years 2009 and
+2019 \url{https://coco.gforge.inria.fr/doku.php?id=algorithms-bbob}. The
+EvoSwarm application includes an adapted version of the noiseless BOBB testbed,
+compatible with the scripts of the framework, to compare with other algorithms
+in the repository.
+
+To validate the heterogeneous multi-population setting, we compare between
+homogeneous and an ensemble of multi-populations, using Genetic Algorithms
+(GAs) and Particle Swarm Optimization (PSO). For the GA implementation, we used
+the DEAP library \cite{fortin2012deap} and for the PSO, the EvoloPy library
+\cite{faris2016evolopy}. Both Python libraries are open-source. In EvoSwarm 
+these two algorithms are implemented as stateless functions. 
+
+
+We show the parameters for each algorithm, GA in Table \ref{tab:GAparams} and
+for PSO in Table \ref{tab:PSOparams}. We obtained these parameters in a
+previous work \cite{}. To obtain the parameters, we tested first on the
+Rastrigin separable function with five dimensions. After about fifteen
+experiments, the most challenging targets were achieved for this particular
+function. We tested again with functions one to three, and after obtaining
+favorable results, the PSO and GA algorithm parameters were set.In the GA, we
+randomly set the mutation and crossover probabilities to have more
+heterogeneous workers; in these parameters, the range of values is specified.
+
+\begin{table}
+  \small
+  \caption{ DEAP GA EvoWorker Parameters }
+  \label{tab:GAparams} 
+  \centering
+  \small
+  \begin{tabular}{|l|c|}
+    \hline
+    Selection & Tournament size=12\\ \hline
+    Mutation & Gaussian $\mu=0.0$, $\sigma=0.5$, indbp=0.05  \\ \hline
+    Mutation Probability & [0.1,0.3]  \\ \hline
+    Crossover & Two Point  \\ \hline
+    Crossover Probability& [0.2,0.6]  \\ \hline
+  \end{tabular}
+\end{table}
+
+\begin{table}
+  \small
+  \caption{ EvoloPy PSO Parameters }
+  \label{tab:PSOparams} 
+  \centering
+  \small
+  \begin{tabular}{|l|c|}
+    \hline
+    $V_{max}$ & 6 \\ \hline
+    $W_{max}$ & $0.9$ \\ \hline
+    $W_{min}$ & $0.2$ \\ \hline
+    $C_1$ & 2 \\ \hline
+    $C_2$ & 2 \\ \hline
+  \end{tabular}
+\end{table}
+
+\begin{table}
+    \small
+    \caption{10 Populations experiment parameters
+    }
+    \label{tab:params:workers}
+    \centering
+    \small
+    \begin{tabular}{|l|c|c|c|c|c|c|}
+      \hline
+      Dimension        & 2  & 3  & 5  & 10 & 20  & 40  \\ \hline
+      Generations      & 40 & 25 & 28 & 50 & 66  & 80  \\ \hline
+      Population Size  & 50 & 60 & 60 & 70 & 100 & 125 \\ \hline
+      Populations      & 10 & 10 & 10 & 10 & 10  & 10  \\ \hline
+      Iterations       & 10 & 20 & 30 & 30 & 30  & 40  \\ \hline  
+    \end{tabular}
+\end{table}
+
+\begin{table}
+    \small
+    \caption{5 Populations experiment parameters
+    }
+    \label{tab:params:workers}
+    \centering
+    \small
+    \begin{tabular}{|l|c|c|c|c|c|c|}
+      \hline
+      Dimension        & 2  & 3  & 5  & 10 & 20  & 40  \\ \hline
+      Generations      & 40 & 25 & 28 & 50 & 66  & 80  \\ \hline
+      Population Size  & 100 & 120 & 120 & 140 & 200 & 250 \\ \hline
+      Populations      & 5 & 5 & 5 & 5 & 5  & 5  \\ \hline
+      Iterations       & 10 & 20 & 30 & 30 & 30  & 40  \\ \hline  
+    \end{tabular}
+\end{table}
+
 
 \section{Experimental Results} 
 \label{results}
