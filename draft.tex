@@ -618,7 +618,7 @@ temporal subpopulation as parameters. An advantage of this design is that the
 sampling provides a type of migration between isolated subpopulations. A problem
 found is that when a processing node returns a subpopulation to the pool, the
 state of the subpopulation is lost. But having the algorithm decoupled opens the
-possibility of a serverless-function implementation.   
+possibility of implementing the system using serverless functions.
 
 \begin{figure}[ht]
     \centering
@@ -679,7 +679,11 @@ the main components and their interactions.
 \label{message_container}
 
 In this work, we implemented all message
-queues in the Redis memory store. Each queue is a Redis List object, and we use
+queues in the Redis memory store. Early cloud architectures
+\cite{de2017parallel} used queues for communication, although in that
+case RabbitMQ was the chosen tool. Redis is faster, and also can act
+as a data store from where we can control the state of the application.
+Each queue is a Redis List object, and we use
 the \texttt{LPOP} (left pop), and \texttt{RPOP} (right pop) commands for a queue like behavior.
 In those cases where we needed a blocking behavior, i.e., when a process needs
 to wait until a message is available, we used the blocking versions \texttt{BLPOP} and
