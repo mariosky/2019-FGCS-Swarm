@@ -827,12 +827,12 @@ the execution to the main loop. This process is shown in Figure
 Figure \ref{fig:experiment_flow} shows the workflow users can follow to run
 experiments in Evo\-Swarm. The first step is to develop the search strategy
 algorithms that are going to be used by the multi-population algorithm.
-Algorithm Developers can upload the container definition or images directly to
+Algorithm developers can upload the container definition or images directly to
 DockerHub. Another option is to upload the image definition (Dockerfile) to
 GitHub and define a trigger to re-upload the image to DockerHub.  Docker Compose
 configuration files can reference these containers. When a user needs to deploy
-the application, he or she needs to edit the Docker compose file to specify the
-type and number of containers needed for the application.  The Docker compose
+the application, he or she needs to edit the {\tt docker-compose.yml} file to specify the
+type and number of containers needed for the application.  The {\tt docker-compose}
 application is responsible for starting all the containers or downloading new
 versions if it is necessary. After starting the application, users can push
 Experiment Definition files and start monitoring the execution in the terminal.
@@ -891,7 +891,8 @@ Genetic Algorithms (GAs) and Particle Swarm Optimization (PSO). For the GA
 implementation, we used the DEAP library \cite{fortin2012deap} and for the  PSO,
 the EvoloPy library \cite{faris2016evolopy}. Both Python libraries are
 open-source. In EvoSwarm these two algorithms are implemented as stateless
-functions.  
+functions. % Did you release this also with a free license? Point to
+           % the URL - JJ 
 
 Next, we show the parameters for each algorithm, in Table \ref{tab:GAparams} 
 for the GA and in Table \ref{tab:PSOparams} for PSO. We obtained these parameters 
@@ -900,7 +901,7 @@ To obtain the parameters, we tested first on the
 Rastrigin separable function with five dimensions. After about fifteen
 experiments, the most challenging targets were achieved for this particular
 function. We tested again with functions one to three, and after obtaining
-favorable results, the PSO and GA algorithm parameters were set.In the GA, we
+favorable results, the PSO and GA algorithm parameters were set. In the GA, we
 randomly set the mutation and crossover probabilities to have more
 heterogeneous workers; in these parameters, the range of values is specified.
 
