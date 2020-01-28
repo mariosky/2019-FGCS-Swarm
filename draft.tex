@@ -831,7 +831,7 @@ Algorithm developers can upload the container definition or images directly to
 DockerHub. Another option is to upload the image definition (Dockerfile) to
 GitHub and define a trigger to re-upload the image to DockerHub.  Docker Compose
 configuration files can reference these containers. When a user needs to deploy
-the application, he or she needs to edit the {\tt docker-compose.yml} file to specify the
+the application, he or she needs to edit the Fi file to specify the
 type and number of containers needed for the application.  The {\tt docker-compose}
 application is responsible for starting all the containers or downloading new
 versions if it is necessary. After starting the application, users can push
@@ -941,8 +941,32 @@ provided as parameters.
   \end{tabular}
 \end{table}
 
-% Experiment configuration 
+% Experiment conf
 
+The EvoSwarm application uses configuration files to run noiseless BOBB testbed
+experiments. As a first step, the docker application must be deployed, using a
+{\tt docker-compose.yml} file, where the number of worker containers is
+specified. Then a JSON file containing the configuration parameters of the
+experiment has to be provided. Table \ref{tab:params} shows an example of these
+parameters. The {\em GA-PSO Ratio} parameter indicates the proportion of
+populations that will use the GA algorithm for the search. With a value of
+$0.50$ there will be about the same proportion of GA and PSO populations. If we
+specify a value of $0$ this will give us a PSO only algorithm, and finally, a
+value of $1$ means that all populations will run the GA algorithm. Next, we
+specify a list indicating which of the 24 benchmark functions will be tested.
+In the example, the experiment will use the first five functions. The
+{\em Instances} parameter, indicates how many instances of each function will be
+executed, this parameter has 15 as the default value. This value is used
+because is the standard for the BBOB benchmark \cite{hansen2016coco}. Then, in
+the {\em Dimensions} parameter we define a list of the dimensions that will be
+tested, we must select additional parameters for each dimension. According to
+the maximum number of Function Evaluations (FEs) we mentioned earlier, we
+define for each dimension: the number of populations that will be generated in
+the setup, and for each population, the number of generations, and population
+size. Finally, the {\em Iterations} parameter indicates how many complete loops
+will be performed. All these parameters give us the maximum number of FEs that
+will be performed. For instance, for $D = 2$, the maximum number of FEs is
+$200,000$ which is the same as $40*50*10*10$.
 
 \begin{table}
     \small
@@ -953,13 +977,14 @@ provided as parameters.
     \small
     \begin{tabular}{|l|l|l|l|l|}
       \hline
-      \multicolumn{3}{|l|}{Parameter}                   & Type             & Example         \\ \hline
+      \multicolumn{3}{|l|}{Parameter}                    & Type             & Example         \\ \hline
       \multicolumn{3}{|l|}{Worker Containers (Docker Compose)}        & \texttt{int}     & \texttt{8} \\ \hline
       \multicolumn{3}{|l|}{GA-PSO Ratio}                 & \texttt{decimal} & \texttt{0.5}    \\  \hline
       \multicolumn{3}{|l|}{Benchmark Functions}          & \texttt{list}    & \texttt{[1, 2, 3, 4, 5]} \\ \hline
+      \multicolumn{3}{|l|}{Instances}                    & \texttt{integer}    & \texttt{15} \\ \hline
       \multicolumn{3}{|l|}{Dimensions}                   & \texttt{list}    & \texttt{[10, 20, 40]}        \\ \hline
       \multicolumn{3}{|l|}{Crossover Probability Range}  & \texttt{list}    & \texttt{[0.2, 0.6]}      \\ \hline
-      \multicolumn{3}{|l|}{Mutation  Probability Range} & \texttt{list}    & \texttt{[0.1, 0.3]}      \\ \hline
+      \multicolumn{3}{|l|}{Mutation  Probability Range}  & \texttt{list}    & \texttt{[0.1, 0.3]}      \\ \hline
       \multicolumn{5}{|c|}{Dimensions}                                                      \\ \hline  
       Dimension               & Generations & Population Size & Populations  &     Iterations    \\ \hline
               10              & 50      & 140                 &      5                 & 30                \\ \hline
