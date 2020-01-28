@@ -859,8 +859,8 @@ algorithms. Hence, in this section, we verify the following:
  and serverless functions to the system, in particular, what is the effect of
  these changes on the scalability of the system? 
  
-\item Can having a multi-population enabled platform, with heterogeneous populations and
-the support for mixing search strategies,  increase the performance of the
+\item Having a multi-population enabled platform, with heterogeneous populations and
+the support for mixing search strategies,  increases the performance of the
 search by needing fewer function evaluations than a homogeneous setting?
 
 \end{itemize}
@@ -1066,6 +1066,20 @@ for the complete list.
     \end{tabular}
 \end{table}
 
+\subsection{Experiment 2}
+\label{sec:exp2}
+% Experiment 1
+
+Having a multi-population based algorithm can decrease the execution time
+because of the parallel execution of the evolution. But, having heterogeneous
+populations increases the performance of the search by needing fewer function
+evaluations than a homogeneous setting.? 
+
+In this experiment, we compare the performance of both heterogeneous and
+homogeneous settings. We compare a multi-population with only  GA and PSO
+populations, versus an ensemble of GA and PSO algorithms on the first five
+functions of the BOBB testbed.  We used ten populations and 8 workers for the
+experiment and the same parameters as before.  
 
 
 \section{Experimental Results} 
