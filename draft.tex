@@ -830,10 +830,10 @@ DockerHub; another option is to upload the container image definition (Dockerfil
 GitHub and define a trigger to re-upload the image to DockerHub; this
 can be defined in DockerHub (or any other registry) too.  Docker Compose
 configuration files can reference these containers. When a user needs to deploy
-the application, he or she needs to edit the Fi file
+the application, he or she needs to edit the {\tt docker-compose.yml} file
 % Fi file? - JJ+
-to specify the
-type and number of containers needed for the application.  The {\tt docker-compose}
+% fixed - Mario
+to specify the type and number of containers needed for the application.  The {\tt docker-compose}
 application is responsible for starting all the containers, downloading new
 versions if it is necessary. After starting the application, users can push
 Experiment Definition files and start monitoring the execution in the terminal.
@@ -856,7 +856,7 @@ algorithms. Hence, in this section, we verify the following:
 
 \begin{itemize}
  \item Whether we can improve the execution time of the algorithm by adding populations
- and serverless functions to the system. In particular, what is the effect of
+ and serverless functions to the system, in particular, what is the effect of
  these changes on the scalability of the system? 
  
 \item Can having a multi-population enabled platform, with heterogeneous populations and
@@ -943,7 +943,6 @@ provided as parameters.
 \end{table}
 
 % Experiment conf
-
 The EvoSwarm application uses configuration files to run noiseless BOBB testbed
 experiments.  As a first step, we must deploy the docker application using a
 {\tt docker-compose.yml} file, where the number of worker containers is
@@ -994,6 +993,27 @@ number of FEs is $200,000$, which is the same as $40*50*10*10$.
     \end{tabular}
 \end{table}
 
+As we mentioned before, reactive systems can scale by adding additional copies
+of serverless functions. In our case, we can start additional worker containers
+to have the same effect. Regarding GAs using a similar architecture, the work of
+Salza et al., suggest that worker nodes, need to have at least a certain level
+of complexity, in terms of execution time,  to effectively scale on multiple
+nodes, tending to linear scalability. In a population-based algorithm like
+EvoSwarm, several parameters can increase or decrease the workload of workers.:
+
+\begin{itemize}
+    \item The number of populations: if there are more workers than populations, workers
+    must wait for work to arrive. If there are too many populations, they could be
+    standing in the queue for more time. 
+    \item The size of populations and the number of generations: 
+    These parameters naturally increase the execution time.
+    \item The complexity of the algorithm: For instance, in our case, 
+    the PSO implementation has a lower execution time than the GA.
+\end{itemize}
+
+To evaluate the effect of these parameters on the scalability of the system, we
+propose the following experiment:
+
 
 \begin{table}
     \small
@@ -1028,6 +1048,7 @@ number of FEs is $200,000$, which is the same as $40*50*10*10$.
       Iterations       & 10 & 20 & 30 & 30 & 30  & 40  \\ \hline  
     \end{tabular}
 \end{table}
+
 
 
 \section{Experimental Results} 
