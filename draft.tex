@@ -942,7 +942,8 @@ provided as parameters.
   \end{tabular}
 \end{table}
 
-% Experiment conf
+
+
 The EvoSwarm application uses configuration files to run noiseless BOBB testbed
 experiments.  As a first step, we must deploy the docker application using a
 {\tt docker-compose.yml} file, where the number of worker containers is
@@ -993,6 +994,10 @@ number of FEs is $200,000$, which is the same as $40*50*10*10$.
     \end{tabular}
 \end{table}
 
+\subsection{Experiment 1}
+\label{sec:exp1}
+% Experiment 1
+
 As we mentioned before, reactive systems can scale by adding additional copies
 of serverless functions. In our case, we can start additional worker containers
 to have the same effect. Regarding GAs using a similar architecture, the work of
@@ -1013,6 +1018,14 @@ EvoSwarm, several parameters can increase or decrease the workload of workers.:
 
 To evaluate the effect of these parameters on the scalability of the system, we
 propose the following experiment:
+
+For the experiment, we selected $f_4$ (Skew Rastrigin-Bueche separable) from the
+BBOB testbed. We selected this function because it is computationally demanding,
+and in higher dimensions has been difficult for PSO \cite{el2009black} and GAs
+\cite{nicolau2009application} to solve with the required FEs. As we are
+comparing just in terms of execution time, the results from a single function
+can be better understand, because there are fewer factors involved. 
+    
 
 
 \begin{table}
