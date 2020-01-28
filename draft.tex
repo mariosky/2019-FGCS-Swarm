@@ -594,7 +594,7 @@ an addressing mechanism. % JJ, help I don't know if this is clearly understood, 
 \begin{figure}[ht]
     \centering
     \includegraphics[width=\textwidth]{pool_island}
-    \caption{Population State and dataflow between processing nodes of a Pool-based multi-population algorithm.}
+    \caption{Population state and flow of data between processing nodes of a Pool-based multi-population algorithm.}
     \label{fig:pool_island}
 \end{figure}
 
@@ -1077,21 +1077,19 @@ Having a multi-population based algorithm can decrease the execution time
 because of the parallel execution of the evolution. But, having heterogeneous 
 populations might enhance evolutionary search and needless
 evaluations than homogeneous systems; heterogeneous settings, if
-done right, increases the diversity of the whole population \cite{araujo2008multikulti}. % cita
-                                % multikulti o similar - JJ 
+done right, increases the diversity of the whole population
+\cite{araujo2008multikulti}.
 
-% Explain that heterogeneity comes from using different algorithms,
-% not from using different types of nodes - JJ 
-% done - Mario 
 But this is a rule of thumb, and it will depend on the degree of heterogeneity,
 as well as on the algorithm itself. Some level of heterogeneity can be
 implemented by just changing the configuration parameters of each population,
 but in this case, we are interested in a heterogeneous search strategy. 
 Therefore, in this experiment we compare a multi-population with only GA and PSO populations,
 versus an ensemble of GA and PSO algorithms. We tested on the first five functions of the
-BOBB testbed. We used ten populations and 8 workers for the experiment and the
+BOBB testbed. We used ten populations and eight workers for the experiment and the
 same parameters as before.  
 
+% Shouldn't this be a subsection of experimental setup? - JJ
 \subsection{Hardware}
 \label{sec:hardware}
 
@@ -1102,15 +1100,17 @@ same parameters as before.
 We present the results of the experiments in this section. The effect of a
 different number of populations on execution time is reported in  Section
 \ref{sec:exp1results}. The results of the performance comparison between homogeneous and
-heterogeneous search strategies are presented in   Section \ref{sec:exp2results}.     
+heterogeneous search strategies are presented in Section \ref{sec:exp2results}.     
 
 \subsection{Experiment 1}
 \label{sec:exp1results}
 
-\begin{figure}[ht]
+\begin{figure}[h!tb]
+  % Is the axis correct? Seconds per instance or total time? Please
+  % change that - JJ
     \centering
     \includegraphics[width=\textwidth]{sp_size_worker}
-    \caption{ Time required to complete experiments with different number of workers and populations sizes }
+    \caption{Time required to complete experiments with different number of workers and populations sizes }
     \label{fig:spworker}
 \end{figure}
 
