@@ -850,17 +850,17 @@ comparisons against other methods.
 \section{Experimental Setup} 
 \label{setup}
 
-We aimed to learn if the proposed solution can be an efficient solution to
+We aimed to learn if the proposed solution can efficiently
 improve the scalability and performance of population-based optimization
 algorithms. Hence, in this section, we verify the following:
 
 \begin{itemize}
- \item If we can improve the execution time of the algorithm by adding populations
+ \item Whether we can improve the execution time of the algorithm by adding populations
  and serverless functions to the system. In particular, what is the effect of
  these changes on the scalability of the system? 
  
-\item Having a multi-population enabled platform, with heterogeneous populations and
-the support for mixing search strategies, can increase the performance of the
+\item Can having a multi-population enabled platform, with heterogeneous populations and
+the support for mixing search strategies,  increase the performance of the
 search by needing fewer function evaluations than a homogeneous setting?
 
 \end{itemize}
@@ -895,11 +895,10 @@ the EvoloPy library \cite{faris2016evolopy}. Both Python libraries are
 open-source. In EvoSwarm these two algorithms are implemented as stateless
 functions. EvoSwarm is also released with a free licence in \url{https://github.com/mariosky/EvoSwarm}.
 
-% Did you release this also with a free license? Point to
-           % the URL - JJ 
+% Maybe this should be mentioned earlier, in the workflow? - JJ
 
-Next, we show the parameters for each algorithm, in Table \ref{tab:GAparams} for
-the GA and in Table \ref{tab:PSOparams} for PSO. We obtained these parameters
+Next, we show the parameters for each algorithm, with Table \ref{tab:GAparams} for
+the GA and Table \ref{tab:PSOparams} for PSO. We obtained these parameters
 following the same method as in a previous work \cite{garcia2017benchmarking}.
 To obtain the parameters, we tested first on the Rastrigin separable function
 with five dimensions. After about fifteen experiments, the most challenging
