@@ -1067,29 +1067,45 @@ for the complete list.
     \end{tabular}
 \end{table}
 
+% 
+
 \subsection{Experiment 2}
 \label{sec:exp2}
 % Experiment 1
 
 Having a multi-population based algorithm can decrease the execution time
-because of the parallel execution of the evolution. But, having heterogeneous
-populations might enhance evolutionary search and need less
+because of the parallel execution of the evolution. But, having heterogeneous 
+populations might enhance evolutionary search and needless
 evaluations than homogeneous systems; heterogeneous settings, if
-done right, will increase the diversity of the whole population % cita
-                                % multikulti o similar - JJ
+done right, increases the diversity of the whole population \cite{araujo2008multikulti}. % cita
+                                % multikulti o similar - JJ 
 
 % Explain that heterogeneity comes from using different algorithms,
-% not from using different types of nodes - JJ
-But this is a rule of thumb, and it will depend on the degree of
-heterogeneity, as well as on the algorithm itself. In this experiment, we compare the performance of both heterogeneous and
-homogeneous settings. We compare a multi-population with only  GA and PSO
-populations, versus an ensemble of GA and PSO algorithms on the first five
-functions of the BOBB testbed.  We used ten populations and 8 workers for the
-experiment and the same parameters as before.  
+% not from using different types of nodes - JJ 
+% done - Mario 
+But this is a rule of thumb, and it will depend on the degree of heterogeneity,
+as well as on the algorithm itself. Some level of heterogeneity can be
+implemented by just changing the configuration parameters of each population,
+but in this case, we are interested in a heterogeneous search strategy. 
+Therefore, in this experiment we compare a multi-population with only GA and PSO populations,
+versus an ensemble of GA and PSO algorithms. We tested on the first five functions of the
+BOBB testbed. We used ten populations and 8 workers for the experiment and the
+same parameters as before.  
+
+\subsection{Hardware}
+\label{sec:hardware}
 
 
 \section{Experimental Results} 
 \label{results}
+
+We present the results of the experiments in this section. The effect of a
+different number of populations on execution time is reported in  Section
+\ref{sec:exp1results}. The results of the performance comparison between homogeneous and
+heterogeneous search strategies are presented in   Section \ref{sec:exp2results}.     
+
+\subsection{Experiment 1}
+\label{sec:exp1results}
 
 \begin{figure}[ht]
     \centering
@@ -1097,6 +1113,10 @@ experiment and the same parameters as before.
     \caption{ Time required to complete experiments with different number of workers and populations sizes }
     \label{fig:spworker}
 \end{figure}
+
+\subsection{Experiment 2}
+\label{sec:exp2results}
+
 
 \section{Conclusions} 
 \label{conclusions}
