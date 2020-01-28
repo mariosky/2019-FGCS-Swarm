@@ -945,29 +945,29 @@ provided as parameters.
 % Experiment conf
 
 The EvoSwarm application uses configuration files to run noiseless BOBB testbed
-experiments. As a first step, the docker application must be deployed, using a
+experiments.  As a first step, we must deploy the docker application using a
 {\tt docker-compose.yml} file, where the number of worker containers is
 specified. Then a JSON file containing the configuration parameters of the
-experiment has to be provided. Table \ref{tab:params} shows an example of these
-parameters. The {\em GA-PSO Ratio} parameter indicates the proportion of
-populations that will use the GA algorithm for the search. With a value of
+experiment has to be provided.  Table \ref{tab:params} shows an example of these
+parameters. The \em{GA-PSO Ratio} parameter indicates the proportion of
+populations that will use the GA algorithm.  In the example, with a value of
 $0.50$ there will be about the same proportion of GA and PSO populations. If we
-specify a value of $0$ this will give us a PSO only algorithm, and finally, a
-value of $1$ means that all populations will run the GA algorithm. Next, we
-specify a list indicating which of the 24 benchmark functions will be tested.
-In the example, the experiment will use the first five functions. The
-{\em Instances} parameter, indicates how many instances of each function will be
-executed, this parameter has 15 as the default value. This value is used
-because is the standard for the BBOB benchmark \cite{hansen2016coco}. Then, in
-the {\em Dimensions} parameter we define a list of the dimensions that will be
-tested, we must select additional parameters for each dimension. According to
-the maximum number of Function Evaluations (FEs) we mentioned earlier, we
-define for each dimension: the number of populations that will be generated in
-the setup, and for each population, the number of generations, and population
-size. Finally, the {\em Iterations} parameter indicates how many complete loops
-will be performed. All these parameters give us the maximum number of FEs that
-will be performed. For instance, for $D = 2$, the maximum number of FEs is
-$200,000$ which is the same as $40*50*10*10$.
+specify a value of $0$, this will give us an algorithm with only PSO
+populations, and finally, a value of  $1$ means that all populations will run
+the GA algorithm. Next, we specify a list indicating which of the 24 benchmark
+functions will be tested. In the example, the experiment will use the first five
+functions.  The \em{Instances} parameter indicates how many instances of each
+function will be tested. \em{Instances}  has a defualt value of 15. We used this
+value because it is the standard for the BBOB benchmark \cite{hansen2016coco}.
+In the \em{Dimensions} parameter, we define a list of the dimensions that will
+be tested, and we must select additional parameters for each dimension.
+According to the maximum number of  Function Evaluations (FEs) we mentioned
+earlier, we define for each dimension: the number of populations that will be
+generated in the setup, and for each population,  the number of generations, and
+population size. Finally, the \em{Iterations} parameter indicates how many
+complete loops will be performed. All these parameters give us the maximum
+number of FEs that will be performed. For instance, for $D = 2$, the maximum
+number of FEs is $200,000$, which is the same as $40*50*10*10$.
 
 \begin{table}
     \small
