@@ -960,7 +960,7 @@ function will be tested. {\em Instances}  has a defualt value of 15. We used thi
 value because it is the standard for the BBOB benchmark \cite{hansen2016coco}.
 In the {\em Dimensions} parameter, we define a list of the dimensions that will
 be tested, and we must select additional parameters for each dimension.
-According to the maximum number of  Function Evaluations (FEs) we mentioned
+According to the maximum number of function evaluations (FEs) we mentioned
 earlier, we define for each dimension: the number of populations that will be
 generated in the setup, and for each population,  the number of generations, and
 population size. Finally, the {\em Iterations} parameter indicates how many
@@ -1021,7 +1021,7 @@ EvoSwarm, several parameters can increase or decrease the workload of workers:
 
 To evaluate the effect of these parameters on the scalability of the system, we
 propose  an experiment in which we selected $f_4$ (Skew Rastrigin-Bueche separable) from the
-BBOB testbed. This function because it is computationally demanding,
+BBOB testbed. This function has been used because it is computationally demanding,
 and in higher dimensions has been difficult for PSO \cite{el2009black} and GAs
 \cite{nicolau2009application} to solve with the required FEs. As we
 are only comparing in terms of execution time, the results from a single function
@@ -1035,9 +1035,10 @@ for the complete list.
 
 \begin{table}
     \small
-    \caption{10 Populations experiment parameters
+    \caption{Parameters used in the experiments with ten populations
     }
     \label{tab:params:10}
+    \vspace{0.25cm}
     \centering
     \small
     \begin{tabular}{|l|c|c|c|c|c|c|}
@@ -1052,9 +1053,10 @@ for the complete list.
 
 \begin{table}
     \small
-    \caption{5 Populations experiment parameters
+    \caption{Parameters used in the experiments that used five populations
     }
     \label{tab:params:5}
+    \vspace{0.25cm}
     \centering
     \small
     \begin{tabular}{|l|c|c|c|c|c|c|}
@@ -1148,6 +1150,11 @@ resources available.
 
 \section{Conclusions} 
 \label{conclusions}
+
+\section{Acknowledgements}
+
+This paper has been supported in part by projects DeepBio
+(TIN2017-85727-C4-2-P).
 
 \bibliographystyle{elsarticle-num}
 \bibliography{multipopulation}
