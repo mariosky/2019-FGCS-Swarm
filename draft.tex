@@ -94,7 +94,7 @@ and researchers have found additional benefits
 besides the execution speed; these include avoiding a premature convergence and
 maintaining the diversity of the global population \cite{li2015multi}. Researchers use the term
 multi-population based methods when generally referring to techniques using
-subpopulations as part of their optimization strategy. % Some comment about asynchrony would be in order - JJ
+many populations as part of their optimization strategy. % Some comment about asynchrony would be in order - JJ
 % Comments below - Mario
 Moreover, parallel implementations can run in two ways: synchronous and
 asynchronous. When operations run in parallel but must maintain synchronism with
@@ -145,9 +145,9 @@ more flexible, loosely-coupled, and scalable. % Some properies and reference - M
 
 
 When designing efficient multi-population algorithms, researchers need to
-consider additional issues \cite{Ma2019}. These include the number and size of subpopulations,
-the interaction between them, the search area of subpopulations, and the search
-strategy and parametrization of each subpopulation. We must take into account
+consider additional issues \cite{Ma2019}. These include the number and size of populations,
+the interaction between them, the search area of each population, and the search
+strategy and parametrization of each population. We must take into account
 these high-level issues when designing a parallel architecture. Researchers 
 and algorithm designers willing to  adapt to the cloud their
 multi-population solutions face the additional challenges:
@@ -155,7 +155,7 @@ multi-population solutions face the additional challenges:
     \item They need to change their current solutions to a reactive architecture in which processes
     communicate with each other by exchanging messages asynchronously and react
     to a continuous stream of data. One of the options is to consider
-    sub-populations as messages to be modified asynchronously by functions. 
+    populations as messages to be modified asynchronously by functions. 
 
     \item To scale the system, when it is possible, they must use stateless functions for
     processing. 
@@ -172,7 +172,7 @@ multi-population solutions face the additional challenges:
 
 Taking these factors into account, in this work, we present EvoSwarm, 
 a multi-container Docker application that reactively processes isolated and
-heterogeneous subpopulations. The platform uses the Docker Compose tool for
+heterogeneous populations. The platform uses the Docker Compose tool for
 defining and running experiments as multi-container applications. 
 % Docker compose is not really for production, more for development environments, 
 % you have to justify this. Also, it does not handle scaling so need to justify it too - JJ
@@ -185,7 +185,7 @@ With additional configuration settings, applications can be deployed
 to a Docker Swarm or a Kubernetes system.  
 
 Docker Container images host the stateless functions responsible for running 
-a search strategy on subpopulations, these functions could also be ported
+a search strategy on several populations, these functions could also be ported
 directly to a Function as a Service (FaaS) \cite{Roberts2016} implementation.
 % Need to improve the next paragraph or maybe move it to another place - Mario
 Researchers then define the configuration of services used by
@@ -196,7 +196,7 @@ for their execution. The platform includes containerized services that are
 compatible with other container orchestration technologies like Kubernetes and
 Docker Swarm. The services included are a Redis Server used for the Message
 Queue implementation and logging and an Experiment Controller implemented in
-Python. Developers of sub-population processing functions have the freedom to
+Python. Developers of population processing functions have the freedom to
 implement new population-based algorithms or operators in the language they
 choose inside a container, as they only need to subscribe to a channel of the
 Message Queue and have the ability to read the population and parameters as JSON  
@@ -259,15 +259,15 @@ offer the conclusions of this paper and suggestions on future work in Section \r
 
 % Also, multipopulation design of what?x
 Multi-population based methods divide the original population into
-smaller subpopulations or islands, with every subpopulation carrying out the
+smaller populations or islands, with every population carrying out the
 algorithm independently, with synchronous or asynchronous communication with the
 rest of the islands. % exemplify how this is done in different
                      % metaheuristics, especially those we will be
                      % using here - JJ
 This relative isolation helps in maintaining an overall
-diversity since each subpopulation will search in a particular area, at least
+diversity since each population will search in a particular area, at least
 between communications. The recombination mentioned above (mixing) or migration
-between subpopulations is needed to avoid a premature convergence of candidate
+between populations is needed to avoid a premature convergence of candidate
 solutions since smaller populations are known to perform better for a given
 problem than bigger populations. % Smaller populations converge
                                 % prematurely or perform better? - JJ
@@ -279,7 +279,7 @@ parallelism of the operation \cite{ALBA20027}. % Need to clarify this
                                 % algorithms too
                                 % Also, is your objective to achieve this superlinear speedup? - JJ
 
-However, in most cases, algorithms applied to each subpopulation are
+However, in most cases, algorithms applied to each population are
 homogeneous, or at any rate, the same variant of the algorithm. As long as this
 parallel operation is not synchronous, other population-based algorithms, or, as
 a matter of fact, any algorithm, could be easily integrated. That is why several
@@ -291,18 +291,18 @@ Heterogeneous algorithms add another degree of freedom to the problem of finding
 the correct parameter settings for an algorithm; because some parameters affect
 the accuracy of the solution and the convergence speed of the algorithms as they
 tip the balance between exploration and exploitation of the search space. On the
-other hand, current studies show that by having a high number of subpopulations
+other hand, current studies show that by having a high number of populations
 interacting in parallel, the effect of the individual parameters of each
-subpopulation is compensated by those selected in other
-subpopulations. % reference - JJ
-In this
-work, we will use random settings within a specific range as results have shown
+population is compensated by those selected in other
+populations . % reference - JJ
+
+In this work, we will use random settings within a specific range as results have shown
 this is a valid solution to this problem. % This should have been
                                 % mentioned in the introduction - JJ
 
 Some parameters, specially the population size, are
 kept fixed in order to control more easily the execution of the algorithm. For
-instance, by having the size of subpopulations fixed, it is easier to control
+instance, by having the size of populations fixed, it is easier to control
 the number of evaluations and the communication costs, when the algorithm is in
 operation. % And to keep them more or less synchronized, which can be
            % interesting, too... But this should go to the
@@ -404,39 +404,14 @@ Section \ref{multi} and the general design principles of cloud-native
 applications we have mentioned earlier. As a first step, we describe the general
 architecture first, and then  every component in detail. 
 
-The most elemental data structure used throughout the system is the subpopulation; and at a higher
-level, we can view the system as a continuous stream of subpopulations
-flowing
-% We talk about "multi-population" elsewhere, including the
-% abstract. We should unify terminology - JJ
-% "multi-population" is the whole thing, a subpopulation is a member of that.
-% "A multi-population has many subpopulations or should we call them just populations?"
-% I will add a comment about this in the Multi-population section -
-% Mario
-% use the usual "multi-deme" terminology. A population has different
-% sub-populations nad uses a multi-deme implementation - JJ
-% Let's talk about it, I am using the Multi-population terminology 
-% maybe multi-dem is more common in the EA community but not 
-% much in the Swarm Intelligence side?  
-% Any how, we decide and explain the difference so readers of both 
-% camps are Ok with it. 
-% I prefer the use of population and something like the global population - Mario
-
-from one process to the other. By "continuous stream," we mean that ideally,
+The most elemental data structure used throughout the system is the population; and at a higher
+level, we can view the system as a continuous stream of populations
+flowing from one process to the other. By "continuous stream," we mean that ideally,
 everything must happen asynchronously without components needing to wait for
 others. In this kind of system, this streaming functionality is normally
 implemented by using a message queue system. For instance, if one process needs
-to communicate a subpopulation to another, it must pack the sub-population into
+to communicate a population to another, it must pack the population into
 a message, and then send the message 
-% I don't know if
-                                % asynchronously applies here. It's
-                                % simply sent - JJ 
-                                % Meaning it does not wait for a
-                                % respone, it continues doing other
-                                % stuff - Mario
-% That's rather "fire and forget". Or simply say it's sent without
-% waiting for a response - JJ
-% corrected - Mario
 to the queuing system without waiting for a response; this
 means that after the process pushes the message, it continues its execution
 without waiting for a result. On the other end, the recipient subscribes to the
@@ -477,8 +452,8 @@ push operations on a queue are represented by solid arrows connecting to the lef
 of the queue box, and pull or pop operations as solid arrows leaving from the right side.
 Also, the architecture has at least four processes indicated in the diagram as
 swimlanes: First, the \texttt{Setup} process, responsible for the reading a configuration
-file, and creating the initial subpopulations. Second, the \texttt{Controller} process,
-responsible for the migration between subpopulations, and keeping track of the
+file, and creating the initial populations. Second, the \texttt{Controller} process,
+responsible for the migration between populations, and keeping track of the
 iterations of the algorithm. The \texttt{Message Queue} process runs the \texttt{Input} and \texttt{Output}
 queues. Finally, there is at least one \texttt{Stateless Function} process responsible
 for running the isolated algorithms. In the example, two processes \texttt{PSO} and \texttt{GA},
@@ -487,7 +462,7 @@ are shown.
 The algorithm starts with the \texttt{Setup} process pulling a configuration message from
 the \texttt{Experiments} queue, this is not shown in the diagram. The configuration message 
 includes all the parameters needed to execute the algorithm, among other things,
-the number of subpopulations, the number of individuals, and the number of iterations
+the number of populations, the number of individuals, and the number of iterations
 of the algorithm. We give more details about the configuration data structure
 in Section \ref{experiment_flow}. % Missing  % added 
 Once the configuration is read, we can follow the path of 
@@ -496,16 +471,16 @@ messages as follows:
 \begin{enumerate}
 \item In this step, the specified number of populations are created according to the 
 parameters found in the configuration structure. The population at this moment is just
-static data, including each individual inside. Each subpopulation includes a metadata
+static data, including each individual inside. Each population includes a metadata
 section where its algorithm and execution parameters are specified. For instance, 
 for a GA, the mutation rate, type of crossover operator, and other values are indicated.
 
-\item Each subpopulation is then pushed to the \texttt{Input} queue, so they can be consumed 
+\item Each population is then pushed to the \texttt{Input} queue, so they can be consumed 
 by Stateless functions responsible for the execution of the search.  % Why the caps in Stateless? - JJ  
 % It refers to the swimlines in the diagram, maybe I should point it out  - Mario
 % Added a comment above. - Mario
 
-\item One or more \texttt{Stateless functions} are constantly pulling subpopulation messages
+\item One or more \texttt{Stateless functions} are constantly pulling population messages
 from the \texttt{Input} queue. Taking the population data and metadata as parameters, these 
 functions are responsible for the actual execution of the optimization algorithm. 
 They take the current state of the population and run the algorithm for a certain 
@@ -514,7 +489,7 @@ number of iterations.
 \item Once they finish the execution, the population state
 is packed again along with additional metadata about the execution of the algorithm.
 The resulting populations are now pushed to the Output queue. Once finished, another 
-subpopulation is pulled from the queue.
+population is pulled from the queue.
 
 \item The \texttt{Controller} process is responsible for keeping track of the progress of 
 the search. It pulls current populations from the \texttt{Output} queue, inspects the metadata 
@@ -522,7 +497,7 @@ and if an optimal solution has been found or the maximum number of iteration has
 reached it signals the stop of the execution. 
 
 \item Otherwise, it passes the stream of messages 
-to a migration process, where subpopulations are mixed with each other. New populations 
+to a migration process, where populations are mixed with each other. New populations 
 are generated from this migration, and they are again pushed to the Input queue to continue 
 in a loop. The \texttt{Controller} is also responsible of logging the metadata received with the
 messages.  
@@ -575,17 +550,17 @@ But, in other cases this is not a viable approach.
 Next, we compare the message-driven architecture we presented against four other
 proposals for multi-population algorithms found in the literature. We center the
 comparison on the coupling and communication between the main components:
-subpopulations, processing nodes, and algorithms.  In Figure \ref{fig:population_message} we show the
+populations, processing nodes, and algorithms.  In Figure \ref{fig:population_message} we show the
 main components of a message-driven architecture. We can see that the algorithm
-and subpopulations are separated, and the \texttt{Population queue} keeps the state
-of subpopulations. While algorithms only need the populations as parameters
+and populations are separated, and the \texttt{Population queue} keeps the state
+of populations. While algorithms only need the populations as parameters
 for their execution.
 
 % We need to add references to the respective papers - Mario
 
 In contrast, in the classic Island model shown in Figure
-\ref{fig:classicisland}, algorithms are coupled with a subpopulation, and the same processing
-node keeps both the algorithm process and the state of the subpopulation.  Other
+\ref{fig:classicisland}, algorithms are coupled with a population, and the same processing
+node keeps both the algorithm process and the state of the population.  Other
 processing nodes follow the same configuration and form of execution, and they
 only pass specific individuals between them.  In this model, adding additional
 processing nodes, on-runtime, can be more difficult, because they need to have
@@ -601,21 +576,21 @@ an addressing mechanism. % JJ, help I don't know if this is clearly understood, 
 A typical design pattern used to alleviate the above drawbacks is the use of a
 central repository or pool of individuals that is available to all processing
 nodes.  In Figure \ref{fig:pool_island} we show the main components of a pool-based
-multi-population algorithm. Although algorithms and subpopulation state remains
+multi-population algorithm. Although algorithms and population state remains
 coupled, now, processing nodes do not communicate directly with each other.
 Instead, they interchange individuals with the pool. Communication between nodes
 is not affected if the system adds or removes nodes because they do not know
 about each other.  Since the state of the global population is stored in
 external processing nodes, the system needs additional communication and
-processing for keeping track of each subpopulation.
+processing for keeping track of each population.
 
 We show another pool-based approach in Figure  \ref{fig:population_pool}. In
 this design, the global population is stored in a central repository, while
 isolated algorithms take random samples of the global population and use this
-temporal subpopulation as parameters. An advantage of this design is that the
-sampling provides a type of migration between isolated subpopulations. A problem
-found is that when a processing node returns a subpopulation to the pool, the
-state of the subpopulation is lost. But having the algorithm decoupled opens the
+temporal population as parameters. An advantage of this design is that the
+sampling provides a type of migration between isolated populations. A problem
+found is that when a processing node returns a population to the pool, the
+state of the population is lost. But having the algorithm decoupled opens the
 possibility of implementing the system using serverless functions.
 
 \begin{figure}[ht]
