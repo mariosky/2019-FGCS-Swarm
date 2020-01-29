@@ -261,7 +261,7 @@ offer the conclusions of this paper and suggestions on future work in Section \r
 Multi-population based methods divide the original population into
 smaller populations or islands, with every population carrying out the
 algorithm independently, with synchronous or asynchronous communication with the
-rest of the islands. % exemplify how this is done in different
+rest of the islands \cite{Ma2019}.% exemplify how this is done in different
                      % metaheuristics, especially those we will be
                      % using here - JJ
 This relative isolation helps in maintaining an overall
@@ -269,7 +269,7 @@ diversity since each population will search in a particular area, at least
 between communications. The recombination mentioned above (mixing) or migration
 between populations is needed to avoid a premature convergence of candidate
 solutions since smaller populations are known to perform better for a given
-problem than bigger populations. % Smaller populations converge
+problem than bigger populations \cite{li2016multi,wu2016differential}. % Smaller populations converge
                                 % prematurely or perform better? - JJ
 However, it gives them the added advantage of
 parallel operation. Additionally, and in some cases, multi-population algorithms
@@ -294,10 +294,10 @@ tip the balance between exploration and exploitation of the search space. On the
 other hand, current studies show that by having a high number of populations
 interacting in parallel, the effect of the individual parameters of each
 population is compensated by those selected in other
-populations . % reference - JJ
+populations \cite{li2016multi,tanabe2013evaluation}. % reference - JJ
 
 In this work, we will use random settings within a specific range as results have shown
-this is a valid solution to this problem. % This should have been
+this is a valid solution to this problem \cite{garcia2014randomized}. % This should have been
                                 % mentioned in the introduction - JJ
 
 Some parameters, specially the population size, are
@@ -313,7 +313,7 @@ other at the same time, can benefit from the strengths of each. For instance, a
 genetic algorithm could find a promising global solution that is not optimal
 while another algorithm, more suitable for a local search, finds the global
 optimum. This approach has been followed extensively in recent years with
-success. % References - JJ
+success \cite{li2015multi,godio2016multi,biswas2014co}. % References - JJ
 Moreover, there is a need for frameworks, architecture, and
 implementation models that can allow researchers the development of new
 parallel, asynchronous, heterogeneous, and parameter-free algorithms in a scalable way.  
