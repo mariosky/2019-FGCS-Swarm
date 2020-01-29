@@ -968,6 +968,9 @@ number of FEs is $200,000$, which is the same as $40*50*10*10$.
     \end{tabular}
 \end{table}
 
+% Section headers should be headlines. Like "Measuring scalability in
+% heterogenous systems", or something like that. Experiment 1 says
+% nothing about what's inside (this also applies below) - JJ
 \subsection{Experiment 1}
 \label{sec:exp1}
 % Experiment 1
@@ -1092,10 +1095,13 @@ heterogeneous search strategies are presented in Section \ref{sec:exp2results}.
 
 We summarize the results of the experiment in Figure \ref{fig:spworker}.  The
 experiment consisted of executing the same benchmark on EvoSwarm twice but
-changing the number of populations used in each run. The left column has the
+changing the number of populations used in each run. %What did you
+                                %want to prove? - JJ
+The left column has the
 results when using five populations, and the right side shows the results for
-ten.  Graphics show the execution time achieved by a certain number of workers.
-Each box-plot indicates the time required for the execution of 15  function
+ten. % Why only 5 and 10? - JJ
+Charts show the execution time achieved by a certain number of workers.
+Each box-plot indicates the time required for the execution of 15 function
 instances, in seconds.  Each row has a different scale on the y-axis, to
 compensate for the dimension increments. It is important to notice that the
 execution time can also be affected by the algorithm finding a solution with an
@@ -1104,19 +1110,28 @@ error smaller than the threshold, before completing all the FEs.
 As expected, in most cases, increasing the number of workers reduces the time
 required for the execution of an instance. Mainly when using the same parameters
 (number of populations and number of workers ). But, when we compare the two
-options, we find some subtle differences:
-
-When using one or two workers, using 5 populations is better in most cases. A
+options, we find some subtle differences: When using one or two
+workers, using 5 populations is better in most cases. A 
 reason for this could be that the migration of individuals takes more time to
 reach the worker. For instance, when a single worker has 10 populations, only
-after processing all, it will start receiving mixed populations.  Although, in
+after processing every one of them, it will start receiving mixed populations.  Although, in
 all cases, and even a single worker, populations are heterogeneous, this
 advantage takes more time to propagate. With four workers, almost the same
 results can be achieved regardless of our selection between five or ten
-populations. Also, there is no much difference between 4 and 8 workers, when
+populations. Also, there is not much difference between 4 and 8 workers, when
 using five populations. In general, we can observe that keeping a ratio close to
-1:1 between the number of workers and populations exploits better the computing
+1:1 between the number of workers and populations  better exploits the computing
 resources available.
+% I don't really understand this too well... JJ
+% Also, it might just be that populations are waiting on the queue to
+% be processed if there are more sub-populations than workers. The
+% fact that 10 subpopulations take more with 1w than 5 subpopulations
+% might be due to late startup as you say above, but you need to
+% explain it better.
+% Actually, what I see is no significant difference, or diminishing
+% difference, between 5 and 10 sub-populations as the number of
+% workers increases, and as long as the number of workers is less than
+% the number of subpopulations.
 
 
 \subsection{Experiment 2}
