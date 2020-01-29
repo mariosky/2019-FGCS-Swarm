@@ -476,9 +476,7 @@ section where its algorithm and execution parameters are specified. For instance
 for a GA, the mutation rate, type of crossover operator, and other values are indicated.
 
 \item Each population is then pushed to the \texttt{Input} queue, so they can be consumed 
-by Stateless functions responsible for the execution of the search.  % Why the caps in Stateless? - JJ  
-% It refers to the swimlines in the diagram, maybe I should point it out  - Mario
-% Added a comment above. - Mario
+by Stateless functions responsible for the execution of the search.
 
 \item One or more \texttt{Stateless functions} are constantly pulling population messages
 from the \texttt{Input} queue. Taking the population data and metadata as parameters, these 
@@ -559,12 +557,19 @@ for their execution.
 % We need to add references to the respective papers - Mario
 
 In contrast, in the classic Island model shown in Figure
-\ref{fig:classicisland}, algorithms are coupled with a population, and the same processing
+\ref{fig:classicisland}, algorithms are  population methods, and the same processing
 node keeps both the algorithm process and the state of the population.  Other
 processing nodes follow the same configuration and form of execution, and they
 only pass specific individuals between them.  In this model, adding additional
 processing nodes, on-runtime, can be more difficult, because they need to have
-an addressing mechanism. % JJ, help I don't know if this is clearly understood, a mean like a DNS - Mario
+an addressing mechanism or simply be aware of these new nodes. This is
+solved in part in Peer to Peer (P2P) evolutionary algorithms
+\cite{juanlu:europar}, but coupling still exists, meaning that every
+node must run the whole evolutionary algorithm and hold full copies of
+its subpopulation. 
+% JJ, help I don't know if this is clearly understood, a mean like a
+% DNS - Mario
+% Added something - JJ
 
 \begin{figure}[ht]
     \centering
@@ -617,8 +622,15 @@ procedures are in order. For those cases when a prototype platform is needed,
 for instance, students developing a new algorithm variant or experimenting with
 a published work, a container-based platform can be more practical. Container
 technology enables researchers the local deployment of all the infrastructure
-needed to run the experiments. Later, if needed, the same deployment could be
+needed to run the experiments. Later, if needed, the same system could be
 deployed to the cloud.
+
+The main advantage of container deployments over virtual machine
+instances is that they add much less overhead to communication between
+them, and they are much more economical to deploy. Scaling and
+monitoring can be done much more easily through cloud orchestration
+systems such as Kubernetes; these are the reasons why we chose it for
+this work.
 % I don't see this line of argument. You can do exactly the same with
 % virtual machines instead of containers. Also, you can test a virtual
 % infrastructure locally and then only when it's needed deploy it to
