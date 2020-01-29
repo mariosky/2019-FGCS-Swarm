@@ -1102,20 +1102,45 @@ different number of populations on execution time is reported in  Section
 \ref{sec:exp1results}. The results of the performance comparison between homogeneous and
 heterogeneous search strategies are presented in Section \ref{sec:exp2results}.     
 
-\subsection{Experiment 1}
-\label{sec:exp1results}
-
-The 
-
-\begin{figure}[h!tb]
-  % Is the axis correct? Seconds per instance or total time? Please
-  % change that - JJ
-  % Yes, they are instances - Mario
+\begin{figure}[ht]
     \centering
     \includegraphics[width=\textwidth]{sp_size_worker}
     \caption{Time required, in seconds, to complete an instance of the function, with different number of workers and populations sizes }
     \label{fig:spworker}
 \end{figure}
+
+
+\subsection{Experiment 1}
+\label{sec:exp1results}
+
+We summarize the results of the experiment in Figure \ref{fig:spworker}.  The
+experiment consisted of executing the same benchmark on EvoSwarm twice but
+changing the number of populations used in each run. The left column has the
+results when using five populations, and the right side shows the results for
+ten.  Graphics show the execution time achieved by a certain number of workers.
+Each box-plot indicates the time required for the execution of 15  function
+instances, in seconds.  Each row has a different scale on the y-axis, to
+compensate for the dimension increments. It is important to notice that the
+execution time can also be affected by the algorithm finding a solution with an
+error smaller than the threshold, before completing all the FEs.
+
+As expected, in most cases, increasing the number of workers reduces the time
+required for the execution of an instance. Mainly when using the same parameters
+(number of populations and number of workers ). But, when we compare the two
+options, we find some subtle differences:
+
+When using one or two workers, using 5 populations is better in most cases. A
+reason for this could be that the migration of individuals takes more time to
+reach the worker. For instance, when a single worker has 10 populations, only
+after processing all, it will start receiving mixed populations.  Although, in
+all cases, and even a single worker, populations are heterogeneous, this
+advantage takes more time to propagate. With four workers, almost the same
+results can be achieved regardless of our selection between five or ten
+populations. Also, there is no much difference between 4 and 8 workers, when
+using five populations. In general, we can observe that keeping a ratio close to
+1:1 between the number of workers and populations exploits better the computing
+resources available.
+
 
 \subsection{Experiment 2}
 \label{sec:exp2results}
