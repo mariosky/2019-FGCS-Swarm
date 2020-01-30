@@ -1113,6 +1113,9 @@ changing the number of populations used in each run. %What did you
 The left column has the
 results when using five populations, and the right side shows the results for
 ten. % Why only 5 and 10? - JJ
+     % mmm I really do not have an answer for that, I was thinking about 
+     % testing from 1 to 15, and also more workers - Mario
+
 Charts show the execution time achieved by a certain number of workers.
 Each box-plot indicates the time required for the execution of 15 function
 instances, in seconds.  Each row has a different scale on the y-axis, to
@@ -1141,11 +1144,21 @@ resources available.
 % fact that 10 subpopulations take more with 1w than 5 subpopulations
 % might be due to late startup as you say above, but you need to
 % explain it better.
+
+% I was thinking also in terms of the heterogeneous populations.
+% If population 1 to 6 are exploiting, and 7 to 9 are exploring
+% they will take longer to catchup. 
+% While with more workers this happens almost at the start
+% If it makes sense, I will try to explain it better tomorrow with a 
+% clear head - Mario    
+
 % Actually, what I see is no significant difference, or diminishing
 % difference, between 5 and 10 sub-populations as the number of
 % workers increases, and as long as the number of workers is less than
 % the number of subpopulations.
 
+% I think that was the point, but not too much less for instance 1w and 10pop
+% Also I see a very big jump between 1w and 2w - Mario
 
 \subsection{Experiment 2}
 \label{sec:exp2results}
