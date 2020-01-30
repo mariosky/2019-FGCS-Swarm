@@ -174,10 +174,7 @@ multi-population solutions face the additional challenges:
 Taking these factors into account, in this work, we present EvoSwarm, 
 a multi-container Docker application that reactively processes isolated and
 heterogeneous populations. The platform uses the Docker Compose tool for
-defining and running experiments as multi-container applications. 
-% Docker compose is not really for production, more for development environments, 
-% you have to justify this. Also, it does not handle scaling so need to justify it too - JJ
-% justification: - Mario
+defining and running experiments as multi-container applications. EvoSwarm is also released with a free licence in \url{https://github.com/mariosky/EvoSwarm}.
 We preferred the use of a container-based application for this prototype because
 it is more suitable for development and replication without the need for
 additional components. Nevertheless, the application is compatible with other
@@ -881,9 +878,7 @@ Genetic Algorithms (GAs) and Particle Swarm Optimization (PSO). For the GA
 implementation, we used the DEAP library \cite{fortin2012deap} and for the PSO,
 the EvoloPy library \cite{faris2016evolopy}. Both Python libraries are
 open-source. In EvoSwarm these two algorithms are implemented as stateless
-functions. EvoSwarm is also released with a free licence in \url{https://github.com/mariosky/EvoSwarm}.
-
-% Maybe this should be mentioned earlier, in the workflow? - JJ
+functions.
 
 Next, we show the parameters for each algorithm, with Table \ref{tab:GAparams} for
 the GA and Table \ref{tab:PSOparams} for PSO. We obtained these parameters
