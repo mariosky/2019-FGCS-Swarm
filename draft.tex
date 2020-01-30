@@ -1090,45 +1090,55 @@ for the complete list.
 \section{Experimental Results} 
 \label{results}
 
-We present the results of the experiments in this section. The effect of a
-different number of populations on execution time is reported in  Section
-\ref{sec:exp1results}.
+We present the results of the experiments in this section.
+% The effect of a
+% different number of populations on execution time is reported in  Section
+% \ref{sec:exp1results}.
 % The results of the performance comparison between homogeneous and
 % heterogeneous search strategies are presented in Section \ref{sec:exp2results}.     
-
+%
 \begin{figure}[ht]
     \centering
     \includegraphics[width=\textwidth]{sp_size_worker}
     \caption{Time required, in seconds, to complete an instance of the function, with different number of workers and populations sizes }
     \label{fig:spworker}
 \end{figure}
-
-
+%
+%
 % \subsection{Experiment 1}
 % \label{sec:exp1results}
-
-We summarize the results of the experiment in Figure \ref{fig:spworker}.  The
+%
+with results summarized in Figure \ref{fig:spworker}.  The
 experiment consisted of executing the same benchmark on EvoSwarm twice but
-changing the number of populations used in each run. %What did you
-                                %want to prove? - JJ
-The left column has the
+changing the number of populations used in each run. This is mainly
+intended as a showcase of the flexibility of the tool presented in
+this paper, but we also wanted to test how the number of workers
+affected the time needed to reach a solution. Adding more populations
+might add more overhead, so this might have a noticeable effect.
+The left column in that figure has the
 results when using five populations, and the right side shows the results for
-ten. % Why only 5 and 10? - JJ
-     % mmm I really do not have an answer for that, I was thinking about 
-     % testing from 1 to 15, and also more workers - Mario
+ten. In principle the main issue is how to find the right number of
+workers for a particular problem, but in general we wanted to check
+the communication overhead when the size of the problem increases and
+how the presented framework reacted to it. % Added some explanation
+% here - JJ
 
-Charts show the execution time achieved by a certain number of workers.
+Charts show the execution time achieved by a certain number of
+workers, for every problem dimension, which, besides, changes the
+population size.
 Each box-plot indicates the time required for the execution of 15 function
 instances, in seconds.  Each row has a different scale on the y-axis, to
 compensate for the dimension increments. It is important to notice that the
 execution time can also be affected by the algorithm finding a solution with an
 error smaller than the threshold, before completing all the FEs.
 
-As expected, in most cases, increasing the number of workers reduces the time
-required for the execution of an instance. Mainly when using the same parameters
-(number of populations and number of workers). But, when we compare the two
+As expected, and in most cases, increasing the number of workers reduces the time
+required for the execution of an instance, mainly when using the same parameters
+(number of populations and number of workers), that is, performance
+scales with the number of workers for a fixed problem and number of
+sub-populations used. However, when we compare the two
 options, we find some subtle differences: When using one or two
-workers, using 5 populations is better in most cases. A 
+workers, using 5 populations takes less time in most cases. A 
 reason for this could be that the migration of individuals takes more time to
 reach the worker. For instance, when a single worker has 10 populations, only
 after processing every one of them, it will start receiving mixed populations.  Although, in
@@ -1136,30 +1146,26 @@ all cases, and even a single worker, populations are heterogeneous, this
 advantage takes more time to propagate. With four workers, almost the same
 results can be achieved regardless of our selection between five or ten
 populations. Also, there is not much difference between 4 and 8 workers, when
-using five populations. In general, we can observe that keeping a ratio close to
-1:1 between the number of workers and populations  better exploits the computing
-resources available.
-% I don't really understand this too well... JJ
-% Also, it might just be that populations are waiting on the queue to
-% be processed if there are more sub-populations than workers. The
-% fact that 10 subpopulations take more with 1w than 5 subpopulations
-% might be due to late startup as you say above, but you need to
-% explain it better.
+using five populations, which might indicate that some workers are
+idling while populations are being processed by other workers. In
+general, we can observe that keeping a ratio close to 1:1, but a bit
+better than that, between the number of workers and populations, better exploits the computing
+resources available. This also decreases the relation between the
+overhead needed to migrate and process incoming and outgoing
+population and the total computing time: more populations will need
+more time to do that.
 
-% I was thinking also in terms of the heterogeneous populations.
-% If population 1 to 6 are exploiting, and 7 to 9 are exploring
-% they will take longer to catchup. 
-% While with more workers this happens almost at the start
-% If it makes sense, I will try to explain it better tomorrow with a 
-% clear head - Mario    
+Another additional issue is related to the algorithm itself. Many more
+workers than populations will have a wider range of states of
+evolution in the experiment; populations that will be mixed will have
+very different fitness states, which means that a part of them will
+probably have been not so useful, following the intermediate
+disturbance hypothesis. When the number of workers is increased, the
+difference between the state of evolution of populations will be
+intermediate, leading to better results; eventually, when there are as
+many workers as populations, the state will be quite similar, which is
+shown with a lower gap in the time won adding more workers.
 
-% Actually, what I see is no significant difference, or diminishing
-% difference, between 5 and 10 sub-populations as the number of
-% workers increases, and as long as the number of workers is less than
-% the number of subpopulations.
-
-% I think that was the point, but not too much less for instance 1w and 10pop
-% Also I see a very big jump between 1w and 2w - Mario
 
 % \subsection{Experiment 2}
 % \label{sec:exp2results}
