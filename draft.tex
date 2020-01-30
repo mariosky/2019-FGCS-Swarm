@@ -98,7 +98,7 @@ multi-population based methods when generally referring to techniques using
 many populations as part of their optimization strategy. % Some comment about asynchrony would be in order - JJ
 % Comments below - Mario
 Moreover, parallel implementations can run in two ways: synchronous and
-asynchronous. When operations run in parallel but must maintain synchronism with
+asynchronous. When operations run in parallel but must maintain synchrony with
 the other operations,  all operations need to finish to continue to the next
 step. For instance, in a  parent/worker model, the parent needs to wait for all
 workers to finish their operations before moving to the next iteration.  In
@@ -926,7 +926,7 @@ provided as parameters.
 \end{table}
 
 
-The EvoSwarm application uses configuration files to run the noiseless BOBB testbed
+The EvoSwarm application uses configuration files to run the noiseless BBOB testbed
 experiments.  As a first step, we must deploy the docker application using a
 {\tt docker-compose.yml} file, where the number of worker containers is
 specified. Then a JSON file containing the configuration parameters of the
@@ -939,7 +939,7 @@ populations, and finally, a value of  $1$ means that all populations will run
 the GA algorithm. Next, we specify a list indicating which of the 24 benchmark
 functions will be tested. In the example, the experiment will use the first five
 functions.  The {\em Instances} parameter indicates how many instances of each
-function will be tested. {\em Instances}  has a defualt value of 15. We used this
+function will be tested. {\em Instances}  has a default value of 15. We used this
 value because it is the standard for the BBOB benchmark \cite{hansen2016coco}.
 In the {\em Dimensions} parameter, we define a list of the dimensions that will
 be tested, and we must select additional parameters for each dimension.
@@ -1266,13 +1266,13 @@ also performance benefits (experiment taking less time because
 evaluations are being split between different workers.
 
 As a conclusion, EvoSwarm is a framework designed and tested according
-to industry standars which is able to bring many benefits to the
+to industry standards which is able to bring many benefits to the
 bioinspired algorithm community, by showing the possibility of
 creating new, high performance, mixed algorithms, which can also be
 easily deployed to the cloud, or locally to systems that simply need
 to have Docker and Docker Compose installed.
 
-It also opens new possibilities. From the dessign point of view, it
+It also opens new possibilities. From the design point of view, it
 would be interesting to try and use automatic scaling, instead of
 setting the number of workers by hand. This would need a certain
 amount of redesign, the most important of which would be using
