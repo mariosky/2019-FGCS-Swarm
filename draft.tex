@@ -16,7 +16,7 @@
 \lstset{language=Python} 
 \begin{frontmatter}
 
-\title{An Event-based Architecture for Multi-population Optimization Algorithms}
+\title{EvoSwarm: An Event-based Architecture for Multi-population Optimization Algorithms}
 
 \author[itt]{Mario Garc\'ia Valdez}\corref{mycorrespondingauthor}
 \cortext[mycorrespondingauthor]{Corresponding author}
@@ -1241,6 +1241,55 @@ shown with a lower gap in the time won adding more workers.
 
 \section{Conclusions} 
 \label{conclusions}
+
+In this paper we have presented the EvoSwarm framework that implements
+an event-based, cloud native architecture suitable for hosting any
+kind of multi-population optimization algorithm. The framework is
+based in industry-standard development tools such as Docker and Docker
+Compose, making easy to develop and deploy multi-algorithm distributed
+experiments.
+
+The set up of this kind of algorithms will have a big influence on the
+results, since diversity is important for this kind of algorithms and
+its creation and destruction play a big part of the algorithm's
+performance. One of the main levers to control it in EvoSwarm is via
+the number of workers that will be allocated from the beginning, which
+is why we have performed an experiment mainly intended as a proof of
+concept, but also devoted to show how two parameters in the framework,
+number of workers and number of populations used to initially seed the
+system, interact with each other. The conclusion of this experiment is
+that there is an interesting interplay, with the most benefit being
+obtained with a number of populations equal to the number of workers
+or slightly inferior or superior, which brings algorithmic benefit
+(experiment taking less time because it needs less evaluations) and
+also performance benefits (experiment taking less time because
+evaluations are being split between different workers.
+
+As a conclusion, EvoSwarm is a framework designed and tested according
+to industry standars which is able to bring many benefits to the
+bioinspired algorithm community, by showing the possibility of
+creating new, high performance, mixed algorithms, which can also be
+easily deployed to the cloud, or locally to systems that simply need
+to have Docker and Docker Compose installed.
+
+It also opens new possibilities. From the dessign point of view, it
+would be interesting to try and use automatic scaling, instead of
+setting the number of workers by hand. This would need a certain
+amount of redesign, the most important of which would be using
+container orchestration systems such as Kubernetes or Docker
+Swarm. Instead of setting a fixed number of workers, only the maximum
+amount would need to be established, which could be done directly or
+by setting an evaluation budget.
+
+From the algorithmic point of view, there are many possible lines of
+research. Mixing population-based algorithms with other algorithms
+would be a possibility, but also using different instances of
+population based algorithms, such as checking how Estimation of
+Distribution Algorithms would work together with evolutionary
+algorithms. EvoloPy also includes other population based algorithms,
+which could be tested, trying to find out which sets of algorithms are
+a better match to each other. All these will be explored as future
+lines of work.
 
 \section{Acknowledgements}
 
