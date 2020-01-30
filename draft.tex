@@ -984,8 +984,8 @@ number of FEs is $200,000$, which is the same as $40*50*10*10$.
 % Section headers should be headlines. Like "Measuring scalability in
 % heterogenous systems", or something like that. Experiment 1 says
 % nothing about what's inside (this also applies below) - JJ
-\subsection{Experiment 1}
-\label{sec:exp1}
+%\subsection{Experiment 1}
+%\label{sec:exp1}
 % Experiment 1
 
 % What is the main objective of this experiment? Measure scalability?
@@ -1044,7 +1044,7 @@ for the complete list.
 
 \begin{table}
     \small
-    \caption{Parameters used in the experiments that used five populations
+    \caption{Parameters used in the experiments with five populations
     }
     \label{tab:params:5}
     \vspace{0.25cm}
@@ -1083,8 +1083,8 @@ for the complete list.
 % same parameters as before.  
 
 % Shouldn't this be a subsection of experimental setup? - JJ
-\subsection{Hardware}
-\label{sec:hardware}
+% \subsection{Hardware}
+% \label{sec:hardware}
 
 
 \section{Experimental Results} 
@@ -1092,8 +1092,9 @@ for the complete list.
 
 We present the results of the experiments in this section. The effect of a
 different number of populations on execution time is reported in  Section
-\ref{sec:exp1results}. The results of the performance comparison between homogeneous and
-heterogeneous search strategies are presented in Section \ref{sec:exp2results}.     
+\ref{sec:exp1results}.
+% The results of the performance comparison between homogeneous and
+% heterogeneous search strategies are presented in Section \ref{sec:exp2results}.     
 
 \begin{figure}[ht]
     \centering
@@ -1103,8 +1104,8 @@ heterogeneous search strategies are presented in Section \ref{sec:exp2results}.
 \end{figure}
 
 
-\subsection{Experiment 1}
-\label{sec:exp1results}
+% \subsection{Experiment 1}
+% \label{sec:exp1results}
 
 We summarize the results of the experiment in Figure \ref{fig:spworker}.  The
 experiment consisted of executing the same benchmark on EvoSwarm twice but
@@ -1125,7 +1126,7 @@ error smaller than the threshold, before completing all the FEs.
 
 As expected, in most cases, increasing the number of workers reduces the time
 required for the execution of an instance. Mainly when using the same parameters
-(number of populations and number of workers ). But, when we compare the two
+(number of populations and number of workers). But, when we compare the two
 options, we find some subtle differences: When using one or two
 workers, using 5 populations is better in most cases. A 
 reason for this could be that the migration of individuals takes more time to
