@@ -684,7 +684,7 @@ this work.
 % - JJ
 % OK, I will add an issue - Mario
 % Did you finally? - JJ
-
+% I did not, will add and assign it - M 
 In this section, we propose a design of a reactive container-based application
 for executing multi-population based optimization experiments.  For the design,
 we followed the design patterns highlighted in the previous section, and again
@@ -836,7 +836,11 @@ implementation details of the \texttt{worker} containers.
 
 % Maybe you should say here how everything wors: launch with
 % Docker-compose, whatever. That's the issue that one of the reviewers
-% say - JJ
+% say - JJ 
+
+% This issue is also commanted in the experimental section
+% I will explain it and then we can see where it goes. - M  
+
 \subsection{Worker Containers} 
 \label{workers}
 
@@ -849,7 +853,9 @@ worker pushes the results to the \texttt{Output} queue, finishes, and passes
 the execution to the main loop. This process is shown in Figure
 \ref{fig:worker}.
 
-\subsection{Experimental Workflow in EvoSwarm} 
+\subsection{Experimental Workflow in EvoSwarm} % We could upgrade this to a section and explain in detail 
+% taking care of #5 - M
+
 \label{experiment_flow}
 
 \begin{sidewaysfigure}
