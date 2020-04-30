@@ -853,10 +853,24 @@ worker pushes the results to the \texttt{Output} queue, finishes, and passes
 the execution to the main loop. This process is shown in Figure
 \ref{fig:worker}.
 
-\subsection{Experimental Workflow in EvoSwarm} % We could upgrade this to a section and explain in detail 
+\section{Experimental Workflow in EvoSwarm} % We could upgrade this to a section and explain in detail 
 % taking care of #5 - M
-
 \label{experiment_flow}
+
+Figure \ref{fig:experiment_flow} shows the general workflow to run experiments 
+in Evo\-Swarm, and three roles users can play. The first step is to develop the 
+search strategy algorithms that are going to be used by the multi-population algorithm.
+
+Figure \ref{fig:experiment_flow} shows the general workflow to run experiments
+in Evo\-Swarm, and three roles users can play. The first step is to develop the
+search strategy algorithms that are going to be used by the multi-population
+algorithm; algorithm developers do this. Then administrators are responsible for
+the installation and configuration of the application. Once the application is
+running, users can start one or several experiments, monitor the execution, and
+analyze the results. Depending on the type of experiment executed, users could
+have additional needs. As a use case, there are additional scripts for
+processing the results of experiments to be used with the COCO framework. In the
+next sections, we give more details about these roles and their workflow.  
 
 \begin{sidewaysfigure}
     \centering
@@ -865,8 +879,18 @@ the execution to the main loop. This process is shown in Figure
     \label{fig:experiment_flow}
 \end{sidewaysfigure}
 
-Figure \ref{fig:experiment_flow} shows the workflow users can follow to run
-experiments in Evo\-Swarm. The first step is to develop the search strategy
+\subsection{Developer}
+
+
+\subsection{EvoSwarm Configuration}
+
+\subsection{Experiment Execution}
+
+\subsection{Using the COCO Framework}
+% BBOB Cases
+
+
+The first step is to develop the search strategy
 algorithms that are going to be used by the multi-population algorithm.
 Algorithm developers can upload the container definition or images directly to
 DockerHub; another option is to upload the container image definition (Dockerfile) to
@@ -874,8 +898,6 @@ GitHub and define a trigger to re-upload the image to DockerHub; this
 can be defined in DockerHub (or any other registry) too.  Docker Compose
 configuration files can reference these containers. When a user needs to deploy
 the application, he or she needs to edit the {\tt docker-compose.yml} file
-% Fi file? - JJ+
-% fixed - Mario
 to specify the type and number of containers needed for the application.  The {\tt docker-compose}
 application is responsible for starting all the containers, downloading new
 versions if it is necessary. After starting the application, users can push
