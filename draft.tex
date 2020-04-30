@@ -406,7 +406,7 @@ Section \ref{multi} and the general design principles of cloud-native
 applications we have mentioned earlier; our intention is to steer
 clear of a direct translation of ``classical'' GA architecturs to the
 cloud and design from the ground up a cloud-native method. As a first step, we describe the general
-architecture first, and then  every component in detail. 
+architecture, and then  every component in detail. 
 
 The most elemental data structure used throughout the system is the population; and at a higher
 level, we can view the system as a continuous stream of populations
@@ -560,7 +560,7 @@ for their execution.
 
 % We need to add references to the respective papers - Mario
 
-In contrast, in the classic Island model shown in Figure
+In contrast, in the classic island model shown in Figure
 \ref{fig:classicisland}, algorithms are  population methods, and the same processing
 node keeps both the algorithm process and the state of the population.  Other
 processing nodes follow the same configuration and form of execution, and they
@@ -641,7 +641,8 @@ this work.
 % the cloud. If you want to give good reasons for using containers
 % instead of virtual machines, there are quite a lot non-economic ones
 % - JJ
-% OK, I will add an issue - Mario 
+% OK, I will add an issue - Mario
+% Did you finally? - JJ
 
 In this section, we propose a design of a reactive container-based application
 for executing multi-population based optimization experiments.  For the design,
@@ -791,6 +792,10 @@ implementation details of the \texttt{worker} containers.
     \label{fig:worker}
 \end{figure}
 
+
+% Maybe you should say here how everything wors: launch with
+% Docker-compose, whatever. That's the issue that one of the reviewers
+% say - JJ
 \subsection{Worker Containers} 
 \label{workers}
 
