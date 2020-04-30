@@ -337,19 +337,22 @@ patterns that, together, conform cloud-native application development
 However, in the field of evolutionary algorithms, this has been a slow
 realization, from the origins where Salza and Ferrucci
 \cite{salza2016approach,salza2016develop} proposed an architecture
-that carried evolutionary algorithms to the cloud, developed further
-in \cite{de2017parallel} which starts to introduce cloud native
-aspects such as the use of messaging queues and CoreOS as an operating
-system designed from the ground up for container utilization. The way
-these containers are organized, however, is rather classical in
-nature: a master-worker approach, communicated using RabbitMQ, where
-replicated workers perform the tasks in parallel. They called their
-approach AMQPGA, inspired by the protocol, AMQP, used by RabbitMQ, the
-messaging system. Other EAs topologies have also been used in the
-cloud: \cite{dziurzanski2020scalable} adapts an island model to a
-container architecture, in a system that is functionally equivalent to
-classical models, but with the added advantage of being easy to deploy
-and run.
+that carried evolutionary algorithms to the cloud, and which were
+developed further in the next paper \cite{de2017parallel}. These
+papers started to introduce cloud native aspects such as the use of
+messaging queues and CoreOS as an operating system designed from the
+ground up for container utilization in the area of evolutionary
+algorithms. The way these containers are managed, however, is rather
+classical in nature from the point of view of distributed EC: a
+master-worker approach, communicated using RabbitMQ (a messaging
+queue), where replicated workers perform the tasks in parallel. They
+called their approach AMQPGA, inspired by the protocol, AMQP, used by
+RabbitMQ, the messaging system. This classical approach has been also
+followed by other authors by using other EA ``classical'' topologies
+in the cloud: \cite{dziurzanski2020scalable} adapts an island model to
+a container architecture, in a system that is functionally equivalent
+to classical models, but with the added advantage of being easy to
+deploy and run.
 
 Later approaches use microservices \cite{khalloof2018generic}, or were
 systematized \cite{salza2019speed} achieving speed-up through the
