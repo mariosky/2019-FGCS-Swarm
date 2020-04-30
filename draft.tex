@@ -55,7 +55,9 @@ the implemented platform is an excellent alternative for running
 locally or in the cloud, thus proving that cloud-native bioinspired
 algorithms perform better in their ``natural'' environment than other
 kinds of algorithms, % Did we compare it to other kind of algorithms?
-                     % If we didn't, this should go - JJ
+                     % If we didn't, this should go - JJ 
+                     % Compared against GA and PSO and others from BBOB - Mario
+                     % on the algorithm, not speedup 
 and setting a new baseline for scaling and
 performance in the cloud.
 \end{abstract}
@@ -180,9 +182,10 @@ multi-population solutions face the additional challenges:
 \end{itemize}
 
 Taking these factors into account, in this work, we present EvoSwarm, 
-a multi-container Docker-based application that reactively processes
+a container-based application that reactively processes
 isolated and
 % Maybe container-based? You can create containers with podman - JJ
+% yes, and is shorter - M
 heterogeneous populations. The platform uses the Docker Compose tool for
 defining and running experiments as multi-container applications. EvoSwarm is also released with a free licence in \url{https://github.com/mariosky/EvoSwarm}.
 We preferred the use of a container-based application for this prototype because
@@ -213,8 +216,13 @@ file.
 This paper extends our earlier publication on the topic
 \cite{guervos2018introducing}, and we highlight the main contributions as
 follows:
+We have proved that cloud-native applications are
+able to easily accommodate multi-paradigm bioinspired algorithms
+with little efforts of parametrization and
+that a combination of algorithms has better speedup and performance
+than any single one taken independently.
 
-
+We have proved this in the following steps:
 % The reviewer says that we should clarify the contributions, and the
 % contribution should answer a research question. Maybe we should
 % clarify these contributions to answer to that. Contribution should
@@ -225,6 +233,10 @@ follows:
 % than any single one taken independently.
 % These items above could be preceded by "We have proved this in the
 % following steps" - JJ
+% I like it will put it just like that. 
+% A reviewer also put enphasis on the workflow and reproductivility 
+% and extracting a Model? we can put something on that too.
+
 \begin{itemize}
     \item First, we present the design and implementation of a reactive 
     container-based application for the asynchronous execution of multi-population 
@@ -246,19 +258,20 @@ follows:
                                 % implementation detail. Convenient,
                                 % but does not advance the state of
                                 % the art - JJ
-    \item Lastly, we present an empirical study to validate the 
-    applicability of our application,  measuring the execution time, 
+    \item Fourth, we present an empirical study to validate the 
+    applicability of our application,  measuring the execution time and  
     speedup.
-    %, and a comparison between homogeneous and an ensemble of 
-    %multi-populations, using Genetic Algorithms (GAs) and Particle 
-    %Swarm Optimization (PSO) in a benchmark for the optimization of 
-    %continuous functions. % "Validate the applicability" falls short
+    
+    \item Lastly, we present a comparison between homogeneous and an ensemble of 
+    multi-populations, using Genetic Algorithms (GAs) and Particle 
+    Swarm Optimization (PSO) in a benchmark for the optimization of 
+    continuous functions. % "Validate the applicability" falls short
                           % of being also a contribution. It must
                           % advance the state of the art, in which way
                           % does it advance? Speed (needs to be
                           % proved) Convenience (needs to be proved
                           % too) Scalability? (needs to be proved
-                          % also). - JJ
+                          % also). - JJ 
 \end{itemize}
 
 The organization of the paper is as follows: First, in Section \ref{multi}, we present a
@@ -372,12 +385,12 @@ messaging queues and CoreOS as an operating system designed from the
 ground up for container utilization in the area of evolutionary
 algorithms. The way these containers are managed, however, is rather
 classical in nature from the point of view of distributed EC: a
-master-worker approach, communicated using RabbitMQ (a messaging
+master-worker approach, comunicated using RabbitMQ (a messaging
 queue), where replicated workers perform the tasks in parallel. They
 called their approach AMQPGA, inspired by the protocol, AMQP, used by
 RabbitMQ, the messaging system. This classical approach has been also
 followed by other authors by using other EA ``classical'' topologies
-in the cloud: \cite{dziurzanski2020scalable} adapts an island model to
+in the cloud: Dziurzanski et al. \cite{dziurzanski2020scalable} adapts an island model to
 a container architecture, in a system that is functionally equivalent
 to classical models, but with the added advantage of being easy to
 deploy and run.
