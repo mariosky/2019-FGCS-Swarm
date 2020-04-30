@@ -338,7 +338,7 @@ However, in the field of evolutionary algorithms, this has been a slow
 realization, from the origins where Salza and Ferrucci
 \cite{salza2016approach,salza2016develop} proposed an architecture
 that carried evolutionary algorithms to the cloud, and which were
-developed further in the next paper \cite{de2017parallel}. These
+developed further in their next paper \cite{de2017parallel}. These
 papers started to introduce cloud native aspects such as the use of
 messaging queues and CoreOS as an operating system designed from the
 ground up for container utilization in the area of evolutionary
@@ -403,7 +403,9 @@ In this section, we present the design
 and a container-based implementation of the model we propose for the execution
 of multi-population based algorithms. We follow the requirements outlined in
 Section \ref{multi} and the general design principles of cloud-native
-applications we have mentioned earlier. As a first step, we describe the general
+applications we have mentioned earlier; our intention is to steer
+clear of a direct translation of ``classical'' GA architecturs to the
+cloud and design from the ground up a cloud-native method. As a first step, we describe the general
 architecture first, and then  every component in detail. 
 
 The most elemental data structure used throughout the system is the population; and at a higher
