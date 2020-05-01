@@ -670,12 +670,12 @@ technology enables researchers the local deployment of all the infrastructure
 needed to run the experiments. Later, if needed, the same system could be
 deployed to the cloud.
 
-The main advantage of container deployments over virtual machine
-instances is that they add much less overhead to communication between
-them, and they are much more economical to deploy. Scaling and
-monitoring can be done much more easily through cloud orchestration
-systems such as Kubernetes; these are the reasons why we chose it for
-this work.
+% The main advantage of container deployments over virtual machine
+% instances is that they add much less overhead to communication between
+% them, and they are much more economical to deploy. Scaling and
+% monitoring can be done much more easily through cloud orchestration
+% systems such as Kubernetes; these are the reasons why we chose it for
+% this work.
 % I don't see this line of argument. You can do exactly the same with
 % virtual machines instead of containers. Also, you can test a virtual
 % infrastructure locally and then only when it's needed deploy it to
@@ -683,8 +683,20 @@ this work.
 % instead of virtual machines, there are quite a lot non-economic ones
 % - JJ
 % OK, I will add an issue - Mario
-% Did you finally? - JJ
-% I did not, will add and assign it - M 
+% Did you finally? - JJrehe
+% I did not, will add and assign it - M
+There are many advantages of container-based architectures over one
+based on virtual machines. The main ones are architectural: it makes
+the design of an application gravitate towards a set of decoupled
+tasks, that use reactive, event based programming, to interact with
+the rest of the application; containers hold micro-services that are
+much easier to test, integrate and deploy. It also simplifies
+the interaction APIs. Of course, that makes them more economical in a
+pay-per-use cloud provider, but that is not the main reason why we
+have chosen them in this paper; reproductibility of experiments and a
+clear and idempotent description of the architecture through docker
+compose are the main reasons. 
+
 In this section, we propose a design of a reactive container-based application
 for executing multi-population based optimization experiments.  For the design,
 we followed the design patterns highlighted in the previous section, and again
