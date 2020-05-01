@@ -77,7 +77,7 @@ In the last decades, nature-inspired optimization algorithms have been successfu
 applied to solve many complex real-world problems
 \cite{yang2014nature}; these algorithms can be broadly grouped into evolutionary algorithms (EAs)
 \cite{back1996evolutionary} and swarm intelligence (SI)
-\cite{kennedy2006swarm}, as well as other catetories; popular EAs
+\cite{kennedy2006swarm}, as well as other categories; popular EAs
 are Genetic Algorithms (GAs) \cite{holland1992adaptation,eiben2003genetic}, 
 Genetic Programming (GP) \cite{back1996evolutionary}, Grey Wolf Optimization
 (GWO) \cite{mirjalili2014grey} and Differential Evolution (DE) \cite{karabouga2004simple},
@@ -112,7 +112,7 @@ step. For instance, in a  master/worker model, the master needs to wait for all
 workers to finish their operations before moving to the next iteration.  In
 contrast, in an asynchronous execution,  operations are not synchronized with
 each other, so there's no time lost waiting for other populations to
-arribe to the synchronization point. Following the previous example, now the master operation can
+arrive to the synchronization point. Following the previous example, now the master operation can
 continue to the next iteration, even if a worker has not finished its work.  In
 the literature, we can find many asynchronous algorithms
 \cite{coleman89,baugh2003asynchronous}, reporting benefits in execution time,
@@ -385,7 +385,7 @@ messaging queues and CoreOS as an operating system designed from the
 ground up for container utilization in the area of evolutionary
 algorithms. The way these containers are managed, however, is rather
 classical in nature from the point of view of distributed EC: a
-master-worker approach, comunicated using RabbitMQ (a messaging
+master-worker approach, communicated using RabbitMQ (a messaging
 queue), where replicated workers perform the tasks in parallel. They
 called their approach AMQPGA, inspired by the protocol, AMQP, used by
 RabbitMQ, the messaging system. This classical approach has been also
@@ -445,7 +445,7 @@ and a container-based implementation of the model we propose for the execution
 of multi-population based algorithms. We follow the requirements outlined in
 Section \ref{multi} and the general design principles of cloud-native
 applications we have mentioned earlier; our intention is to steer
-clear of a direct translation of ``classical'' GA architecturs to the
+clear of a direct translation of ``classical'' GA architectures to the
 cloud and design from the ground up a cloud-native method. As a first step, we describe the general
 architecture, and then  every component in detail. 
 
@@ -693,7 +693,7 @@ the rest of the application; containers hold micro-services that are
 much easier to test, integrate and deploy. It also simplifies
 the interaction APIs. Of course, that makes them more economical in a
 pay-per-use cloud provider, but that is not the main reason why we
-have chosen them in this paper; reproductibility of experiments and a
+have chosen them in this paper; reproducibility of experiments and a
 clear and idempotent description of the architecture through docker
 compose are the main reasons. 
 
