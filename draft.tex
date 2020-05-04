@@ -888,9 +888,9 @@ next sections, we give more details about these roles and their workflows.
     \label{fig:experiment_flow}
 \end{sidewaysfigure}
 
-\subsection{Developer} 
+\subsection{EvoSwarm from the developer point of view} 
 
-Developers can add new algorithm stateless functions in
+Developers can add new algorithm as stateless functions in
 several ways and with two levels of integration. In the first level of
 integration, the algorithm execution is not dependent on an initial
 configuration created in the setup, and it only needs to take messages from the
@@ -898,10 +898,12 @@ input queue and return the modified population to the output queue. On the
 second level, the algorithm receives a configuration from the initial setup,
 specifying initial algorithm parameters. We show an example of the configuration
 file received by workers in Figure x. % Adding to Annex or is not even needed? - M
+
+% Clarify this is the first level.
 In the case of a decoupled worker, developers can implement a new stateless
-docker container that executes a demon that continuously pulls messages from the
+Docker container that executes a daemon that continuously pulls messages from the
 input queue on the Redis host specified as an environmental variable {\tt REDIS\_HOST}.
-If the function is written in python, developers can base the implementation on
+If the function is written in Python, developers can base the implementation on
 the provided worker container image, adding a new type of function.  
 If developers use an existing library for population-based algorithms, they need
 to change the standard model of execution, that first creates a random
@@ -913,6 +915,7 @@ be returned as a result. Depending on the type of experiment, additional data
 can be returned in the message. For instance, the message can include the id of
 the container, or even records giving information for each iteration of the
 algorithm. The format of the JSON message is depicted in Figure y. % Adding to Annex or is not even needed? - M
+% it's probably OK if you add it, but instead of Figure it could be a listing - JJ
 
 For the next level of integration, developers need to add code to the setup
 container to specify additional configuration options that can be related to
