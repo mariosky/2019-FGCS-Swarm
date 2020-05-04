@@ -1301,15 +1301,16 @@ intermediate, leading to better results; eventually, when there are as
 many workers as populations, the state will be quite similar, which is
 shown with a lower gap in the time won adding more workers.
 
-\subsection{Deploying to a Cloud Provider}
+\subsection{Deploying to a cloud provider}
 
 % This is only an idea of the section
-% 
+%
+% First you have to say that cloud is a way of describing deployment to any kind of infrastructure in a reproducible way, and it needn't be in the cloud proper, it can be deployed to anything, that's precisely the thing. 
 Several options:
     A virtual machine with a container-optimized operating system, for example,
      Google Compute Engine VMs, or Amazon EC2.  We still need to provision the
       virtual machine and run docker-compose commands as we would do in a local 
-      workstation.
+      workstation. % Remember that Salza et al. used CoreOS, which is optimized for containers - JJ
     
     A Kubernetes cluster, this provides auto-scaling and management of containerized
     application, but it needs additional configuration for provisioning. All major
@@ -1319,8 +1320,9 @@ Several options:
     files for configuration and provide transparent provisioning. Examples of these
     services are Amazon Elastic Container Service,  Red Hat Openshift, and Marantis Docker Enterprise. 
 
+    % This is the second option. The first option was already tested, right? - JJ
 As a proof-of-concept, we deployed the EvoSwarm application in Amazon Elastic
-Container Service (ECS).  Because it needs fewer changes in configuration, 
+Container Service (ECS),  since it needs fewer changes in configuration (from deploying it locally using docker-compose)
 and it is has a lower cost than a Kubernetes alternative.
 
 We can define an ECS cluster directly on AWS Elastic Cloud VMs or through AWS Fargate.
@@ -1331,6 +1333,7 @@ instead of every component.
 
 Using the ECS CLI, we can provision a cluster with a configuration file
 specifying the computing resources needed. Multicontainer applications are
+% Maybe an example - JJ
 deployed to ECS as tasks, and a single cluster can run multiple tasks in
 parallel. When using the Fargate service as a backend, tasks are limited to a
 maximum of 10 containers.  
