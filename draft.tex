@@ -898,13 +898,11 @@ input queue and return the modified population to the output queue. On the
 second level, the algorithm receives a configuration from the initial setup,
 specifying initial algorithm parameters. We show an example of the configuration
 file received by workers in Figure x. % Adding to Annex or is not even needed? - M
-
 In the case of a decoupled worker, developers can implement a new stateless
 docker container that executes a demon that continuously pulls messages from the
 input queue on the Redis host specified as an environmental variable \tt{REDIS\_HOST}.
 If the function is written in python, developers can base the implementation on
 the provided worker container image, adding a new type of function.  
-
 If developers use an existing library for population-based algorithms, they need
 to change the standard model of execution, that first creates a random
 population because, in this case, we need to start with the population provided
@@ -918,7 +916,8 @@ algorithm. The format of the JSON message is depicted in Figure y. % Adding to A
 
 For the next level of integration, developers need to add code to the setup
 container to specify additional configuration options that can be related to
-other workers.
+other workers. As with all optimization libraries, developers also need 
+to write the fitness function that is going to be optimized.
 
 Migration between populations it is independent of the type of algorithm, as the
 controller treats messages as the same type of objects. But, developers could
