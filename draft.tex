@@ -904,33 +904,39 @@ In the case of a decoupled worker, developers can implement a new stateless
 Docker container that executes a daemon that continuously pulls messages from the
 input queue on the Redis host specified as an environmental variable {\tt REDIS\_HOST}.
 If the function is written in Python, developers can base the implementation on
-the provided worker container image, adding a new type of function.  
+the provided worker container image, adding a new type of function.  % say which function, what's its API, how can you test it - JJ
 If developers use an existing library for population-based algorithms, they need
 to change the standard model of execution, that first creates a random
 population because, in this case, we need to start with the population provided
-as a parameter. Depending on the implementation, it required to extract the
+as a parameter. Depending on the implementation, % Depending on which implementation? - JJ
+it is required to extract the
 population from the JSON message and create the population object needed by the
 library. Again, the state of the population must be encoded as a JSON message to
 be returned as a result. Depending on the type of experiment, additional data
-can be returned in the message. For instance, the message can include the id of
+can be returned in the message. % how do you know the type of experiment? how do you add that? Which JSON key? - JJ
+For instance, the message can include the id of
 the container, or even records giving information for each iteration of the
-algorithm. The format of the JSON message is depicted in Figure y. % Adding to Annex or is not even needed? - M
+algorithm. % Is this mandatory? Optional? How is the algorithm going to use it? - JJ
+The format of the JSON message is depicted in Figure y. % Adding to Annex or is not even needed? - M
 % it's probably OK if you add it, but instead of Figure it could be a listing - JJ
 
 For the next level of integration, developers need to add code to the setup
-container to specify additional configuration options that can be related to
+container to specify additional configuration options that can be related to % related to? What do you mean here?
 other workers. As with all optimization libraries, developers also need 
-to write the fitness function that is going to be optimized.
+to write the fitness function that is going to be optimized. % Not clear how you integrate this with the rest. An example would probably help. - JJ
 
-Migration between populations it is independent of the type of algorithm, as the
-controller treats messages as the same type of objects. But, developers could
+Migration between populations is independent of the type of algorithm, as the
+controller treats messages as the same type of objects. But developers could
 also change the controller to specify new rules of operation, for instance, to
-change the type of migration depending on the algorithm.
+change the type of migration depending on the algorithm. % Not clear how you would do this. Maybe a simple example would help - JJ
 
+% This is the second level? - JJ
 Algorithm developers can upload the container definition or images directly to
 DockerHub; another option is to upload the container image definition (Dockerfile) to
 GitHub and define a trigger to re-upload the image to DockerHub; this
-can be defined in DockerHub (or any other registry) too. 
+can be defined in DockerHub (or any other registry) too.u 
+% This is probably accessory. What difference would it make to upload it to GitHub?
+% You also need to say in this section how it helps your overall objective. Does it contribute to reproducibility? We've talked about that elsewhere. Does it help diversity by making easy to add new algorithms? - JJ
 
 \subsection{EvoSwarm Configuration} 
 
