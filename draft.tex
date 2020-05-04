@@ -888,8 +888,42 @@ next sections, we give more details about these roles and their workflows.
     \label{fig:experiment_flow}
 \end{sidewaysfigure}
 
-\subsection{Developer}
+\subsection{Developer} 
 
+Developers can add new algorithm stateless functions in
+several ways and with two levels of integration. In the first level of
+integration, the algorithm execution is not dependent on an initial
+configuration created in the setup, and it only needs to take messages from the
+input queue and return the modified population to the output queue. On the
+second level, the algorithm receives a configuration from the initial setup,
+specifying initial algorithm parameters. We show an example of the configuration
+file received by workers in Figure x. % Adding to Annex or is not even needed? - M
+
+In the case of a decoupled worker, developers can implement a new stateless
+docker container that executes a demon that continuously pulls messages from the
+input queue on the Redis host specified as an environmental variable \tt{REDIS\_HOST}.
+If the function is written in python, developers can base the implementation on
+the provided worker container image, adding a new type of function.  
+
+If developers use an existing library for population-based algorithms, they need
+to change the standard model of execution, that first creates a random
+population because, in this case, we need to start with the population provided
+as a parameter. Depending on the implementation, it required to extract the
+population from the JSON message and create the population object needed by the
+library. Again, the state of the population must be encoded as a JSON message to
+be returned as a result. Depending on the type of experiment, additional data
+can be returned in the message. For instance, the message can include the id of
+the container, or even records giving information for each iteration of the
+algorithm. The format of the JSON message is depicted in Figure y. % Adding to Annex or is not even needed? - M
+
+For the next level of integration, developers need to add code to the setup
+container to specify additional configuration options that can be related to
+other workers.
+
+Migration between populations it is independent of the type of algorithm, as the
+controller treats messages as the same type of objects. But, developers could
+also change the controller to specify new rules of operation, for instance, to
+change the type of migration depending on the algorithm.
 
 \subsection{EvoSwarm Configuration}
 
