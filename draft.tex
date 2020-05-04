@@ -1262,8 +1262,48 @@ intermediate, leading to better results; eventually, when there are as
 many workers as populations, the state will be quite similar, which is
 shown with a lower gap in the time won adding more workers.
 
+\subsection{Deploying to a Cloud Provider}
 
-  
+% This is only an idea of the section
+% 
+Several options:
+    A virtual machine with a container-optimized operating system, for example,
+     Google Compute Engine VMs, or Amazon EC2.  We still need to provision the
+      virtual machine and run docker-compose commands as we would do in a local 
+      workstation.
+    
+    A Kubernetes cluster, this provides auto-scaling and management of containerized
+    application, but it needs additional configuration for provisioning. All major
+    cloud-providers have Kubernetes services.
+
+    A container orchestration service, these services are compatible with docker-compose
+    files for configuration and provide transparent provisioning. Examples of these
+    services are Amazon Elastic Container Service,  Red Hat Openshift, and Marantis Docker Enterprise. 
+
+As a proof-of-concept, we deployed the EvoSwarm application in Amazon Elastic
+Container Service (ECS).  Because it needs fewer changes in configuration, 
+and it is has a lower cost than a Kubernetes alternative.
+
+We can define an ECS cluster directly on AWS Elastic Cloud VMs or through AWS Fargate.
+Fargate is a serverless compute engine for containers that provides automatic provision 
+and management of AWS ECS resources. With this service, calculating the cost of execution
+is simplified because users only specify the computing units and memory for all the application,
+instead of every component. 
+
+Using the ECS CLI, we can provision a cluster with a configuration file
+specifying the computing resources needed. Multicontainer applications are
+deployed to ECS as tasks, and a single cluster can run multiple tasks in
+parallel. When using the Fargate service as a backend, tasks are limited to a
+maximum of 10 containers.  
+
+We deployed an AWS Fargate cluster and defined a Task configuration file with
+8GBs of memory and 4096 computing units, equivalent to 4 CPUs. Because of the
+ten container limit, we only used seven workers and tested the same function as
+in the previous experiment, but save resources only for dimensions 10 and 20.  
+
+The results ..
+
+
 
 \section{Conclusions} 
 \label{conclusions}
