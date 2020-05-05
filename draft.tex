@@ -31,15 +31,15 @@
 \begin{abstract} 
 Splitting a population into multiple instances is a technique that has
 been used extensively in recent years in order to help improve the
-performance of nature-inspired optimization algorithms. Work on
-several populations can be done in parallel, and also asynchronously,
+performance of nature-inspired optimization algorithms. Work on those
+populations can be done in parallel, and they can interact asynchronously,
 a fact that can be leveraged to create scalable implementations based
 on, among other methods, distributed, multi-threaded, parallel, and
-cloud-based computing.  However, the design of these cloud-native,
+cloud-native computing.  However, the design of these cloud-native,
 distributed, multi-population algorithms is not a trivial task. Coming
 from monolithic (single-instance) solutions, adaptations at several
 levels, from the algorithmic to the functional, must be made to
-leverage the scalability, elasticity, fault-tolerance,
+leverage the scalability, elasticity, (limited) fault-tolerance,
 reproducibility, and cost-effectiveness of cloud systems while, at the
 same time, conserving the intended functionality. Instead of an
 evolutive approach, in this paper we propose to create from scratch a
@@ -54,7 +54,11 @@ size of populations with respect to problem size. The architecture and
 the implemented platform is an excellent alternative for running
 locally or in the cloud, thus proving that cloud-native bioinspired
 algorithms perform better in their ``natural'' environment than other
-kinds of algorithms, and setting a new baseline for scaling and
+kinds of algorithms, % Did we compare it to other kind of algorithms?
+                     % If we didn't, this should go - JJ 
+                     % Compared against GA and PSO and others from BBOB - Mario
+                     % on the algorithm, not speedup 
+and setting a new baseline for scaling and
 performance in the cloud.
 \end{abstract}
 
@@ -70,40 +74,45 @@ Multi-population \sep Nature-inspired algorithm \sep Parallel Genetic Algorithms
 \section{Introduction}
 
 In the last decades, nature-inspired optimization algorithms have been successfully
-applied to solve complex real-world problems \cite{yang2014nature}. Algorithms
-inspired by natural processes include evolutionary algorithms (EAs)
-\cite{back1996evolutionary} and swarm intelligence (SI) \cite{kennedy2006swarm},
-among others. These population-based algorithms share the common characteristic
-of using an initial set of random candidate solutions that are later used to
-generate a new set of candidates, using a nature-inspired heuristic. Popular EAs
+applied to solve many complex real-world problems
+\cite{yang2014nature}; these algorithms can be broadly grouped into evolutionary algorithms (EAs)
+\cite{back1996evolutionary} and swarm intelligence (SI)
+\cite{kennedy2006swarm}, as well as other categories; popular EAs
 are Genetic Algorithms (GAs) \cite{holland1992adaptation,eiben2003genetic}, 
 Genetic Programming (GP) \cite{back1996evolutionary}, Grey Wolf Optimization
 (GWO) \cite{mirjalili2014grey} and Differential Evolution (DE) \cite{karabouga2004simple},
 while examples of (SI) \cite{kennedy2006swarm} are particle swarm
 optimization (PSO) \cite{clerc2010particle} and ant colony algorithms (ACO) \cite{dorigo1999ant}.
 
+Besides being all population-based, they also share the common characteristic
+of creating an initial set of random candidate solutions that are later used to
+generate a new set of candidates, using a nature-inspired heuristic.
 Population-based algorithms are intrinsically parallel, and can be implemented to run asynchronously.
-The fitness of each individual can be evaluated independently of 
-others, and similarly, each population could evolve in isolation. Since 
+The fitness of each individual can be (in general) evaluated independently of 
+others, and similarly, each population could evolve in isolation. Researchers use the term
+multi-population based methods when generally referring to techniques using
+many populations as part of their optimization strategy. 
+Since 
 earlier works, researchers have been proposing some form of parallelization
-\cite{muhlenbein1988evolution} to increase the scalability of these algorithms.
+\cite{muhlenbein1988evolution} to increase the scalability of these
+algorithms that adds to this simple parallel execution some form of
+interaction between the independently running populations.
 The island model was one of the first techniques proposed for parallelization,
-which lead to an increased performance \cite{gorges1990explicit,grosso1985computer}. 
+which led to an early proof of speedup   \cite{gorges1990explicit,grosso1985computer}. 
 The concept was to divide a large population into communicated subpopulations. 
 Since then, other population-based algorithms have adopted the concept, 
 and researchers have found additional benefits
 besides the execution speed; these include avoiding a premature convergence and
-maintaining the diversity of the global population \cite{li2015multi}. Researchers use the term
-multi-population based methods when generally referring to techniques using
-many populations as part of their optimization strategy. % Some comment about asynchrony would be in order - JJ
-% Comments below - Mario
+maintaining the diversity of the global population \cite{li2015multi}. 
+
 Moreover, parallel implementations can run in two ways: synchronous and
 asynchronous. When operations run in parallel but must maintain synchrony with
 the other operations,  all operations need to finish to continue to the next
-step. For instance, in a  parent/worker model, the parent needs to wait for all
+step. For instance, in a  master/worker model, the master needs to wait for all
 workers to finish their operations before moving to the next iteration.  In
 contrast, in an asynchronous execution,  operations are not synchronized with
-each other. Following the previous example, now the parent operation can
+each other, so there's no time lost waiting for other populations to
+arrive to the synchronization point. Following the previous example, now the master operation can
 continue to the next iteration, even if a worker has not finished its work.  In
 the literature, we can find many asynchronous algorithms
 \cite{coleman89,baugh2003asynchronous}, reporting benefits in execution time,
@@ -121,15 +130,16 @@ And recently the focus has been on exploiting a higher number of processing
 units by using GPUs \cite{tan2015survey,li2007efficient}, or distributed
 systems; techniques used to achieve this include web-based \cite{JSON},
 map-reduce \cite{fazenda2012},  grid \cite{munawar2010design,Gonzalez09},
-voluntary computing \cite{MilkyWay}, and cloud computing
-\cite{GValdez2015,salza2019speed,valenzuela2015implementing,FlexGP}. % many references here too - JJ 
+voluntary computing \cite{MilkyWay}, and, more importantly, cloud computing
+\cite{GValdez2015,salza2019speed,valenzuela2015implementing,FlexGP}. 
+
 Cloud computing has become the standard way of running
 enterprise applications, not only because of the convenience of the
-pay-as-you-go model or the non-existent cost of administration, but also because
+pay-as-you-go model or the non-existent cost of physical facilities, but also because
 it offers a way of describing the infrastructure as part of the code, so that it
 is much easier to reproduce results and this has been a boon for scientific
 computing.  However,  cloud computing has also been evolving, going from simply
-putting in the cloud old-style monolithic applications, that is, applications
+putting using virtual machines elsewhere than on premises old-style monolithic applications, that is, applications
 built on a single stack of services that communicate by layers, to microservices
 \cite{microservices} and serverless architectures \cite{varghese2018next,Varghese2018849} that favor the parallel and asynchronous communication of
 heterogeneous resources; in the process, a new process for designing {\em cloud
@@ -138,7 +148,7 @@ techniques \cite{Baldini2016287}. In these architectures, services or even
 functions are seen as single processing points, departing from the monolithic
 and even distributed paradigms, become a loosely coupled collection of {\em
 stateless functions} \cite{malawski2017serverless}, that react to events and
-only come into existence while they are doing some processing. % many references more here - JJ 
+only come into existence while they are doing some processing.
 Systems developed with the patterns outlined above have the
 properties of a reactive system \cite{boner2014reactive} and they are commonly
 more flexible, loosely-coupled, and scalable. % Some properies and reference - Mario  
@@ -172,7 +182,10 @@ multi-population solutions face the additional challenges:
 \end{itemize}
 
 Taking these factors into account, in this work, we present EvoSwarm, 
-a multi-container Docker application that reactively processes isolated and
+a container-based application that reactively processes
+isolated and
+% Maybe container-based? You can create containers with podman - JJ
+% yes, and is shorter - M
 heterogeneous populations. The platform uses the Docker Compose tool for
 defining and running experiments as multi-container applications. EvoSwarm is also released with a free licence in \url{https://github.com/mariosky/EvoSwarm}.
 We preferred the use of a container-based application for this prototype because
@@ -182,7 +195,7 @@ orchestration and deployment technologies if more scalability is needed.
 With additional configuration settings, applications can be deployed 
 to a Docker Swarm or a Kubernetes system.  
 
-Docker Container images host the stateless functions responsible for running 
+Docker container images host the stateless functions responsible for running 
 a search strategy on several populations, these functions could also be ported
 directly to a Function as a Service (FaaS) \cite{Roberts2016} implementation.
 % Need to improve the next paragraph or maybe move it to another place - Mario
@@ -203,6 +216,26 @@ file.
 This paper extends our earlier publication on the topic
 \cite{guervos2018introducing}, and we highlight the main contributions as
 follows:
+We have proved that cloud-native applications are
+able to easily accommodate multi-paradigm bioinspired algorithms
+with little efforts of parametrization and
+that a combination of algorithms has better speedup and performance
+than any single one taken independently.
+
+We have proved this in the following steps:
+% The reviewer says that we should clarify the contributions, and the
+% contribution should answer a research question. Maybe we should
+% clarify these contributions to answer to that. Contribution should
+% be something like "We have proved that cloud-native applications are
+% able to easily accommodate multi-paradigm bioinspired algorithms
+% with little efforts of parametrization and
+% that a combination of algorithms has better speedup and performance
+% than any single one taken independently.
+% These items above could be preceded by "We have proved this in the
+% following steps" - JJ
+% I like it will put it just like that. 
+% A reviewer also put enphasis on the workflow and reproductivility 
+% and extracting a Model? we can put something on that too.
 
 \begin{itemize}
     \item First, we present the design and implementation of a reactive 
@@ -225,19 +258,20 @@ follows:
                                 % implementation detail. Convenient,
                                 % but does not advance the state of
                                 % the art - JJ
-    \item Lastly, we present an empirical study to validate the 
-    applicability of our application,  measuring the execution time, 
+    \item Fourth, we present an empirical study to validate the 
+    applicability of our application,  measuring the execution time and  
     speedup.
-    %, and a comparison between homogeneous and an ensemble of 
-    %multi-populations, using Genetic Algorithms (GAs) and Particle 
-    %Swarm Optimization (PSO) in a benchmark for the optimization of 
-    %continuous functions. % "Validate the applicability" falls short
+    
+    \item Lastly, we present a comparison between homogeneous and an ensemble of 
+    multi-populations, using Genetic Algorithms (GAs) and Particle 
+    Swarm Optimization (PSO) in a benchmark for the optimization of 
+    continuous functions. % "Validate the applicability" falls short
                           % of being also a contribution. It must
                           % advance the state of the art, in which way
                           % does it advance? Speed (needs to be
                           % proved) Convenience (needs to be proved
                           % too) Scalability? (needs to be proved
-                          % also). - JJ
+                          % also). - JJ 
 \end{itemize}
 
 The organization of the paper is as follows: First, in Section \ref{multi}, we present a
@@ -255,6 +289,9 @@ offer the conclusions of this paper and suggestions on future work in Section \r
                                 % art? - JJ
 % This the Background for the design decisions, but I think is also needed
 % to better understand the state of the art.
+% I don't know. Maybe it should be directly merged with the state of
+% the art, if there's some essential to our paper it should go to the
+% introduction - JJ
 
 % Also, multipopulation design of what?x
 Multi-population based methods divide the original population into
@@ -295,10 +332,13 @@ interacting in parallel, the effect of the individual parameters of each
 population is compensated by those selected in other
 populations \cite{li2016multi,tanabe2013evaluation}. % reference - JJ
 
+%%%%% ----------------- This gets lost in this section -----------------------------
 In this work, we will use random settings within a specific range as results have shown
 this is a valid solution to this problem \cite{garcia2014randomized}. % This should have been
                                 % mentioned in the introduction - JJ
 
+%%%%%% -------------------- This too. Should go up, to intro, or down,
+%%%%%% to method - JJ
 Some parameters, specially the population size, are
 kept fixed in order to control more easily the execution of the algorithm. For
 instance, by having the size of populations fixed, it is easier to control
@@ -307,12 +347,13 @@ operation. % And to keep them more or less synchronized, which can be
            % interesting, too... But this should go to the
            % introduction also - JJ
 
+%%%% ---------------------- Also to the introduction
 Combining multiple algorithms, with different parameters, interacting with each
 other at the same time, can benefit from the strengths of each. For instance, a
 genetic algorithm could find a promising global solution that is not optimal
 while another algorithm, more suitable for a local search, finds the global
 optimum. This approach has been followed extensively in recent years with
-success \cite{li2015multi,godio2016multi,biswas2014co}. % References - JJ
+success \cite{li2015multi,godio2016multi,biswas2014co}. 
 Moreover, there is a need for frameworks, architecture, and
 implementation models that can allow researchers the development of new
 parallel, asynchronous, heterogeneous, and parameter-free algorithms in a scalable way.  
@@ -320,7 +361,7 @@ parallel, asynchronous, heterogeneous, and parameter-free algorithms in a scalab
 \section{State of the Art} 
 \label{soa}
 
-Although on first sight containers look like simply a method that
+Although at first sight containers look like simply a method that
 allows easy shipping of applications, they are much more than
 that. One of the first features that make them interesting is their
 ephemerality: fast startup and teardown time make them usable for
@@ -337,19 +378,22 @@ patterns that, together, conform cloud-native application development
 However, in the field of evolutionary algorithms, this has been a slow
 realization, from the origins where Salza and Ferrucci
 \cite{salza2016approach,salza2016develop} proposed an architecture
-that carried evolutionary algorithms to the cloud, developed further
-in \cite{de2017parallel} which starts to introduce cloud native
-aspects such as the use of messaging queues and CoreOS as an operating
-system designed from the ground up for container utilization. The way
-these containers are organized, however, is rather classical in
-nature: a master-worker approach, communicated using RabbitMQ, where
-replicated workers perform the tasks in parallel. They called their
-approach AMQPGA, inspired by the protocol, AMQP, used by RabbitMQ, the
-messaging system. Other EAs topologies have also been used in the
-cloud: \cite{dziurzanski2020scalable} adapts an island model to a
-container architecture, in a system that is functionally equivalent to
-classical models, but with the added advantage of being easy to deploy
-and run.
+that carried evolutionary algorithms to the cloud, and which were
+developed further in their next paper \cite{de2017parallel}. These
+papers started to introduce cloud native aspects such as the use of
+messaging queues and CoreOS as an operating system designed from the
+ground up for container utilization in the area of evolutionary
+algorithms. The way these containers are managed, however, is rather
+classical in nature from the point of view of distributed EC: a
+master-worker approach, communicated using RabbitMQ (a messaging
+queue), where replicated workers perform the tasks in parallel. They
+called their approach AMQPGA, inspired by the protocol, AMQP, used by
+RabbitMQ, the messaging system. This classical approach has been also
+followed by other authors by using other EA ``classical'' topologies
+in the cloud: Dziurzanski et al. \cite{dziurzanski2020scalable} adapts an island model to
+a container architecture, in a system that is functionally equivalent
+to classical models, but with the added advantage of being easy to
+deploy and run.
 
 Later approaches use microservices \cite{khalloof2018generic}, or were
 systematized \cite{salza2019speed} achieving speed-up through the
@@ -400,8 +444,10 @@ In this section, we present the design
 and a container-based implementation of the model we propose for the execution
 of multi-population based algorithms. We follow the requirements outlined in
 Section \ref{multi} and the general design principles of cloud-native
-applications we have mentioned earlier. As a first step, we describe the general
-architecture first, and then  every component in detail. 
+applications we have mentioned earlier; our intention is to steer
+clear of a direct translation of ``classical'' GA architectures to the
+cloud and design from the ground up a cloud-native method. As a first step, we describe the general
+architecture, and then  every component in detail. 
 
 The most elemental data structure used throughout the system is the population; and at a higher
 level, we can view the system as a continuous stream of populations
@@ -555,7 +601,7 @@ for their execution.
 
 % We need to add references to the respective papers - Mario
 
-In contrast, in the classic Island model shown in Figure
+In contrast, in the classic island model shown in Figure
 \ref{fig:classicisland}, algorithms are  population methods, and the same processing
 node keeps both the algorithm process and the state of the population.  Other
 processing nodes follow the same configuration and form of execution, and they
@@ -624,19 +670,32 @@ technology enables researchers the local deployment of all the infrastructure
 needed to run the experiments. Later, if needed, the same system could be
 deployed to the cloud.
 
-The main advantage of container deployments over virtual machine
-instances is that they add much less overhead to communication between
-them, and they are much more economical to deploy. Scaling and
-monitoring can be done much more easily through cloud orchestration
-systems such as Kubernetes; these are the reasons why we chose it for
-this work.
+% The main advantage of container deployments over virtual machine
+% instances is that they add much less overhead to communication between
+% them, and they are much more economical to deploy. Scaling and
+% monitoring can be done much more easily through cloud orchestration
+% systems such as Kubernetes; these are the reasons why we chose it for
+% this work.
 % I don't see this line of argument. You can do exactly the same with
 % virtual machines instead of containers. Also, you can test a virtual
 % infrastructure locally and then only when it's needed deploy it to
 % the cloud. If you want to give good reasons for using containers
 % instead of virtual machines, there are quite a lot non-economic ones
 % - JJ
-% OK, I will add an issue - Mario 
+% OK, I will add an issue - Mario
+% Did you finally? - JJrehe
+% I did not, will add and assign it - M
+There are many advantages of container-based architectures over one
+based on virtual machines. The main ones are architectural: it makes
+the design of an application gravitate towards a set of decoupled
+tasks, that use reactive, event based programming, to interact with
+the rest of the application; containers hold micro-services that are
+much easier to test, integrate and deploy. It also simplifies
+the interaction APIs. Of course, that makes them more economical in a
+pay-per-use cloud provider, but that is not the main reason why we
+have chosen them in this paper; reproducibility of experiments and a
+clear and idempotent description of the architecture through docker
+compose are the main reasons. 
 
 In this section, we propose a design of a reactive container-based application
 for executing multi-population based optimization experiments.  For the design,
@@ -781,10 +840,18 @@ implementation details of the \texttt{worker} containers.
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=\textwidth]{worker}
+    \includegraphics[width=\textwidth]{worker_new}
     \caption{Serverless function implementation details. Showing the worker algorithm in each container}
     \label{fig:worker}
 \end{figure}
+
+
+% Maybe you should say here how everything wors: launch with
+% Docker-compose, whatever. That's the issue that one of the reviewers
+% say - JJ 
+
+% This issue is also commanted in the experimental section
+% I will explain it and then we can see where it goes. - M  
 
 \subsection{Worker Containers} 
 \label{workers}
@@ -793,13 +860,26 @@ Worker containers include a Python script called \texttt{main.py} running an
 infinite loop, continually trying to pull a new population to work on it. Once
 \texttt{main.py} receives a message containing configuration data, it creates a
 worker object responsible for initializing and running the specified stateless
-function (i.e., GA or PSO). Once the function returns a new population, the
-worker pushes the results to the \texttt{Output} queue, finishes, and passes
-the execution to the main loop. This process is shown in Figure
+function (i.e., GA or PSO) with the population and configuration in the message.
+Once the function returns the evolved population, the
+the main script pushes the results to the \texttt{Output} queue, and continues
+the execution to the infinite loop. This process is shown in Figure
 \ref{fig:worker}.
 
-\subsection{Experimental Workflow in EvoSwarm} 
+\section{Experimental Workflow in EvoSwarm} % We could upgrade this to a section and explain in detail 
+% taking care of #5 - M
 \label{experiment_flow}
+
+Figure \ref{fig:experiment_flow} shows the general workflow to run experiments
+in Evo\-Swarm, and the three roles users can play. The first step is to develop the
+search strategy algorithms that are going to be used by the multi-population
+algorithm; algorithm developers do this. Then administrators are responsible for
+the installation and configuration of the application. Once the application is
+running, users can start one or several experiments, monitor the execution, and
+analyze the results. Depending on the type of experiment executed, users could
+have additional needs, in this case there are additional scripts for
+processing the results of experiments to be used with the COCO framework. In the
+next sections, we give more details about these roles and their workflows.  
 
 \begin{sidewaysfigure}
     \centering
@@ -808,25 +888,66 @@ the execution to the main loop. This process is shown in Figure
     \label{fig:experiment_flow}
 \end{sidewaysfigure}
 
-Figure \ref{fig:experiment_flow} shows the workflow users can follow to run
-experiments in Evo\-Swarm. The first step is to develop the search strategy
-algorithms that are going to be used by the multi-population algorithm.
+\subsection{Developer} 
+
+Developers can add new algorithm stateless functions in
+several ways and with two levels of integration. In the first level of
+integration, the algorithm execution is not dependent on an initial
+configuration created in the setup, and it only needs to take messages from the
+input queue and return the modified population to the output queue. On the
+second level, the algorithm receives a configuration from the initial setup,
+specifying initial algorithm parameters. We show an example of the configuration
+file received by workers in Figure x. % Adding to Annex or is not even needed? - M
+In the case of a decoupled worker, developers can implement a new stateless
+docker container that executes a demon that continuously pulls messages from the
+input queue on the Redis host specified as an environmental variable {\tt REDIS\_HOST}.
+If the function is written in python, developers can base the implementation on
+the provided worker container image, adding a new type of function.  
+If developers use an existing library for population-based algorithms, they need
+to change the standard model of execution, that first creates a random
+population because, in this case, we need to start with the population provided
+as a parameter. Depending on the implementation, it required to extract the
+population from the JSON message and create the population object needed by the
+library. Again, the state of the population must be encoded as a JSON message to
+be returned as a result. Depending on the type of experiment, additional data
+can be returned in the message. For instance, the message can include the id of
+the container, or even records giving information for each iteration of the
+algorithm. The format of the JSON message is depicted in Figure y. % Adding to Annex or is not even needed? - M
+
+For the next level of integration, developers need to add code to the setup
+container to specify additional configuration options that can be related to
+other workers. As with all optimization libraries, developers also need 
+to write the fitness function that is going to be optimized.
+
+Migration between populations it is independent of the type of algorithm, as the
+controller treats messages as the same type of objects. But, developers could
+also change the controller to specify new rules of operation, for instance, to
+change the type of migration depending on the algorithm.
+
 Algorithm developers can upload the container definition or images directly to
 DockerHub; another option is to upload the container image definition (Dockerfile) to
 GitHub and define a trigger to re-upload the image to DockerHub; this
-can be defined in DockerHub (or any other registry) too.  Docker Compose
-configuration files can reference these containers. When a user needs to deploy
-the application, he or she needs to edit the {\tt docker-compose.yml} file
-% Fi file? - JJ+
-% fixed - Mario
-to specify the type and number of containers needed for the application.  The {\tt docker-compose}
-application is responsible for starting all the containers, downloading new
-versions if it is necessary. After starting the application, users can push
+can be defined in DockerHub (or any other registry) too. 
+
+\subsection{EvoSwarm Configuration} 
+
+The administrator role is responsible for
+editing the Docker Compose configuration files that reference the images created
+by developers. To deploy the application, he or she needs to edit the {\tt
+docker-compose.yml} file to specify the type and number of containers required
+for the experiments. The {\tt docker-compose} application is responsible for
+starting all the containers, and downloading new versions if it is necessary.
+
+\subsection{Experiment Execution}
+
+After starting the application, users can push
 Experiment Definition files and start monitoring the execution in the terminal.
 After the experiment is finished, the user must execute another script
-that takes as argument the
-experiment id to generate a collection of files containing all the
+that takes as argument the experiment id to generate a collection of files containing all the
 data generated by the experiment in a JSON format.
+
+\subsection{Using the COCO Framework}
+
 Researchers can use these files to analyze and plot experiment data.  Python
 scripts are included in the repository to plot the running times for the
 experiments, and all other plots used in this paper;  there is also a script to
@@ -889,7 +1010,8 @@ with five dimensions. After about fifteen experiments, the most challenging
 targets were achieved for this particular function. We tested again with
 functions one to three, and after obtaining favorable results, the PSO and GA
 algorithm parameters were set. In the GA, we randomly set the mutation and
-crossover probabilities to have more heterogeneous workers; in these parameters,
+crossover probabilities to have more heterogeneous workers; % highlight this and add citation - JJ
+in these parameters,
 the range of values is specified. We did not change these parameters during the
 experiments, and only the population size and number of generations were
 provided as parameters. 
@@ -927,17 +1049,25 @@ provided as parameters.
 \end{table}
 
 
-The EvoSwarm application uses configuration files to run the noiseless BBOB testbed
-experiments.  As a first step, we must deploy the docker application using a
+The experiments can be easily reproduced by using the configuration
+files the the EvoSwarm application uses to run the noiseless BBOB testbed
+experiments. % Specify this a bit more (with commands such as
+             % docker-compose up and so on and use an itemize
+             % environment to highlight it and answer to the reviewer
+             % - JJ
+As a first step, we must deploy the docker application using a
 {\tt docker-compose.yml} file, where the number of worker containers is
 specified. Then a JSON file containing the configuration parameters of the
 experiment has to be provided.  Table \ref{tab:params} shows an example of these
-parameters. The { \em GA-PSO Ratio} parameter indicates the proportion of
+parameters. The {\em GA-PSO Ratio} parameter indicates the proportion of
 populations that will use the GA algorithm.  In the example, with a value of
 $0.50$ there will be about the same proportion of GA and PSO populations. If we
 specify a value of $0$, this will give us an algorithm with only PSO
 populations, and finally, a value of  $1$ means that all populations will run
-the GA algorithm. Next, we specify a list indicating which of the 24 benchmark
+the GA algorithm. % Opening up the door to ask for testing with
+                  % different proportion. You have to justify this
+                  % value - JJ 
+Next, we specify a list indicating which of the 24 benchmark
 functions will be tested. In the example, the experiment will use the first five
 functions.  The {\em Instances} parameter indicates how many instances of each
 function will be tested. {\em Instances}  has a default value of 15. We used this
@@ -1162,8 +1292,48 @@ intermediate, leading to better results; eventually, when there are as
 many workers as populations, the state will be quite similar, which is
 shown with a lower gap in the time won adding more workers.
 
+\subsection{Deploying to a Cloud Provider}
 
-  
+% This is only an idea of the section
+% 
+Several options:
+    A virtual machine with a container-optimized operating system, for example,
+     Google Compute Engine VMs, or Amazon EC2.  We still need to provision the
+      virtual machine and run docker-compose commands as we would do in a local 
+      workstation.
+    
+    A Kubernetes cluster, this provides auto-scaling and management of containerized
+    application, but it needs additional configuration for provisioning. All major
+    cloud-providers have Kubernetes services.
+
+    A container orchestration service, these services are compatible with docker-compose
+    files for configuration and provide transparent provisioning. Examples of these
+    services are Amazon Elastic Container Service,  Red Hat Openshift, and Marantis Docker Enterprise. 
+
+As a proof-of-concept, we deployed the EvoSwarm application in Amazon Elastic
+Container Service (ECS).  Because it needs fewer changes in configuration, 
+and it is has a lower cost than a Kubernetes alternative.
+
+We can define an ECS cluster directly on AWS Elastic Cloud VMs or through AWS Fargate.
+Fargate is a serverless compute engine for containers that provides automatic provision 
+and management of AWS ECS resources. With this service, calculating the cost of execution
+is simplified because users only specify the computing units and memory for all the application,
+instead of every component. 
+
+Using the ECS CLI, we can provision a cluster with a configuration file
+specifying the computing resources needed. Multicontainer applications are
+deployed to ECS as tasks, and a single cluster can run multiple tasks in
+parallel. When using the Fargate service as a backend, tasks are limited to a
+maximum of 10 containers.  
+
+We deployed an AWS Fargate cluster and defined a Task configuration file with
+8GBs of memory and 4096 computing units, equivalent to 4 CPUs. Because of the
+ten container limit, we only used seven workers and tested the same function as
+in the previous experiment, but save resources only for dimensions 10 and 20.  
+
+The results ..
+
+
 
 \section{Conclusions} 
 \label{conclusions}
@@ -1191,6 +1361,9 @@ or slightly inferior or superior, which brings algorithmic benefit
 also performance benefits (experiment taking less time because
 evaluations are being split between different workers.
 
+% this is not a conclusion. The conclusion is an answer to the
+% research question. This works, and works precisely for the reasons
+% we say it works. - JJ
 As a conclusion, EvoSwarm is a framework designed and tested according
 to industry standards which is able to bring many benefits to the
 bioinspired algorithm community, by showing the possibility of
@@ -1221,6 +1394,8 @@ lines of work.
 
 This paper has been supported in part by projects TecNM-5654.19-P and DeepBio
 (TIN2017-85727-C4-2-P).
+
+\section*{References}
 
 \bibliographystyle{elsarticle-num}
 \bibliography{multipopulation}
