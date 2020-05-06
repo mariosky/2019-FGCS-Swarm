@@ -1302,6 +1302,11 @@ We present the results of the experiments in this section.
 
 
 \begin{table}[]
+    \small
+    \caption{ Speedup of incrementing the number of workers for each dimension showing the p-rate for the Wilcoxon test}
+    \label{tab:medians}
+    \vspace{0.25cm}
+    \centering
     \begin{tabular}{lllllll}
               &               &               & \multicolumn{2}{l}{5 Populations} & \multicolumn{2}{l}{10 Populations} \\
     Dimension & \multicolumn{2}{l}{Increment} & Speedup         & p-value         & Speedup          & p-value         \\
@@ -1329,10 +1334,18 @@ We present the results of the experiments in this section.
 
 \begin{figure}[h!p]
     \centering
-    \includegraphics[width=\textwidth]{sp_size_worker}
-    \caption{Time required, in seconds, to complete an instance of the function, with different number of workers and populations sizes }
+    \includegraphics[width=\textwidth]{evalrate}
+    \caption{Rate of number of evaluations per second, for 30 instances of the function, with different number of workers and populations sizes }
     \label{fig:spworker}
 \end{figure}
+
+\begin{figure}[h!p]
+    \centering
+    \includegraphics[width=\textwidth]{evalsworker}
+    \caption{Total number of evaluations for 30 instances of the function, with different number of workers and populations sizes }
+    \label{fig:spworker}
+\end{figure}
+
 %
 %
 % \subsection{Experiment 1}
