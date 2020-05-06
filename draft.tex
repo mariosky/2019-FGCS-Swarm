@@ -903,15 +903,27 @@ integration, the algorithm execution is not dependent on an initial
 configuration created in the setup, and it only needs to take messages from the
 input queue and return the modified population to the output queue. On the
 second level, the algorithm receives a configuration from the initial setup,
-specifying initial algorithm parameters. We show an example of the configuration
-file received by workers in  Listing \ref{code:config}. % Adding to Annex or is not even needed? - M
+specifying the initial algorithm parameters. We show an example of the configuration
+file received by workers in Listing \ref{code:config}  in which we abbreviated
+the population key. The message includes the current state
+of the population, together with data about the problem, algorithm,
+and its parameters. 
 
 \begin{lstlisting}[language=Python, caption = Configuration message example, label=code:config]
 {"problem":{
   "name":"BBOB","instance": 1,"error":1e-8,"function":4,
   "dim":3,"search_space":[-5,5],
   "problem_id":"1515-4-1-3",
-  "max_iterations": 20,"population":[],
+  "max_iterations": 20,
+  "population":[
+          [ -3.323452321611405, 
+             2.593007989886873, 
+             3.001112341167673],
+             ...
+          [ -2.22e343232411405, 
+             2.593007989886873, 
+             2.0011025031167673] 
+          ],
   "population_size": 100,
   "algorithm": "GA",  
   "params":{
@@ -934,25 +946,34 @@ file received by workers in  Listing \ref{code:config}. % Adding to Annex or is 
 
 
 % Clarify this is the first level.
-In the case of a decoupled worker, developers can implement a new stateless
-Docker container that executes a daemon that continuously pulls messages from the
-input queue on the Redis host specified as an environmental variable {\tt REDIS\_HOST}.
-If the function is written in Python, developers can base the implementation on
-the provided worker container image, adding a new type of function.  % say which function, what's its API, how can you test it - JJ
+In the case of the first level of integration, a decoupled worker, developers
+can implement a new stateless docker container following the description of a
+worker container described in the previous section (\ref{workers}). The worker
+container executes a demon that continuously pulls messages from the input queue
+on the Redis host specified as an environmental variable REDIS_HOST. If the new
+population-based algorithm is written in python, developers can base the new
+implementation on the provided worker container image, adding a new algorithm
+function and worker and modifying the \texttt{main.py} file.
+% say which function, what's its API, how can you test it - JJ
+% this is not an API the need to write their own - Mario
+% We can write an API later - M
 If developers use an existing library for population-based algorithms, they need
 to change the standard model of execution, that first creates a random
 population because, in this case, we need to start with the population provided
-as a parameter. Depending on the implementation, % Depending on which implementation? - JJ
-it is required to extract the
-population from the JSON message and create the population object needed by the
-library. Again, the state of the population must be encoded as a JSON message to
-be returned as a result. Depending on the type of experiment, additional data
-can be returned in the message. % how do you know the type of experiment? how do you add that? Which JSON key? - JJ
-For instance, the message can include the id of
-the container, or even records giving information for each iteration of the
-algorithm. % Is this mandatory? Optional? How is the algorithm going to use it? - JJ
-The format of the JSON message is depicted in  Listing \ref{code:result}. % Adding to Annex or is not even needed? - M
-% it's probably OK if you add it, but instead of Figure it could be a listing - JJ
+as a parameter. Depending on the library, % Depending on which implementation? - JJ
+it may be required to extract the population from the JSON message and replace
+the population object created by the library. Again, the state of 
+the population must be encoded as a JSON message to
+be returned as a result. Additional data
+must be returned in the JSON message, % how do you know the type of experiment? how do you add that? Which JSON key? - JJ
+% I was wrong, it does not depend on the problem. - M
+as depicted in  Listing \ref{code:result}. 
+The output message contains the id of the worker container together
+with records giving information about each iteration of the algorithm, 
+including the best solution found. The controller uses this information 
+to track the execution of the algorithm and keeping a log in the Redis 
+container for posterior analyses. . % Is this mandatory? Optional? How is the algorithm going to use it? - JJ
+% Mandatory and used for everything - M
 
 \begin{lstlisting}[language=Python, caption=Fragment of output message, label=code:result ]
 {
@@ -980,24 +1001,32 @@ The format of the JSON message is depicted in  Listing \ref{code:result}. % Addi
 }
 \end{lstlisting}
 
-For the next level of integration, developers need to add code to the setup
-container to specify additional configuration options that can be related to % related to? What do you mean here?
-other workers. As with all optimization libraries, developers also need 
-to write the fitness function that is going to be optimized. % Not clear how you integrate this with the rest. An example would probably help. - JJ
-
+For the secondary level of integration, developers need to add code to the setup
+container to specify additional configuration options. For instance,  % related to? What do you mean here?
+in the current configuration message (see Listing \ref{code:config})
+workers executing a GA, initialize the mutation and crossover 
+probabilities randomly from a specific range of values. Users specify
+this range on the experiment configuration.  % Not clear how you integrate this with the rest. An example would probably help. - JJ
+% done - M
 Migration between populations is independent of the type of algorithm, as the
 controller treats messages as the same type of objects. But developers could
 also change the controller to specify new rules of operation, for instance, to
 change the type of migration depending on the algorithm. % Not clear how you would do this. Maybe a simple example would help - JJ
+For example, in the case of swarm-based algorithms,  migration between  % Added - M
+populations (swarms) can follow a topology, indicating valid connections 
+between them (i.e., ring or hypercube). The controller
+can apply these rules selectively only to swarm-based algorithms.
 
 % This is the second level? - JJ
-Algorithm developers can upload the container definition or images directly to
+In either level, algorithm developers can upload the container definition or images directly to
 DockerHub; another option is to upload the container image definition (Dockerfile) to
 GitHub and define a trigger to re-upload the image to DockerHub; this
-can be defined in DockerHub (or any other registry) too.u 
+can be defined in DockerHub (or any other registry) too. 
 
 % This is probably accessory. What difference would it make to upload it to GitHub?
-% You also need to say in this section how it helps your overall objective. Does it contribute to reproducibility? We've talked about that elsewhere. Does it help diversity by making easy to add new algorithms? - JJ
+% You also need to say in this section how it helps your overall objective. 
+% Does it contribute to reproducibility? We've talked about that elsewhere. 
+% Does it help diversity by making easy to add new algorithms? - JJ
 
 
 \subsection{EvoSwarm Configuration} 
