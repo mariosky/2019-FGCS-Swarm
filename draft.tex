@@ -654,6 +654,9 @@ possibility of implementing the system using serverless functions.
     \label{fig:population_pool}
 \end{figure}
 
+
+% Maybe these three sections should be merged; they are all experimental set up and the two next ones start with "experimental"
+% (and he next one too) - JJ
 \section{Container-based application} 
 \label{docker}
 
@@ -1303,7 +1306,7 @@ for the complete list.
 \section{Experimental Results} 
 \label{results}
 
-We present the results of the experiments in this section.
+We present the results of the experiments in this section. % that's pretty obvious. Say what you intend to prove with the experiments and why - JJ
 % The effect of a
 % different number of populations on execution time is reported in  Section
 % \ref{sec:exp1results}.
@@ -1332,9 +1335,11 @@ We present the results of the experiments in this section.
 \end{table}
 
 
-\begin{table}[]
+\begin{table}[h!tbp]
     \small
-    \caption{ Median of evaluation rate per second, for each number of workers and dimension}
+    \caption{Median evaluation rate per second, for each number of workers and dimension}
+        % mark significant differences in some way - JJ
+
     \label{tab:medians}
     \vspace{0.25cm}
     \centering
@@ -1381,7 +1386,8 @@ We present the results of the experiments in this section.
 
 \begin{table}[]
     \small
-    \caption{ Speedup of incrementing the number of workers for each dimension showing the p-rate for the Wilcoxon test}
+    \caption{Speedup achieved with incrementing the number of workers for each dimension showing the p-rate for the Wilcoxon test}
+    % mark significant differences in some way - JJ
     \label{tab:medians}
     \vspace{0.25cm}
     \centering
@@ -1413,14 +1419,15 @@ We present the results of the experiments in this section.
 \begin{figure}[h!p]
     \centering
     \includegraphics[width=\textwidth]{evalrate}
-    \caption{Rate of number of evaluations per second, for 30 instances of the function, with different number of workers and populations sizes }
+    \caption{Boxplot of the number of evaluations per second, for 30 instances of the function, with different number of workers and populations sizes }
     \label{fig:spworker}
 \end{figure}
 
 \begin{figure}[h!p]
     \centering
     \includegraphics[width=\textwidth]{evalsworker}
-    \caption{Total number of evaluations for 30 instances of the function, with different number of workers and populations sizes }
+    \caption{Boxplot of the total number of evaluations for 30 instances of the function, with different number of workers and populations sizes }
+    % Which function? - JJ
     \label{fig:spworker}
 \end{figure}
 
@@ -1491,7 +1498,7 @@ shown with a lower gap in the time won adding more workers.
 
 % This is only an idea of the section
 %
-% First you have to say that cloud is a way of describing deployment to any kind of infrastructure in a reproducible way, and it needn't be in the cloud proper, it can be deployed to anything, that's precisely the thing. 
+% First you have to say that cloud is a way of describing deployment to any kind of infrastructure in a reproducible way, and it needn't be in the cloud proper, it can be deployed to anything, that's precisely the thing. But make clear that when you use a cloud provider, there are more options to do it... - JJ
 Several options:
     A virtual machine with a container-optimized operating system, for example,
      Google Compute Engine VMs, or Amazon EC2.  We still need to provision the
