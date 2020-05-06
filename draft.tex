@@ -7,6 +7,10 @@
 \usepackage{listings}
 \usepackage{xcolor}
 
+
+\lstset{
+basicstyle=\small\ttfamily,
+}
 \graphicspath{ {./images/} }
 
 \modulolinenumbers[5]
@@ -899,6 +903,33 @@ second level, the algorithm receives a configuration from the initial setup,
 specifying initial algorithm parameters. We show an example of the configuration
 file received by workers in Figure x. % Adding to Annex or is not even needed? - M
 
+\begin{lstlisting}[language=Python, caption=Python example]
+{"problem":{
+  "name":"BBOB","instance": 1,"error":1e-8,"function":4,
+  "dim":3,"search_space":[-5,5],
+  "problem_id":"1515-4-1-3",
+  "max_iterations": 20,"population":[],
+  "population_size": 100,
+  "algorithm": "GA",  
+  "params":{
+      "GA":{"crossover": { "type": "cxTwoPoint", 
+            "CXPB_RND": [0.2, 0.6], "CXPB": 0.26},
+             "mutation": { "MUTPB_RND": [0.1, 0.3], 
+             "indpb": 0.05, "sigma": 0.5, 
+             "type":"mutGaussian","mu":0,"MUTPB":0.12},
+             "selection": { 
+               "type": "tools.selTournament", 
+               "tournsize": 2 },
+               "iterations": 50},
+       "PSO": {"Vmax":5,"wMax":0.9,"wMin":0.2,
+               "c1":2,"c2":2,"iterations":50 } 
+    },
+  "experiment":{"type":"benchmark","experiment_id": 1515}
+  }
+}
+\end{lstlisting}
+
+
 % Clarify this is the first level.
 In the case of a decoupled worker, developers can implement a new stateless
 Docker container that executes a daemon that continuously pulls messages from the
@@ -920,6 +951,32 @@ algorithm. % Is this mandatory? Optional? How is the algorithm going to use it? 
 The format of the JSON message is depicted in Figure y. % Adding to Annex or is not even needed? - M
 % it's probably OK if you add it, but instead of Figure it could be a listing - JJ
 
+\begin{lstlisting}[language=Python, caption=Python example]
+{
+"time_stamp": 1588455316.698875,
+"evals": [
+  {
+    "gen_num": 0, "best_fitness": -259.96925945939404,
+    "best_solution": [ -4.9446848321611405, 
+                        2.593007989886873, 
+                        2.0011025031167673],
+    "num_of_evals": 17
+  },
+  {
+    "gen_num": 49, "best_fitness": -419.47555780783347,
+    "best_solution": [ -0.9165294450108963, 
+                        2.291966676472422, 
+                        1.8527006568795485],
+    "num_of_evals": 28
+  }
+],
+"worker_id": "4f5eb12e-8278-40de-b0f3-4ac18171566d",
+"message_counter": 1,
+"message_id": "cbcd2e82-e232-4818-8aec-2cd072c7cfe9",
+"best_score": -419.47555780783347
+}
+\end{lstlisting}
+
 For the next level of integration, developers need to add code to the setup
 container to specify additional configuration options that can be related to % related to? What do you mean here?
 other workers. As with all optimization libraries, developers also need 
@@ -937,6 +994,24 @@ GitHub and define a trigger to re-upload the image to DockerHub; this
 can be defined in DockerHub (or any other registry) too.u 
 % This is probably accessory. What difference would it make to upload it to GitHub?
 % You also need to say in this section how it helps your overall objective. Does it contribute to reproducibility? We've talked about that elsewhere. Does it help diversity by making easy to add new algorithms? - JJ
+\begin{lstlisting}[language=Python, caption=Python example]
+{
+ "DIM_CONFIGURATION" : 
+ {
+ "2":{"GEN":40,"POP_SIZE": 50,"MAX_ITER":10,"MESSAGES":10},
+ "3":{"GEN":25,"POP_SIZE": 60,"MAX_ITER":20,"MESSAGES":10},
+ "5":{"GEN":28,"POP_SIZE": 60,"MAX_ITER":30,"MESSAGES":10},
+"10":{"GEN":50,"POP_SIZE": 70,"MAX_ITER":30,"MESSAGES":10},
+"20":{"GEN":66,"POP_SIZE":100,"MAX_ITER":30,"MESSAGES":10},
+"40":{"GEN":80,"POP_SIZE":125,"MAX_ITER":40,"MESSAGES":10}
+},
+"GA_WORKER_RATIO" : 0.5,
+"FUNCTIONS": [4],
+"DIMENSIONS" : [2, 3, 5, 10, 20, 40],
+"CXPB_RND": [0.2, 0.6],
+"MUTPB_RND": [0.1, 0.3]
+}
+\end{lstlisting}
 
 \subsection{EvoSwarm Configuration} 
 

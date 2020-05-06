@@ -1,0 +1,23 @@
+{
+"time_stamp": 1588455316.698875,
+"evals": [
+  {
+    "gen_num": 0, "best_fitness": -259.96925945939404,
+    "best_solution": [ -4.9446848321611405, 
+                        2.593007989886873, 
+                        2.0011025031167673],
+    "num_of_evals": 17
+  },
+  {
+    "gen_num": 49, "best_fitness": -419.47555780783347,
+    "best_solution": [ -0.9165294450108963, 
+                        2.291966676472422, 
+                        1.8527006568795485],
+    "num_of_evals": 28
+  }
+],
+"worker_id": "4f5eb12e-8278-40de-b0f3-4ac18171566d",
+"message_counter": 1,
+"message_id": "cbcd2e82-e232-4818-8aec-2cd072c7cfe9",
+"best_score": -419.47555780783347
+}
