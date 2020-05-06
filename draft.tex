@@ -950,7 +950,7 @@ In the case of the first level of integration, a decoupled worker, developers
 can implement a new stateless docker container following the description of a
 worker container described in the previous section (\ref{workers}). The worker
 container executes a demon that continuously pulls messages from the input queue
-on the Redis host specified as an environmental variable REDIS_HOST. If the new
+on the Redis host specified as an environmental variable {\texttt REDIS\_HOST}. If the new
 population-based algorithm is written in python, developers can base the new
 implementation on the provided worker container image, adding a new algorithm
 function and worker and modifying the \texttt{main.py} file.
@@ -972,7 +972,7 @@ The output message contains the id of the worker container together
 with records giving information about each iteration of the algorithm, 
 including the best solution found. The controller uses this information 
 to track the execution of the algorithm and keeping a log in the Redis 
-container for posterior analyses. . % Is this mandatory? Optional? How is the algorithm going to use it? - JJ
+container for posterior analyses.  % Is this mandatory? Optional? How is the algorithm going to use it? - JJ
 % Mandatory and used for everything - M
 
 \begin{lstlisting}[language=Python, caption=Fragment of output message, label=code:result ]
@@ -1018,7 +1018,7 @@ between them (i.e., ring or hypercube). The controller
 can apply these rules selectively only to swarm-based algorithms.
 
 % This is the second level? - JJ
-
+% either - M
 On either level of integration, algorithm developers can upload the container
 definition or images directly to a public repository like DockerHub. Another
 option is to upload the container image definition (Dockerfile) to GitHub and
@@ -1033,7 +1033,7 @@ images is a requirement, as it is the case of Amazon ECS.
 % You also need to say in this section how it helps your overall objective. 
 % Does it contribute to reproducibility? We've talked about that elsewhere. 
 % Does it help diversity by making easy to add new algorithms? - JJ
-% Explain it a bit more - M
+% I explain it a bit more - M
 
 \subsection{EvoSwarm Configuration} 
 
@@ -1046,6 +1046,7 @@ starting all the containers, and downloading new versions if it is necessary.
 
 
 \subsection{Experiment Execution}
+\label{sec:exeperimentalDefinition}
 
 After starting the application, users can push several Experiment Definition 
 files at a time and start monitoring the current execution in the terminal.
@@ -1082,22 +1083,21 @@ experiments, and all other plots used in this paper;  there is also a script to
 generate the files needed by the COCO framework \cite{hansen2016coco}, which can generate standard
 comparisons against other methods.
 
-\section{Experimental Setup} 
+\section{General Experimental Setup} 
 \label{setup}
 
 We aimed to learn if the proposed solution can efficiently
 improve the scalability and performance of population-based optimization
-algorithms. Hence, in this section, we verify the following:
+algorithms. Hence, in the following sections, we verify the following:
 
 \begin{itemize}
- \item Whether we can improve the execution time of the algorithm by adding populations
+\item Whether we can improve the execution time of the algorithm by adding populations
  and serverless functions to the system, in particular, what is the effect of
  these changes on the scalability of the system? 
  
 \item Having a multi-population enabled platform, with heterogeneous populations and
 the support for mixing search strategies,  increases the performance of the
 search by needing fewer function evaluations than a homogeneous setting?
-
 \end{itemize}
 
 
@@ -1111,7 +1111,6 @@ over 2, 3, 5, 10, 20, and 40 dimensions. The maximum number of Function
 Evaluations (FEs) changes according to the dimension (D), and it is determined
 by the expression $10^5 \cdot D$. As an example, if we have $D = 2$, the
 maximum number of FEs is $200,000$
-
 
 The COCO framework offers several tools to compare the performance of
 algorithms, generating data sets, tables, and reports for an experiment. There
@@ -1138,11 +1137,13 @@ with five dimensions. After about fifteen experiments, the most challenging
 targets were achieved for this particular function. We tested again with
 functions one to three, and after obtaining favorable results, the PSO and GA
 algorithm parameters were set. In the GA, we randomly set the mutation and
-crossover probabilities to have more heterogeneous workers; % highlight this and add citation - JJ
-in these parameters,
-the range of values is specified. We did not change these parameters during the
+crossover probabilities to have more heterogeneous workers; % highlight this and add citation - JJ 
+% done below - M
+in these parameters, the range of values is specified. We did not change these parameters during the 
 experiments, and only the population size and number of generations were
-provided as parameters. 
+provided as parameters. This strategy has been applied successfully for increasing 
+the performance of multi-population algorithms without requiring the setting 
+of initial parameters \cite{garcia2014randomized}.
 
 \begin{table}
   \small
@@ -1179,7 +1180,7 @@ provided as parameters.
 
 The experiments can be easily reproduced by using the configuration
 files the the EvoSwarm application uses to run the noiseless BBOB testbed
-experiments. % Specify this a bit more (with commands such as
+experiments as seen in Section~\ref{sec:exeperimentalDefinition}. % Specify this a bit more (with commands such as
              % docker-compose up and so on and use an itemize
              % environment to highlight it and answer to the reviewer
              % - JJ
@@ -1194,7 +1195,8 @@ specify a value of $0$, this will give us an algorithm with only PSO
 populations, and finally, a value of  $1$ means that all populations will run
 the GA algorithm. % Opening up the door to ask for testing with
                   % different proportion. You have to justify this
-                  % value - JJ 
+                  % value - JJ  
+                  % We only tested 0, 1 and .5, there is not really a justification - M 
 Next, we specify a list indicating which of the 24 benchmark
 functions will be tested. In the example, the experiment will use the first five
 functions.  The {\em Instances} parameter indicates how many instances of each
@@ -1238,15 +1240,12 @@ number of FEs is $200,000$, which is the same as $40*50*10*10$.
 % Section headers should be headlines. Like "Measuring scalability in
 % heterogenous systems", or something like that. Experiment 1 says
 % nothing about what's inside (this also applies below) - JJ
-%\subsection{Experiment 1}
-%\label{sec:exp1}
+\section{Measuring Scalability}
+\label{sec:exp1}
 % Experiment 1
-
-% What is the main objective of this experiment? Measure scalability?
-% - JJ
 As we mentioned before, reactive systems can scale by adding additional copies
 of serverless functions. In our case, we can start additional worker containers
-to have the same effect. Other authors, like Salza et al., % add
+to have the same effect. Other authors, like Salza et al. \cite{salza2019speed},   % add
                                 % reference - JJ
 have used a
 similar architecture, which implies that worker nodes need to have at least a certain level
@@ -1264,216 +1263,28 @@ EvoSwarm, several parameters can increase or decrease the workload of workers:
     the PSO implementation has a lower execution time than the GA.
 \end{itemize}
 
+% What is the main objective of this experiment? Measure scalability?
+% - JJ 
+% Yes, see below - M
+
 To evaluate the effect of these parameters on the scalability of the system, we
 propose  an experiment in which we selected $f_4$ (Skew Rastrigin-Bueche separable) from the
 BBOB testbed. This function has been used because it is computationally demanding,
 and in higher dimensions has been difficult for PSO \cite{el2009black} and GAs
 \cite{nicolau2009application} to solve with the required FEs. As we
 are only comparing in terms of execution time, the results from a single function
-can be better understood, since there are fewer factors involved. 
+can be better understood, since there are fewer factors involved.
+
+\subsection{Setup}
 
 We executed two sets of experiments with five and ten initial populations,
-repeating each experiment using  1, 2, 4, and 8 workers.  We kept the same
+repeating each experiment 30 times using  1, 2, 4, and 8 workers.  We kept the same 
 maximum number of FEs, changing the relevant parameters for this. 
 See Tables \ref{tab:params:10} and \ref{tab:params:5} 
-for the complete list. 
-
-\begin{table}
-    \small
-    \caption{Parameters used in the experiments with ten populations
-    }
-    \label{tab:params:10}
-    \vspace{0.25cm}
-    \centering
-    \small
-    \begin{tabular}{|l|c|c|c|c|c|c|}
-      \hline
-      Dimension        & 2  & 3  & 5  & 10 & 20  & 40  \\ \hline
-      Generations      & 40 & 25 & 28 & 50 & 66  & 80  \\ \hline
-      Population Size  & 50 & 60 & 60 & 70 & 100 & 125 \\ \hline
-      Populations      & 10 & 10 & 10 & 10 & 10  & 10  \\ \hline
-      Iterations       & 10 & 20 & 30 & 30 & 30  & 40  \\ \hline  
-    \end{tabular}
-\end{table}
-
-\begin{table}
-    \small
-    \caption{Parameters used in the experiments with five populations
-    }
-    \label{tab:params:5}
-    \vspace{0.25cm}
-    \centering
-    \small
-    \begin{tabular}{|l|c|c|c|c|c|c|}
-      \hline
-      Dimension        & 2  & 3  & 5  & 10 & 20  & 40  \\ \hline
-      Generations      & 40 & 25 & 28 & 50 & 66  & 80  \\ \hline
-      Population Size  & 100 & 120 & 120 & 140 & 200 & 250 \\ \hline
-      Populations      & 5 & 5 & 5 & 5 & 5  & 5  \\ \hline
-      Iterations       & 10 & 20 & 30 & 30 & 30  & 40  \\ \hline  
-    \end{tabular}
-\end{table}
-
-% 
-
-% \subsection{Experiment 2}
-% \label{sec:exp2}
-% % Experiment 1
-
-% Having a multi-population based algorithm can decrease the execution time
-% because of the parallel execution of the evolution. But, having heterogeneous 
-% populations might enhance evolutionary search and needless
-% evaluations than homogeneous systems; heterogeneous settings, if
-% done right, increases the diversity of the whole population
-% \cite{araujo2008multikulti}.
-
-% But this is a rule of thumb, and it will depend on the degree of heterogeneity,
-% as well as on the algorithm itself. Some level of heterogeneity can be
-% implemented by just changing the configuration parameters of each population,
-% but in this case, we are interested in a heterogeneous search strategy. 
-% Therefore, in this experiment we compare a multi-population with only GA and PSO populations,
-% versus an ensemble of GA and PSO algorithms. We tested on the first five functions of the
-% BBOB testbed. We used ten populations and eight workers for the experiment and the
-% same parameters as before.  
-
-% Shouldn't this be a subsection of experimental setup? - JJ
-% \subsection{Hardware}
-% \label{sec:hardware}
+for the complete list.
 
 
-\section{Experimental Results} 
-\label{results}
 
-We present the results of the experiments in this section. % that's pretty obvious. Say what you intend to prove with the experiments and why - JJ
-% The effect of a
-% different number of populations on execution time is reported in  Section
-% \ref{sec:exp1results}.
-% The results of the performance comparison between homogeneous and
-% heterogeneous search strategies are presented in Section \ref{sec:exp2results}.     
-%
-
-
-\begin{table}[]
-    \caption{Speedup by worker and dimension, taking one worker as the baseline.}
-    \label{tab:speedup-table}
-    \vspace{0.25cm}
-    \centering
-
-    \begin{tabular}{c|r|r|r|r|r|r|}
-    \cline{2-7}
-    \multicolumn{1}{l|}{}           & \multicolumn{3}{c|}{5 Populations}                                          & \multicolumn{3}{c|}{10 Populations}                                         \\ \hline
-    \multicolumn{1}{|l|}{Dimension} & \multicolumn{1}{c|}{2W} & \multicolumn{1}{c|}{4W} & \multicolumn{1}{c|}{8W} & \multicolumn{1}{c|}{2W} & \multicolumn{1}{c|}{4W} & \multicolumn{1}{c|}{8W} \\ \hline
-    \multicolumn{1}{|c|}{2}         & 1.94                    & 3.12                    & 3.86                    & 1.84                    & 3.38                    & 5.98                    \\ \hline
-    \multicolumn{1}{|c|}{3}         & 1.93                    & 2.77                    & 3.15                    & 1.90                    & 3.26                    & 5.96                    \\ \hline
-    \multicolumn{1}{|c|}{5}         & 1.91                    & 2.90                    & 3.09                    & 1.91                    & 3.46                    & 6.14                    \\ \hline
-    \multicolumn{1}{|c|}{10}        & 1.92                    & 3.03                    & 3.30                    & 1.90                    & 3.61                    & 6.41                    \\ \hline
-    \multicolumn{1}{|c|}{20}        & 1.91                    & 3.14                    & 3.27                    & 1.89                    & 3.73                    & 6.71                    \\ \hline
-    \multicolumn{1}{|c|}{40}        & 2.00                    & 2.92                    & 3.12                    & 1.95                    & 3.80                    & 7.52                    \\ \hline
-    \end{tabular}
-\end{table}
-
-
-\begin{table}[h!tbp]
-    \small
-    \caption{Median evaluation rate per second, for each number of workers and dimension}
-        % mark significant differences in some way - JJ
-
-    \label{tab:medians}
-    \vspace{0.25cm}
-    \centering
-
-    \begin{tabular}{ccrr}
-    \hline
-               &         & 5 Populations    & 10 Populations \\
-     Dimension & Workers & Median of rate & Median of rate  \\
-    \hline
-    2         & 1w      & 10,815.95      & 10,771.30      \\
-    
-              & 2w      & 20,704.11      & 19,197.58      \\
-              & 4w      & 32,563.61      & 35,248.83      \\
-              & 8w      & 40,106.09      & 59,744.88      \\
-    \hline
-    3         & 1w      & 9,599.62       & 9,389.69       \\
-              & 2w      & 18,634.43      & 18,064.24      \\
-              & 4w      & 27,607.12      & 30,419.51      \\
-              & 8w      & 30,189.27      & 56,102.75      \\
-    \hline
-    5         & 1w      & 9,473.63       & 8,671.92       \\
-              & 2w      & 18,181.18      & 16,753.68      \\
-              & 4w      & 27,351.11      & 31,145.09      \\
-              & 8w      & 29,257.72      & 52,985.83      \\
-    \hline
-    10        & 1w      & 8,353.71       & 8,145.61       \\
-              & 2w      & 15,957.87      & 15,577.79      \\
-              & 4w      & 25,696.70      & 29,176.94      \\
-              & 8w      & 28,571.52      & 54,348.60      \\
-    \hline
-    20        & 1w      & 6,920.57       & 6,723.48       \\
-              & 2w      & 13,297.58      & 13,136.11      \\
-              & 4w      & 22,307.73      & 25,271.93      \\
-              & 8w      & 24,179.41      & 46,988.12      \\
-    \hline
-    40        & 1w      & 5,086.88       & 4,976.05       \\
-              & 2w      & 9,896.65       & 9,736.12       \\
-              & 4w      & 16,326.54      & 18,695.84      \\
-              & 8w      & 19,183.37      & 37,302.60      \\
-    \hline  
-    \end{tabular}
-\end{table}
-
-
-\begin{table}[]
-    \small
-    \caption{Speedup achieved with incrementing the number of workers for each dimension showing the p-rate for the Wilcoxon test}
-    % mark significant differences in some way - JJ
-    \label{tab:medians}
-    \vspace{0.25cm}
-    \centering
-    \begin{tabular}{lllllll}
-              &               &               & \multicolumn{2}{l}{5 Populations} & \multicolumn{2}{l}{10 Populations} \\
-    Dimension & \multicolumn{2}{l}{Increment} & Speedup         & p-value         & Speedup          & p-value         \\
-    2         & 1w            & 2w            & 1.94            & 6E-16           & 1.84             & 2E-16           \\
-              & 2w            & 4w            & 1.61            & 2E-15           & 1.83             & 1E-15           \\
-              & 4w            & 8w            & 1.24            & 1E-06           & 1.77             & 2E-16           \\
-    3         & 1w            & 2w            & 1.93            & 2E-16           & 1.90             & 2E-16           \\
-              & 2w            & 4w            & 1.44            & 8E-15           & 1.71             & 2E-16           \\
-              & 4w            & 8w            & 1.14            & 3E-05           & 1.83             & 2E-16           \\
-    5         & 1w            & 2w            & 1.91            & 9E-16           & 1.91             & 2E-16           \\
-              & 2w            & 4w            & 1.52            & 3E-11           & 1.82             & 2E-16           \\
-              & 4w            & 8w            & 1.06            & 5E-03           & 1.77             & 2E-16           \\
-    10        & 1w            & 2w            & 1.92            & 3E-16           & 1.90             & 2E-16           \\
-              & 2w            & 4w            & 1.58            & 3E-16           & 1.89             & 2E-16           \\
-              & 4w            & 8w            & 1.09            & 1E-03           & 1.78             & 2E-16           \\
-    20        & 1w            & 2w            & 1.91            & 2E-16           & 1.89             & 2E-16           \\
-              & 2w            & 4w            & 1.64            & 2E-15           & 1.97             & 2E-16           \\
-              & 4w            & 8w            & 1.04            & 1E-02           & 1.80             & 2E-16           \\
-    40        & 1w            & 2w            & 2.00            & 2E-16           & 1.95             & 2E-16           \\
-              & 2w            & 4w            & 1.46            & 1E-09           & 1.95             & 2E-16           \\
-              & 4w            & 8w            & 1.07            & 3E-02           & 1.98             & 2E-16          
-    \end{tabular}
-    \end{table}
-
-
-\begin{figure}[h!p]
-    \centering
-    \includegraphics[width=\textwidth]{evalrate}
-    \caption{Boxplot of the number of evaluations per second, for 30 instances of the function, with different number of workers and populations sizes }
-    \label{fig:spworker}
-\end{figure}
-
-\begin{figure}[h!p]
-    \centering
-    \includegraphics[width=\textwidth]{evalsworker}
-    \caption{Boxplot of the total number of evaluations for 30 instances of the function, with different number of workers and populations sizes }
-    % Which function? - JJ
-    \label{fig:spworker}
-\end{figure}
-
-%
-%
-% \subsection{Experiment 1}
-% \label{sec:exp1results}
-%
 with results summarized in Figure \ref{fig:spworker}.  The
 experiment consisted of executing the same benchmark on EvoSwarm twice but
 changing the number of populations used in each run. This is mainly
@@ -1532,7 +1343,203 @@ intermediate, leading to better results; eventually, when there are as
 many workers as populations, the state will be quite similar, which is
 shown with a lower gap in the time won adding more workers.
 
-\subsection{Deploying to a cloud provider}
+
+\begin{table}
+    \small
+    \caption{Parameters used in the experiments with ten populations
+    }
+    \label{tab:params:10}
+    \vspace{0.25cm}
+    \centering
+    \small
+    \begin{tabular}{|l|c|c|c|c|c|c|}
+      \hline
+      Dimension        & 2  & 3  & 5  & 10 & 20  & 40  \\ \hline
+      Generations      & 40 & 25 & 28 & 50 & 66  & 80  \\ \hline
+      Population Size  & 50 & 60 & 60 & 70 & 100 & 125 \\ \hline
+      Populations      & 10 & 10 & 10 & 10 & 10  & 10  \\ \hline
+      Iterations       & 10 & 20 & 30 & 30 & 30  & 40  \\ \hline  
+    \end{tabular}
+\end{table}
+
+\begin{table}
+    \small
+    \caption{Parameters used in the experiments with five populations
+    }
+    \label{tab:params:5}
+    \vspace{0.25cm}
+    \centering
+    \small
+    \begin{tabular}{|l|c|c|c|c|c|c|}
+      \hline
+      Dimension        & 2  & 3  & 5  & 10 & 20  & 40  \\ \hline
+      Generations      & 40 & 25 & 28 & 50 & 66  & 80  \\ \hline
+      Population Size  & 100 & 120 & 120 & 140 & 200 & 250 \\ \hline
+      Populations      & 5 & 5 & 5 & 5 & 5  & 5  \\ \hline
+      Iterations       & 10 & 20 & 30 & 30 & 30  & 40  \\ \hline  
+    \end{tabular}
+\end{table}
+
+\subsection{Experimental Results} 
+\label{results}
+% that's pretty obvious. Say what you intend to prove with the experiments and why - JJ 
+% Removed - M
+% The effect of a
+% different number of populations on execution time is reported in  Section
+% \ref{sec:exp1results}.
+% The results of the performance comparison between homogeneous and
+% heterogeneous search strategies are presented in Section \ref{sec:exp2results}.     
+%
+
+\begin{table}[]
+    \caption{Speedup by worker and dimension, taking one worker as the baseline.}
+    \label{tab:speedup-table}
+    \vspace{0.25cm}
+    \centering
+
+    \begin{tabular}{c|r|r|r|r|r|r|}
+    \cline{2-7}
+    \multicolumn{1}{l|}{}           & \multicolumn{3}{c|}{5 Populations}                                          & \multicolumn{3}{c|}{10 Populations}                                         \\ \hline
+    \multicolumn{1}{|l|}{Dimension} & \multicolumn{1}{c|}{2W} & \multicolumn{1}{c|}{4W} & \multicolumn{1}{c|}{8W} & \multicolumn{1}{c|}{2W} & \multicolumn{1}{c|}{4W} & \multicolumn{1}{c|}{8W} \\ \hline
+    \multicolumn{1}{|c|}{2}         & 1.94                    & 3.12                    & 3.86                    & 1.84                    & 3.38                    & 5.98                    \\ \hline
+    \multicolumn{1}{|c|}{3}         & 1.93                    & 2.77                    & 3.15                    & 1.90                    & 3.26                    & 5.96                    \\ \hline
+    \multicolumn{1}{|c|}{5}         & 1.91                    & 2.90                    & 3.09                    & 1.91                    & 3.46                    & 6.14                    \\ \hline
+    \multicolumn{1}{|c|}{10}        & 1.92                    & 3.03                    & 3.30                    & 1.90                    & 3.61                    & 6.41                    \\ \hline
+    \multicolumn{1}{|c|}{20}        & 1.91                    & 3.14                    & 3.27                    & 1.89                    & 3.73                    & 6.71                    \\ \hline
+    \multicolumn{1}{|c|}{40}        & 2.00                    & 2.92                    & 3.12                    & 1.95                    & 3.80                    & 7.52                    \\ \hline
+    \end{tabular}
+\end{table}
+
+
+\begin{table}[h!tbp]
+    \small
+    \caption{Median evaluation rate per second, for each number of workers and dimension}
+        % mark significant differences in some way - JJ
+
+    \label{tab:medians:rate}
+    \vspace{0.25cm}
+    \centering
+
+    \begin{tabular}{ccrr}
+    \hline
+               &         & 5 Populations    & 10 Populations \\
+     Dimension & Workers & Median of rate & Median of rate  \\
+    \hline
+    2         & 1w      & 10,815.95      & 10,771.30      \\
+    
+              & 2w      & 20,704.11      & 19,197.58      \\
+              & 4w      & 32,563.61      & 35,248.83      \\
+              & 8w      & 40,106.09      & 59,744.88      \\
+    \hline
+    3         & 1w      & 9,599.62       & 9,389.69       \\
+              & 2w      & 18,634.43      & 18,064.24      \\
+              & 4w      & 27,607.12      & 30,419.51      \\
+              & 8w      & 30,189.27      & 56,102.75      \\
+    \hline
+    5         & 1w      & 9,473.63       & 8,671.92       \\
+              & 2w      & 18,181.18      & 16,753.68      \\
+              & 4w      & 27,351.11      & 31,145.09      \\
+              & 8w      & 29,257.72      & 52,985.83      \\
+    \hline
+    10        & 1w      & 8,353.71       & 8,145.61       \\
+              & 2w      & 15,957.87      & 15,577.79      \\
+              & 4w      & 25,696.70      & 29,176.94      \\
+              & 8w      & 28,571.52      & 54,348.60      \\
+    \hline
+    20        & 1w      & 6,920.57       & 6,723.48       \\
+              & 2w      & 13,297.58      & 13,136.11      \\
+              & 4w      & 22,307.73      & 25,271.93      \\
+              & 8w      & 24,179.41      & 46,988.12      \\
+    \hline
+    40        & 1w      & 5,086.88       & 4,976.05       \\
+              & 2w      & 9,896.65       & 9,736.12       \\
+              & 4w      & 16,326.54      & 18,695.84      \\
+              & 8w      & 19,183.37      & 37,302.60      \\
+    \hline  
+    \end{tabular}
+\end{table}
+
+
+\begin{table}[]
+    \small
+    \caption{Speedup achieved with incrementing the number of workers for each dimension showing the p-rate for the Wilcoxon test}
+    % mark significant differences in some way - JJ
+    \label{tab:speedup:test}
+    \vspace{0.25cm}
+    \centering
+    \begin{tabular}{lllllll}
+              &               &               & \multicolumn{2}{l}{5 Populations} & \multicolumn{2}{l}{10 Populations} \\
+    Dimension & \multicolumn{2}{l}{Increment} & Speedup         & p-value         & Speedup          & p-value         \\
+    2         & 1w            & 2w            & 1.94            & 6E-16           & 1.84             & 2E-16           \\
+              & 2w            & 4w            & 1.61            & 2E-15           & 1.83             & 1E-15           \\
+              & 4w            & 8w            & 1.24            & 1E-06           & 1.77             & 2E-16           \\
+    3         & 1w            & 2w            & 1.93            & 2E-16           & 1.90             & 2E-16           \\
+              & 2w            & 4w            & 1.44            & 8E-15           & 1.71             & 2E-16           \\
+              & 4w            & 8w            & 1.14            & 3E-05           & 1.83             & 2E-16           \\
+    5         & 1w            & 2w            & 1.91            & 9E-16           & 1.91             & 2E-16           \\
+              & 2w            & 4w            & 1.52            & 3E-11           & 1.82             & 2E-16           \\
+              & 4w            & 8w            & 1.06            & 5E-03           & 1.77             & 2E-16           \\
+    10        & 1w            & 2w            & 1.92            & 3E-16           & 1.90             & 2E-16           \\
+              & 2w            & 4w            & 1.58            & 3E-16           & 1.89             & 2E-16           \\
+              & 4w            & 8w            & 1.09            & 1E-03           & 1.78             & 2E-16           \\
+    20        & 1w            & 2w            & 1.91            & 2E-16           & 1.89             & 2E-16           \\
+              & 2w            & 4w            & 1.64            & 2E-15           & 1.97             & 2E-16           \\
+              & 4w            & 8w            & 1.04            & 1E-02           & 1.80             & 2E-16           \\
+    40        & 1w            & 2w            & 2.00            & 2E-16           & 1.95             & 2E-16           \\
+              & 2w            & 4w            & 1.46            & 1E-09           & 1.95             & 2E-16           \\
+              & 4w            & 8w            & 1.07            & 3E-02           & 1.98             & 2E-16          
+    \end{tabular}
+    \end{table}
+
+
+\begin{figure}[h!p]
+    \centering
+    \includegraphics[width=\textwidth]{evalrate}
+    \caption{Boxplot of the number of evaluations per second, for 30 instances of function $f_4$, with different number of workers and populations sizes }
+    \label{fig:spworker:ratio}
+\end{figure}
+
+\begin{figure}[h!p]
+    \centering
+    \includegraphics[width=\textwidth]{evalsworker}
+    \caption{Boxplot of the total number of evaluations for 30 instances of function $f_4$ , with different number of workers and populations sizes }
+    % Which function? - JJ
+    \label{fig:spworker}
+\end{figure}
+
+
+
+\section{Performance of Heterogeneous Populations in the BBOB Benchmark}
+\label{sec:exp2}
+
+\subsection{Setup}
+
+
+% % Experiment 1
+
+% Having a multi-population based algorithm can decrease the execution time
+% because of the parallel execution of the evolution. But, having heterogeneous 
+% populations might enhance evolutionary search and needless
+% evaluations than homogeneous systems; heterogeneous settings, if
+% done right, increases the diversity of the whole population
+% \cite{araujo2008multikulti}.
+
+% But this is a rule of thumb, and it will depend on the degree of heterogeneity,
+% as well as on the algorithm itself. Some level of heterogeneity can be
+% implemented by just changing the configuration parameters of each population,
+% but in this case, we are interested in a heterogeneous search strategy. 
+% Therefore, in this experiment we compare a multi-population with only GA and PSO populations,
+% versus an ensemble of GA and PSO algorithms. We tested on the first five functions of the
+% BBOB testbed. We used ten populations and eight workers for the experiment and the
+% same parameters as before.  
+
+% Shouldn't this be a subsection of experimental setup? - JJ
+% \subsection{Hardware}
+% \label{sec:hardware}
+
+
+
+\section{Deploying to a cloud provider}
 
 % This is only an idea of the section
 %
