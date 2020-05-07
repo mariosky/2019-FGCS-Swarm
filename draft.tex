@@ -1088,23 +1088,23 @@ comparisons against other methods.
 
 We aimed to learn if the proposed solution can efficiently
 improve the scalability and performance of population-based optimization
-algorithms. Hence, in the following sections, we verify the following:
+algorithms. % If you want to prove it *improves*, you need to provide a baseline. What will be your baseline? You need to specify anyway in which way it really improves - JJ
+Hence, in the following sections, we verify the following:
 
 % JJ these are the three experiments, please check them. The last two addressing
 % issues from a reviewer - M 
 
 \begin{itemize}
-\item Whether we can improve the execution time of the algorithm by adding populations
- and serverless functions to the system, in particular, what is the effect of
- these changes on the scalability of the system? 
+\item Can we improve the execution time of the algorithm by adding populations
+ and serverless functions to the system and, in particular, what is its effect on the scalability of the system? 
  
-\item Having a multi-population enabled platform, with heterogeneous populations and
+\item Does having a multi-population enabled platform, with heterogeneous populations and
 the support for mixing search strategies,  increases the performance of the
-search by needing fewer function evaluations than a homogeneous setting?
+search by needing fewer function evaluations than a homogeneous setting? % But in this case the answer is no, right? - JJ
 
-\item EvoSwarm as cloud-native, container-based application, can it be deployed
+\item Can EvoSwarm as a cloud-native, container-based application,  be deployed
 locally or in the cloud by just specifying the configuration of container images
-and resources to an orchestration service??
+and resources to an orchestration service?
 \end{itemize}
 
 
@@ -1117,7 +1117,9 @@ value. The standard benchmark of the testbed utilizes 15 instances per function
 over 2, 3, 5, 10, 20, and 40 dimensions. The maximum number of Function
 Evaluations (FEs) changes according to the dimension (D), and it is determined
 by the expression $10^5 \cdot D$. As an example, if we have $D = 2$, the
-maximum number of FEs is $200,000$
+maximum number of FEs is $200,000$.
+% How do you manage to stop exactly at that number of evaluations in a distributed system? - JJ
+
 
 The COCO framework offers several tools to compare the performance of
 algorithms, generating data sets, tables, and reports for an experiment. There
@@ -1574,6 +1576,7 @@ shown with a lower gap in the time won adding more workers.
 % This is only an idea of the section
 %
 % First you have to say that cloud is a way of describing deployment to any kind of infrastructure in a reproducible way, and it needn't be in the cloud proper, it can be deployed to anything, that's precisely the thing. But make clear that when you use a cloud provider, there are more options to do it... - JJ
+% You should start writing this out soon... Don't leave it this way - JJ
 Several options:
     A virtual machine with a container-optimized operating system, for example,
      Google Compute Engine VMs, or Amazon EC2.  We still need to provision the
