@@ -944,35 +944,47 @@ and its parameters.
 }
 \end{lstlisting}
 
-In the case of the first level of integration, a decoupled worker, % a decoupler worker what? - JJ
-developers
-can implement a new stateless Docker container following the description in the previous section (\ref{workers}). The worker
+In the case of the first level of integration, developers % a decoupler worker what? - JJ
+% I think it was redundant, I was saying that in this level the worker container
+% is not tied to the rest of the containers. - M 
+can implement a new stateless Docker container following
+the description in the previous section (\ref{workers}). The worker
 container executes a daemon that continuously pulls messages from the input queue
 on the Redis host specified as an environment variable {\texttt REDIS\_HOST}. If the new
 population-based algorithm is written in Python, developers can base the new
 implementation on the provided worker container image, adding a new algorithm
-function and worker and modifying the \texttt{main.py} file.
+function and worker and modifying the \texttt{main.py} file. 
+The worker must include a constructor with the configuration dictionary 
+(see Listing \ref{code:config}) as the only parameter, and call a the new function 
+with the required parameters, unpacking them from the configuration dictionary if necessary.
+All the code of the EvoSwarm Application is published with the open source MIT license.
 % say which function, what's its API, how can you test it - JJ
 % this is not an API the need to write their own - Mario
 % We can write an API later - M
-% Anyway you need to say what is the signature of the function. Also, if they can use the existing implementation, you need to specify the license - JJ
-If developers use an existing library for population-based algorithms, they need
-to change the standard model of execution, that first creates a random
-population because, in this case, the algorithm need to start with the population provided
-as a parameter. Depending on the library, % Depending on which library? - JJ
-it may be required to extract the population from the JSON message and replace
-the population object created by the library. Again, the state of 
-the population must be encoded as a JSON message to
-be returned as a result. Additional data
-must be returned in the JSON message, 
-as depicted in  Listing \ref{code:result}. 
-The output message contains the id of the worker container together
-with records giving information about each iteration of the algorithm, 
-including the best solution found. The controller uses this information 
-to track the execution of the algorithm and keep a log in the Redis 
-container for posterior analyses. 
+% Anyway you need to say what is the signature of the function. 
+%Also, if they can use the existing implementation, you need to specify the license - JJ
 
-\begin{lstlisting}[language=JSON, caption=Fragment of output message, label=code:result ]
+If developers use an existing library for population-based algorithms, they need
+to change the standard model of execution, that creates first a random
+population because, in this case, the algorithm needs to start with the
+population provided as a parameter. Depending on the library used, % Depending on which library? - JJ 
+it may be required to extract the population from the
+JSON message and replace the population object created by the library. For
+example, the DEAP library we used for the GA algorithm, creates the type of the
+population at runtime (i.e., bit, float), so we have to replace the population
+once DEAP created it. In the case of EvoloPy, the PSO method directly uses a
+list of floats for storing the swarm, so we just added a parameter to receive
+the population as a list of floats. Both libraries store information about each
+iteration, so we just read it and put it in the format required.
+Again, the state of the population must be encoded as a JSON message to be
+returned as a result, with additional data as
+depicted in Listing \ref{code:result}. The output message contains the id of the
+worker container together with records giving information about each iteration
+of the algorithm, including the best solution found. The controller uses this
+information to track the execution of the algorithm and keep a log in the Redis
+container for posterior analyses.
+
+\begin{lstlisting}[language=Python, caption=Fragment of output message, label=code:result ]
 {
 "time_stamp": 1588455316.698875,
 "evals": [
