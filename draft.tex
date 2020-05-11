@@ -944,9 +944,7 @@ and its parameters.
 }
 \end{lstlisting}
 
-In the case of the first level of integration, developers % a decoupler worker what? - JJ
-% I think it was redundant, I was saying that in this level the worker container
-% is not tied to the rest of the containers. - M 
+In the case of the first level of integration, developers
 can implement a new stateless Docker container following
 the description in the previous section (\ref{workers}). The worker
 container executes a daemon that continuously pulls messages from the input queue
@@ -962,14 +960,15 @@ All the code of the EvoSwarm Application is published with the open source MIT l
 % this is not an API the need to write their own - Mario
 % We can write an API later - M
 % Anyway you need to say what is the signature of the function. 
-%Also, if they can use the existing implementation, you need to specify the license - JJ
+% Also, if they can use the existing implementation, you need to specify the license - JJ u
+% Any reaction to this? - JJ
 
 If developers use an existing library for population-based algorithms, they need
 to change the standard model of execution, that creates first a random
 population because, in this case, the algorithm needs to start with the
-population provided as a parameter. Depending on the library used, % Depending on which library? - JJ 
+population provided as a parameter. Depending on the evolutionary (or other) algorithm library used,
 it may be required to extract the population from the
-JSON message and replace the population object created by the library. For
+JSON message and replace the population object created by the default library implementation. For
 example, the DEAP library we used for the GA algorithm, creates the type of the
 population at runtime (i.e., bit, float), so we have to replace the population
 once DEAP created it. In the case of EvoloPy, the PSO method directly uses a
@@ -1011,7 +1010,8 @@ container for posterior analyses.
 \end{lstlisting}
 
 For the secondary level of integration, developers need to add code to the setup
-container to specify additional configuration options. For instance,  % related to? What do you mean here?
+container %maybe you should specify more, at the beginning of the section, what is the current setup, what containers are there, what libraries are being used, and so no. - JJ 
+to specify additional configuration options. For instance,  % related to? What do you mean here?
 in the current configuration message (see Listing \ref{code:config})
 workers executing a GA, initialize the mutation and crossover 
 probabilities randomly from a specific range of values. Users specify
@@ -1023,17 +1023,20 @@ change the type of migration depending on the algorithm.
 For example, in the case of swarm-based algorithms,  migration between  
 populations (swarms) can follow a topology, indicating valid connections 
 between them (i.e., ring or hypercube). The controller
-can apply these rules selectively only to swarm-based algorithms.
+can apply these rules selectively only to swarm-based algorithms. In general, these configuration options will be algorithm and library specific. 
 
 On either level of integration, algorithm developers can upload the container
-definition or images directly to a public repository like DockerHub. Another
+definition or images directly to a public repository like DockerHub. % Clarify what you need to change in those images. Will you need to just rebuild the image with new code, or something else? - JJ
+Another
 option is to upload the container image definition (Dockerfile) to GitHub and
 define a trigger to re-upload the image to the registry after an update. Having
 images publicly available can contribute to the reproducibility of experiments.
 Moreover, having more algorithms available can benefit researchers trying to
 compare against other algorithms or increase the diversity of their algorithms
 by adding more search methods. Finally, in some cloud services, having hosted 
-images is a requirement, as it is the case of Amazon ECS.   
+images is a requirement, as it is the case of Amazon ECS.
+
+% Besides addressing the concerns of a reviewer, you should mention how this is related to the overall objective of the paper, saying this contributes to reproducibility or to be able to do it on the cloud  - Jj
 
 
 \subsection{EvoSwarm Configuration} 
