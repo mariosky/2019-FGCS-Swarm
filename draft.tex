@@ -658,7 +658,8 @@ possibility of implementing the system using serverless functions.
 
 % Maybe these three sections should be merged; they are all experimental set up and the two next ones start with "experimental"
 % (and he next one too) - JJ
-% done - Mario 
+% done - Mario
+% But also change title? - JJ
 \section{Container-based application} 
 \label{docker}
 
@@ -958,13 +959,6 @@ The worker must include a constructor with the configuration dictionary
 (see Listing \ref{code:config}) as the only parameter, and call a the new function 
 with the required parameters, unpacking them from the configuration dictionary if necessary.
 All the code of the EvoSwarm Application is published with the open source MIT license.
-% say which function, what's its API, how can you test it - JJ
-% this is not an API the need to write their own - Mario
-% We can write an API later - M
-% Anyway you need to say what is the signature of the function. 
-% Also, if they can use the existing implementation, you need to specify the license - JJ u
-% Any reaction to this? - JJ
-% I forgot to put done, but I added in the above paragraphs. It was correct? - Mario
 
 If developers use an existing library for population-based algorithms, they need
 to change the standard model of execution, that creates first a random
@@ -1014,11 +1008,7 @@ container for posterior analyses.
 
 For the secondary level of integration, developers need to add code to the setup
 
-container %maybe you should specify more, at the beginning of the section, 
-% what is the current setup, what containers are there, what libraries are being used, and so on. - JJ
-% The previous section talks about, can you have look? Maybe I should move it to this one. - Mario
-% If not, I will add a remainder, something like: following from the setup described in the previous section... - M  
-to specify additional configuration options. For instance,  % related to? What do you mean here? - done Mario 
+container
 in the current configuration message (see Listing \ref{code:config})
 workers executing a GA, initialize the mutation and crossover 
 probabilities randomly from a specific range of values. Users specify
@@ -1037,32 +1027,21 @@ In general, these configuration options will be algorithm and library specific.
 On either level of integration and after making the changes outlined before,
 algorithm developers can upload the container 
 definition or images directly to a public repository like DockerHub. 
-% Clarify what you need to change in those images. 
-% Added a brief comment at the beginning  - M
-% Will you need to 
-% just rebuild the image with new code, or something else? - JJ
-% That and document your work, talk about this at the end - M
-% We need to document our own images :) - M   
 
 Another option is to upload the container image definition (Dockerfile) to GitHub and
 define a trigger to re-upload the image to the registry after an update. Having
 images publicly available can contribute to the reproducibility of experiments.
 Moreover, having more algorithms available can benefit researchers trying to
 compare against other algorithms or increase the diversity of their algorithms
-by adding more search methods. Finally, in some cloud services, having hosted 
+by adding more search methods. Finally, in some cloud services, having hosted
 images is a requirement, as it is the case of Amazon ECS.
-
-% Besides addressing the concerns of a reviewer, you should mention how this is 
-% related to the overall objective of the paper, saying this contributes to
-% reproducibility or to be able to do it on the cloud  - Jj
-% Added the lines bellow - Mario
 
 Moreover, public repositories have the functionality for documenting, sharing,
 and tracking different versions of both images and image definitions by using
 tags. This infrastructure supports the objective of the paper, which is to
 contribute to the reproducibility of experiments and platform independence.
 
-\subsection{EvoSwarm Configuration} 
+\subsection{EvoSwarm Configuration}
 \label{sec:evoswarm:config}
 The administrator role is responsible for
 editing the Docker Compose configuration files that reference the images created
