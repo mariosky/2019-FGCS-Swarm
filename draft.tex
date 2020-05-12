@@ -11,6 +11,7 @@
 \lstset{
 basicstyle=\small\ttfamily,
 }
+
 \graphicspath{ {./images/} }
 
 \modulolinenumbers[5]
@@ -1208,8 +1209,6 @@ functions.
   \end{tabular}
 \end{table}
 
-
-
 Next, we show the parameters for each algorithm, with Table \ref{tab:GAparams} for
 the GA and Table \ref{tab:PSOparams} for PSO. We obtained these parameters
 following the same method as in a previous work \cite{garcia2017benchmarking}.
@@ -1225,9 +1224,6 @@ experiments, and only the population size and number of generations were
 provided as parameters. This strategy has been applied successfully for increasing 
 the performance of multi-population algorithms without requiring the setting 
 of initial parameters \cite{garcia2014randomized}.
-
-
-
 
 The experiments can be easily reproduced by using the configuration
 files the EvoSwarm application uses to run the noiseless BBOB testbed
@@ -1290,8 +1286,6 @@ population size. Finally, the {\em Iterations} parameter indicates how many
 complete loops will be performed. All these parameters give us the maximum
 number of FEs that will be performed. For instance, for $D = 2$, the maximum
 number of FEs is $200,000$, which is the same as $40*50*10*10$.
-%
-
 
 For local experiments we have deployed the EvoSwarm application in a
 Desktop PC with an AMD Ryzen 9 3900x 12-core processor with 24 threads 
@@ -1301,9 +1295,6 @@ in Ubuntu Linux 18.04; coce is run using Python 3.7.5. Container images and the 
 The BOBB experiments were performed with COCO \cite{hansen2016coco} version bbob.v15.03 in Python, 
 the plots were produced with version 2.3.2. % Are we using BBOB plots? - JJ
 
-% Section headers should be headlines. Like "Measuring scalability in
-% heterogenous systems", or something like that. Experiment 1 says
-% nothing about what's inside (this also applies below) - JJ
 \section{Measuring Scalability}
 \label{sec:exp1}
 % Experiment 1
@@ -1557,32 +1548,6 @@ difference between the state of evolution of populations will be
 intermediate, leading to better results; eventually, when there are as
 many workers as populations, the state will be quite similar, which is
 shown with a smaller gap in the time won adding more workers.
-%
-% Boxplot of the total number of evaluations for 30 instances of function f4 , with
-% different number of workers and populations sizes
-
-
-
-%
-%
-% The effect of a
-% different number of populations on execution time is reported in  Section
-% \ref{sec:exp1results}.
-% The results of the performance comparison between homogeneous and
-% heterogeneous search strategies are presented in Section \ref{sec:exp2results}.     
-%
-%
-
-%
-%
-%\begin{figure}[h!tbp]
-%%    \centering
-%    \includegraphics[width=\textwidth]{evalrate}
-%%    \caption{Boxplot of the number of evaluations per second, for 30 instances of function $f_4$, with different number of workers and populations sizes }
-%    \label{fig:spworker:ratio}
-%\end{figure}
-
-
 
 
 
@@ -1626,26 +1591,40 @@ shown with a smaller gap in the time won adding more workers.
 % it can be deployed to anything, that's precisely the thing. But make clear that
 % when you use a cloud provider, there are more options to do it... - JJ
 
+Container-based applications describe the deployment of isolated processes in a
+consistent and portable way, going from development, testing, and production
+independently on the kind of infrastructure. The term cloud-native describes
+these container-based environments because they are deployed on an
+infrastructure that abstracts the underlying compute, storage, and networking
+primitives. This infrastructure does need to be a cloud provider; it could be a
+developer's laptop, a single server, or a production environment. When we deploy
+a cloud-native application to a cloud provider, we have more options to choose:
 
-% You should start writing this out soon... Don't leave it this way - JJ
-Several options:
-    A virtual machine with a container-optimized operating system, for example,
-     Google Compute Engine VMs, or Amazon EC2.  We still need to provision the
-      virtual machine and run docker-compose commands as we would do in a local 
-      workstation. % Remember that Salza et al. used CoreOS, which is optimized for containers - JJ
-    
-    A Kubernetes cluster, this provides auto-scaling and management of containerized
-    application, but it needs additional configuration for provisioning. All major
-    cloud-providers have Kubernetes services.
+\begin{description}
+  
+  \item[A virtual machine] with a container-optimized operating system, for example,
+  Google Compute Engine VMs, or Amazon EC2.  We still need to provision the
+  virtual machine and run docker-compose commands as we would do in a local 
+  workstation. Salza et al. \cite{salza2019speed} tested this option by using
+  CoreOs cluster. 
+  % Remember that Salza et al. used CoreOS, which is optimized for containers - JJ
 
-    A container orchestration service, these services are compatible with docker-compose
+  \item[A Kubernetes cluster] provides auto-scaling and management of containerized
+  applications, but it needs additional configuration for provisioning. All major
+  cloud-providers have Kubernetes services.
+
+  \item[A container orchestration service] these services are compatible with docker-compose
     files for configuration and provide transparent provisioning. Examples of these
-    services are Amazon Elastic Container Service,  Red Hat Openshift, and Marantis Docker Enterprise. 
+    services are Amazon Elastic Container Service,  Red Hat Openshift, and Marantis Docker Enterprise.
 
-    % This is the second option. The first option was already tested, right? - JJ
-As a proof-of-concept, we deployed the EvoSwarm application in Amazon Elastic
-Container Service (ECS),  since it needs fewer changes in configuration (from deploying it locally using docker-compose)
-and it is has a lower cost than a Kubernetes alternative.
+\end{description}
+    
+% This is the second option. The first option was already tested, right? - JJ
+% This is the third option.  - M
+
+As a proof-of-concept, we chose the third option and deployed the EvoSwarm application in Amazon Elastic
+Container Service (ECS),  since it needs fewer changes in configuration 
+(from deploying it locally using docker-compose) and it is has a lower cost than a Kubernetes alternative.
 
 We can define an ECS cluster directly on AWS Elastic Cloud VMs or through AWS Fargate.
 Fargate is a serverless compute engine for containers that provides automatic provision 
@@ -1653,20 +1632,102 @@ and management of AWS ECS resources. With this service, calculating the cost of 
 is simplified because users only specify the computing units and memory for all the application,
 instead of every component. 
 
-Using the ECS CLI, we can provision a cluster with a configuration file
-specifying the computing resources needed. Multicontainer applications are
+Multicontainer applications are 
 % Maybe an example - JJ
+% This is shown next - Mario
 deployed to ECS as tasks, and a single cluster can run multiple tasks in
 parallel. When using the Fargate service as a backend, tasks are limited to a
 maximum of 10 containers.  
 
-We deployed an AWS Fargate cluster and defined a Task configuration file with
+Using the ECS CLI, we can provision a cluster with a configuration file
+specifying the computing resources needed. We can specify the configuration a Task 
+by using a task definition file (see Listing~\ref{code:ecs}) in YAML format.
+The main attributes are the {\texttt task\_size} indicating the memory and CPU units
+assigned, and network configuration. The complete configuration of the task is generated
+by the {\texttt compose command} that uses a {\texttt docker-compose.yml} to generate 
+the configuration on-the-fly. For example to deployed the controller, setup and redis 
+containers we used the file in Listing ~\ref{code:compose}. 
+
+We deployed two configurations, one that included all containers in a single Task,
+and another one, where we assigned each worker to a single Task and the controller, 
+redis, and setup in another independent Task. 
+
+For the first option, we deployed an AWS Fargate cluster and defined a Task configuration file with
 8GBs of memory and 4096 computing units, equivalent to 4 CPUs. Because of the
-ten container limit, we only used seven workers and tested the same function as
-in the previous experiment, but save resources only for dimensions 10 and 20.  
+ten container limit, we only used seven workers and tested function $f_4$ as
+in the previous experiment, and to save resources we only tested for dimensions 10 and 20.
 
-The results ..
+For the second option we assigned each worker to a single task with 4GBs of memory and 2048 computing units,
+and scale the number of worker Tasks to eight. 
 
+\begin{lstlisting}[caption=ecs-params.yml , label=code:ecs]
+version: 1
+task_definition:
+  task_execution_role: ecsTaskExecutionRole
+  ecs_network_mode: awsvpc
+  task_size:
+    mem_limit: 8GB
+    cpu_limit: 4096
+run_params:
+  network_configuration:
+    awsvpc_configuration:
+      subnets:
+        - "subnet-0ca2a542bbd74239e"
+        - "subnet-0dfd367b5ca531b07"
+      security_groups:
+        - "sg-0681c18469874b391"
+      assign_public_ip: ENABLED
+\end{lstlisting}
+
+
+
+\begin{lstlisting}[caption={docker-compose.yml for setup, controller and redis containers}, label=code:compose]
+  version: '3'
+  services:
+    redis:
+      image: "redis:alpine"
+      ports:
+        - "6379:6379"
+      logging:
+        driver: awslogs
+        options:
+          awslogs-region: us-west-2
+          awslogs-group: docker-logs
+          awslogs-stream-prefix: redis
+  
+    setup:
+      image: mariosky/setup
+      command: python experiment.py
+      volumes:
+        - /code
+      environment:
+        PYTHONUNBUFFERED: 1
+        REDIS_HOST: localhost
+      logging:
+        driver: awslogs
+        options:
+          awslogs-region: us-west-2
+          awslogs-group: docker-logs
+          awslogs-stream-prefix: setup
+        
+    controller:
+      image: mariosky/controller
+      volumes:
+          - /code
+      command: python controller.py
+      environment:
+          PYTHONUNBUFFERED: 1
+          REDIS_HOST: localhost
+      logging:
+        driver: awslogs
+        options:
+          awslogs-region: us-west-2
+          awslogs-group: docker-logs
+          awslogs-stream-prefix: controller
+  \end{lstlisting}
+
+
+The results are shown in Table X.
 
 
 \section{Conclusions} 
