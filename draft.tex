@@ -1570,14 +1570,14 @@ shown with a smaller gap in the time won adding more workers.
 % it can be deployed to anything, that's precisely the thing. But make clear that
 % when you use a cloud provider, there are more options to do it... - JJ
 
-Container-based applications describe the deployment of isolated processes in a
-consistent and portable way, going from development, testing, and production
+Container-based applications describe the deployment of loosely coupled processes in a
+consistent and portable way, in every phase of the life cycle of an application, from development through testing to production
 independently on the kind of infrastructure. The term cloud-native describes
 these container-based environments because they are deployed on an
 infrastructure that abstracts the underlying compute, storage, and networking
 primitives. This infrastructure does need to be a cloud provider; it could be a
 developer's laptop, a single server, or a production environment. When we deploy
-a cloud-native application to a cloud provider, we have more options to choose:
+a cloud-native application to a cloud provider, we have some more options to choose:
 
 \begin{description}
   
@@ -1603,27 +1603,24 @@ a cloud-native application to a cloud provider, we have more options to choose:
 
 As a proof-of-concept, we chose the third option and deployed the EvoSwarm application in Amazon Elastic
 Container Service (ECS),  since it needs fewer changes in configuration 
-(from deploying it locally using docker-compose) and it is has a lower cost than a Kubernetes alternative.
+(from deploying it locally using docker-compose) and it is has a lower cost than the Kubernetes alternative. % Remember to mention cost at the end - JJ
 
-We can define an ECS cluster directly on AWS Elastic Cloud VMs or through AWS Fargate.
+We can define an ECS cluster directly on AWS Elastic Cloud VMs or through the AWS Fargate service.
 Fargate is a serverless compute engine for containers that provides automatic provision 
 and management of AWS ECS resources. With this service, calculating the cost of execution
 is simplified because users only specify the computing units and memory for all the application,
 instead of every component. 
 
-Multicontainer applications are 
-% Maybe an example - JJ
-% This is shown next - Mario
-deployed to ECS as tasks, and a single cluster can run multiple tasks in
+Multicontainer applications are deployed to ECS as tasks, and a single cluster can run multiple tasks in
 parallel. When using the Fargate service as a backend, tasks are limited to a
 maximum of 10 containers.  
 
 Using the ECS CLI, we can provision a cluster with a configuration file
-specifying the computing resources needed. We can specify the configuration a Task 
+specifying the computing resources needed. We can specify the configuration of a Task 
 by using a task definition file (see Listing~\ref{code:ecs}) in YAML format.
 The main attributes are the {\texttt task\_size} indicating the memory and CPU units
 assigned, and network configuration. The complete configuration of the task is generated
-by the {\texttt compose command} that uses a {\texttt docker-compose.yml} to generate 
+by the {\texttt compose command} that uses a {\texttt docker-compose.yml} file to generate 
 the configuration on-the-fly. For example to deployed the controller, setup and redis 
 containers we used the file in Listing ~\ref{code:compose}. 
 
@@ -1637,7 +1634,7 @@ ten container limit, we only used seven workers and tested function $f_4$ as
 in the previous experiment, and to save resources we only tested for dimensions 10 and 20.
 
 For the second option we assigned each worker to a single task with 4GBs of memory and 2048 computing units,
-and scale the number of worker Tasks to eight. 
+and scale the number of worker tasks to eight.  % Please use caps or not for Tasks in a consistent way - JJ
 
 \begin{lstlisting}[caption=ecs-params.yml , label=code:ecs]
 version: 1
@@ -1705,7 +1702,7 @@ run_params:
           awslogs-stream-prefix: controller
   \end{lstlisting}
 
-
+% Please clarify that those images are published in Docker hub by yourself - JJ
 The results are shown in Table X.
 
 
