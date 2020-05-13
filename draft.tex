@@ -1499,8 +1499,10 @@ required for the execution of an instance,
 mainly when using the same parameters
 (number of populations and number of workers), that is, performance
 scales with the number of workers for a fixed problem and number of
-sub-populations used. See Table~\ref{tab:speedup:test} for a statistical test 
-on speedup, this explain further in the next section. 
+sub-populations used. The exception is the case when using five populations;
+the time does not decrease when progressing from four to eight workers.  
+That is because most of the time, workers are waiting for a population 
+to be available in the message queue.
 
 However, when we compare the two
 options, we find some subtle differences: When using one or two
