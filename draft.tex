@@ -249,7 +249,7 @@ We have proved this in the following steps:
 % These items above could be preceded by "We have proved this in the
 % following steps" - JJ
 % I like it will put it just like that. 
-% A reviewer also put enphasis on the workflow and reproductivility 
+% A reviewer also put enph   asis on the workflow and reproductivility 
 % and extracting a Model? we can put something on that too.
 % yep. 
 
@@ -261,7 +261,7 @@ We have proved this in the following steps:
     publicly available. % Not really a contribution. It's the mean to
     % achieve the contribution - JJ
     % Maybe you should check this out again ... - JJ
-    \item Second, we propose a method for the deployment and execution of 
+    \item Second, we propose a new method for the deployment and execution of 
     multiple experiments by specifying the infrastructure as part of an 
     experiment definition in both local or cloud environments,
     facilitating the reproduction of experimental results. % Not clear
@@ -296,11 +296,12 @@ The organization of the paper is as follows: First, in Section \ref{multi}, we p
 background of the fundamental issues of integrating nature-inspired optimization
 and multi-population methods. Section \ref{soa} presents state of the art relevant to
 our work. In Section \ref{method}, we present the proposed method and the container-based
-application in Section \ref{docker} . % No reference to section 6.
+application in Section \ref{docker} and the workflow for experiment design in Section \ref{experiment_flow}. % No reference to section 6.
 Section \ref{setup} describes
 the design of the empirical evaluation we designed to assess the effectiveness
-of the method, and in Section \ref{results}, % This is a subsection, fix it. 
-we report and discuss the results. % No references to sections 9 and 10
+of the method, scalability is analysed in Section \ref{sec:exp1}, % This is a subsection, fix it. 
+the performance of heterogeneous populations in Second \label{sec:exp2} 
+and a cloud deployment example in Section \ref{cloud-aws}. % No references to sections 9 and 10
 Finally, we
 offer the conclusions of this paper and suggestions on future work in Section \ref{conclusions}.
 
@@ -1667,7 +1668,7 @@ that the later have better performance.
 % Ok, stated like that - M
 
 \section{Deploying to a cloud provider}
-
+\label{cloud-aws}
 Container-based applications describe the deployment of loosely coupled
 processes in a consistent and portable way, in every phase of the life cycle of
 an application, from development through testing to production independently on
