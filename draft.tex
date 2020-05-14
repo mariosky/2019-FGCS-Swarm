@@ -206,9 +206,12 @@ orchestration and deployment technologies if more scalability is needed.
 With additional configuration settings, applications can be deployed 
 to a Docker Swarm or a Kubernetes system.  
 
-Docker container images host the stateless functions responsible for running 
-a search strategy on several populations, % clarify "on several populations" Sequentially? At the same time? - JJ
-these functions could also be ported
+Docker container images host the stateless functions responsible for 
+running a search strategy on populations they receive as messages. 
+A single container can pull many messages on its lifetime, processing one at a time. 
+% clarify "on several populations" Sequentially? At the same time? - JJ 
+% done - M
+These functions could also be ported
 directly to a Function as a Service (FaaS) \cite{Roberts2016} implementation.
 % Need to improve the next paragraph or maybe move it to another place - Mario
 Researchers then define the configuration of services used by
