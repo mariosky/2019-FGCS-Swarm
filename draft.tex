@@ -144,7 +144,7 @@ And recently the focus has been on exploiting a higher number of processing
 units by using GPUs \cite{tan2015survey,li2007efficient}, or distributed
 systems, including web-based \cite{JSON} systems,
 map-reduce \cite{fazenda2012} implementations,  grids \cite{munawar2010design,Gonzalez09},
-voluntary computing systems \cite{MilkyWay}, % Maybe add one of our own voluntary computing references? - JJ
+voluntary computing systems \cite{MilkyWay,merelo2016nodio}, 
 and, more importantly, cloud computing
 \cite{GValdez2015,salza2019speed,valenzuela2015implementing,FlexGP}. Cloud computing has become the standard way of running
 enterprise applications, not only because of the convenience of the
@@ -308,7 +308,7 @@ Finally, we
 offer the conclusions of this paper and suggestions on future work in Section \ref{conclusions}.
 
 
-\section{Multi-population methods} % Is this part of the state of the
+\section{Multi-population Methods} % Is this part of the state of the
 \label{multi}
                                 % art? - JJ
 % This the Background for the design decisions, but I think is also needed
@@ -611,7 +611,7 @@ But, in other cases this is not a viable approach.
     \label{fig:classicisland}
 \end{figure}
 
-\subsection{Comparison with other cloud-based works} 
+\subsection{Comparison with Other Cloud-based Works} 
 \label{comparison}
 
 Next, we compare the message-driven architecture we presented against four other
@@ -681,7 +681,7 @@ possibility of implementing the system using serverless functions.
 % But also change title? - JJ
 % Experimental design of a container-based application or something like that - JJ 
 % Like it - M
-\section{Experimental design of a container-based application} 
+\section{Experimental Design of a Container-based Application} 
 \label{docker}
 
 We have mentioned several advantages of a cloud-native application for running
@@ -922,7 +922,7 @@ next sections, we give more details about these roles and their workflows.
     \label{fig:experiment_flow}
 \end{sidewaysfigure}
 
-\subsection{EvoSwarm from the developer point of view} 
+\subsection{EvoSwarm from the Developer Point of View} 
 
 Developers can add new algorithm as stateless functions in
 several ways and with two levels of integration. In the first level of
@@ -1670,7 +1670,7 @@ that the later have better performance.
 % better than single-algorithm versions - JJ
 % Ok, stated like that - M
 
-\section{Deploying to a cloud provider}
+\section{Deploying to a Cloud Provider}
 \label{cloud-aws}
 Container-based applications describe the deployment of loosely coupled
 processes in a consistent and portable way, in every phase of the life cycle of
@@ -1700,7 +1700,9 @@ choose:
     services are Amazon Elastic Container Service,  Red Hat Openshift, and Marantis Docker Enterprise.
 
 \end{description}
-    
+
+\subsection{Setup}
+
 As a proof-of-concept, we chose the third option, that is, a container orchestration service, and deployed the EvoSwarm application in Amazon Elastic
 Container Service (ECS),  since it needs fewer changes in configuration 
 (from deploying it locally using {\tt docker-compose}) and it is has a lower cost than the Kubernetes alternative. % Remember to mention cost at the end - JJ
