@@ -199,7 +199,7 @@ these high-level issues when designing a parallel architecture.
 Taking these factors into account, in this work, we present EvoSwarm, 
 a container-based application that reactively processes
 isolated and
-heterogeneous populations. The platform uses the Docker Compose tool for
+heterogeneous populations. The platform uses the {\tt docker-compose} tool for
 defining and running experiments as multi-container applications. EvoSwarm is also released with a free licence in \url{https://github.com/mariosky/EvoSwarm}.
 We preferred the use of a container-based application for this prototype because
 it is more suitable for development and replication without the need for
@@ -393,7 +393,7 @@ machine-independent and cloud deployment of simple, ephemeral and
 maybe stateless functions. On the other hand, containerization also
 allows, through the use of orchestration engines like Docker Swarm or
 Kubernetes, or through simple, non-self-scaling specifications using
-Docker Compose, a definition of all the relationships between
+{\tt docker-compose}, a definition of all the relationships between
 different parts of the application, or services. The full realization
 of Docker-based architectures has led to the creation of a series of
 patterns that, together, conform cloud-native application development
@@ -679,14 +679,15 @@ possibility of implementing the system using serverless functions.
 % (and he next one too) - JJ
 % done - Mario
 % But also change title? - JJ
-% Experimental design of a container-based application or something like that - JJ
-\section{Container-based application} 
+% Experimental design of a container-based application or something like that - JJ 
+% Like it - M
+\section{Experimental design of a container-based application} 
 \label{docker}
 
 We have mentioned several advantages of a cloud-native application for running
-multi-population based algorithms, but there are in our experience several
-practical issues of this approach. % several issues that make it practical or useful instead? - JJ
-In general, cloud platforms have free-tiers
+multi-population based algorithms, but there are in our experience, several
+issues that make this approach more practical. % several issues that make it practical or useful instead? - JJ 
+In general, cloud platforms have free-tiers    
 for their services, and many offer academic discounts to students. But once we
 pass to the pay-as-you-go tier, computing resources need to be
 managed, and, where possible, its cost minimized.  First,
@@ -725,8 +726,8 @@ much easier to test, integrate and deploy. It also simplifies
 the interaction APIs. Of course, that makes them more economical in a
 pay-per-use cloud provider, but that is not the main reason why we
 have chosen them in this paper; reproducibility of experiments and a
-clear and idempotent description of the architecture through docker
-compose % Be consistent with docker compose. Either {\tt docker-compose} or {\sf docker-compose}, but not docker compose, for instance. - JJ
+clear and idempotent description of the architecture through {\tt docker-compose} 
+% Be consistent with docker compose. Either {\tt docker-compose} or {\sf docker-compose}, but not docker compose, for instance. - JJ - ok
 are the main reasons. 
 
 In this section, we propose a design of a reactive container-based application
@@ -1262,7 +1263,7 @@ the GA algorithm. % Opening up the door to ask for testing with
   \begin{tabular}{|l|l|l|l|l|}
     \hline
     \multicolumn{3}{|l|}{Parameter}                    & Type             & Example         \\ \hline
-    \multicolumn{3}{|l|}{Worker Containers (Docker Compose)}        & \texttt{int}     & \texttt{8} \\ \hline
+    \multicolumn{3}{|l|}{Worker Containers}        & \texttt{int}     & \texttt{8} \\ \hline
     \multicolumn{3}{|l|}{GA-PSO Ratio}                 & \texttt{decimal} & \texttt{0.5}    \\  \hline
     \multicolumn{3}{|l|}{Benchmark Functions}          & \texttt{list}    & \texttt{[1, 2, 3, 4, 5]} \\ \hline
     \multicolumn{3}{|l|}{Instances}                    & \texttt{integer}    & \texttt{15} \\ \hline
@@ -1295,8 +1296,8 @@ number of FEs is $200,000$, which is the same as $40*50*10*10$.
 
 For local experiments we have deployed the EvoSwarm application in a
 Desktop PC with an AMD Ryzen 9 3900x 12-core processor with 24 threads with a 3.8 GHz base clock, 
-and 16 GB RAM. We used Docker version 19.03.3, build a872fc2f86, and docker-compose version 1.21.0, 
-in Ubuntu Linux 18.04; coce is run using Python 3.7.5. Container images and the docker-compose file are available at
+and 16 GB RAM. We used Docker version 19.03.3, build a872fc2f86, and {\tt docker-compose} version 1.21.0, 
+in Ubuntu Linux 18.04; coce is run using Python 3.7.5. Container images and the {\tt docker-compose} file are available at
 \url{https://hub.docker.com/u/mariosky}, and \url{https://github.com/mariosky/EvoSwarm} respectively. 
 The BOBB experiments were performed with COCO \cite{hansen2016coco} version bbob.v15.03 in Python, 
 the plots were produced with version 2.3.2. % Are we using BBOB plots? - JJ
@@ -1686,7 +1687,7 @@ choose:
   
   \item[A virtual machine] with a container-optimized operating system, for example,
   Google Compute Engine VMs, or Amazon EC2.  We still need to provision the
-  virtual machine and run docker-compose commands as we would do in a local 
+  virtual machine and run {\tt docker-compose} commands as we would do in a local 
   workstation. Salza et al. \cite{salza2019speed} tested this option by using
   CoreOs cluster. 
 
@@ -1694,7 +1695,7 @@ choose:
   applications, but it needs additional configuration for provisioning. All major
   cloud-providers have Kubernetes services.
 
-  \item[A container orchestration service] these services are compatible with docker-compose
+  \item[A container orchestration service] these services are compatible with {\tt docker-compose}
     files for configuration and provide transparent provisioning. Examples of these
     services are Amazon Elastic Container Service,  Red Hat Openshift, and Marantis Docker Enterprise.
 
@@ -1702,7 +1703,7 @@ choose:
     
 As a proof-of-concept, we chose the third option, that is, a container orchestration service, and deployed the EvoSwarm application in Amazon Elastic
 Container Service (ECS),  since it needs fewer changes in configuration 
-(from deploying it locally using docker-compose) and it is has a lower cost than the Kubernetes alternative. % Remember to mention cost at the end - JJ
+(from deploying it locally using {\tt docker-compose}) and it is has a lower cost than the Kubernetes alternative. % Remember to mention cost at the end - JJ
 
 We can define an ECS cluster directly on AWS Elastic Cloud VMs or through the AWS Fargate service.
 Fargate is a serverless compute engine for containers that provides automatic provision 
@@ -1812,7 +1813,7 @@ As we can see, the local environment (see section \ref{setup}) achieved a higher
 ratio of evaluations per second (in bold). Still, we must consider that there is a minimum
 network overhead in a local workstation and a clock speed of 3.8 GHz. The first
 option (labeled Single) is straightforward to deploy, needing only a single
-docker-compose file, and one command to execute. But with the limit of 4CPUs and
+{\tt docker-compose} file, and one command to execute. But with the limit of 4CPUs and
 ten containers, it is the slower option. The second option (labeled Multi), is
 faster, and not too far from the local execution, especially when solving the
 $f_4$ in 20 dimensions (underline in table). With the capacity for increasing the number of worker
@@ -1891,7 +1892,7 @@ to industry standards which is able to bring many benefits to the
 bioinspired algorithm community, by showing the possibility of
 creating new, high performance, mixed algorithms, which can also be
 easily deployed to the cloud, or locally to systems that simply need
-to have Docker and Docker Compose installed.
+to have Docker and {\tt docker-compose} installed.
 
 It also opens new possibilities. From the design point of view, it
 would be interesting to try and use automatic scaling, instead of
