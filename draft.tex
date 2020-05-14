@@ -164,7 +164,7 @@ stateless functions} \cite{malawski2017serverless}, that react to events and
 only come into existence while they are doing some processing.
 Systems developed with the patterns outlined above have the
 properties of a reactive system \cite{boner2014reactive} and they are commonly
-more flexible, fault-tolerant, and scalable. % Some properies and reference - Mario  
+more flexible, fault-tolerant, and scalable. % Some properties and reference - Mario  
 % Again, you have to justify the need for a reactive architecture and define it before this paragraph - JJ
 
 Researchers 
@@ -251,7 +251,7 @@ We have proved this in the following steps:
 % These items above could be preceded by "We have proved this in the
 % following steps" - JJ
 % I like it will put it just like that. 
-% A reviewer also put enph   asis on the workflow and reproductivility 
+% A reviewer also put enphasis on the workflow and reproducivility 
 % and extracting a Model? we can put something on that too.
 % yep. 
 
@@ -298,14 +298,11 @@ The organization of the paper is as follows: First, in Section \ref{multi}, we p
 background of the fundamental issues of integrating nature-inspired optimization
 and multi-population methods. Section \ref{soa} presents state of the art relevant to
 our work. In Section \ref{method}, we present the proposed method and the container-based
-application in Section \ref{docker} and the workflow for experiment design in Section \ref{experiment_flow}. % No reference to section 6.
-Section \ref{setup} describes
-the design of the empirical evaluation we designed to assess the effectiveness
-of the method, scalability is analysed in Section \ref{sec:exp1}, % This is a subsection, fix it. 
-the performance of heterogeneous populations in Second \label{sec:exp2} 
-and a cloud deployment example in Section \ref{cloud-aws}. % No references to sections 9 and 10
-Finally, we
-offer the conclusions of this paper and suggestions on future work in Section \ref{conclusions}.
+application in Section \ref{docker} and the workflow for reproducible experiment design in Section \ref{experiment_flow}. % No reference to section 6.
+Section \ref{setup} describes the design of the empirical evaluation to assess the effectiveness
+of the method,  with respect to scalability and % This is a subsection, fix it. 
+the performance of heterogeneous populations.  % No references to sections 9 and 10
+Finally, we offer the conclusions of this paper and suggestions on future work in Section \ref{conclusions}.
 
 
 \section{Multi-population Methods} % Is this part of the state of the
@@ -436,30 +433,6 @@ architectures. Pool-based systems are closer to serverless systems
 whole algorithms, instead of just evaluation. The pool from where they
 pull is the common store of results, and can be accessed in an
 asynchronous way, which suits better the nature of cloud systems.
-
-
-% a lot of this has been done in the previous method... Maybe there's
-% not that much to do - JJ
-% Hadoop 
-%     Comparison \cite{ferrucci2018using}
-%     Hadoop\cite{fazenda2012} 
-%     FlexGP \cite{FlexGP}, 
-%     elephant56 \cite{salza2016elephant56},
-
-% Pool
-%     SofEA \cite{merelo2012sofea,sofea:cec2012} , 
-%     EvoSpace \cite{garcia2015evospace},
-% Volunteer
-%     evospace-js \cite{garcia2017evospace}
-% Queue
-%     Containers \cite{valenzuela2015implementing} \cite{salza2016approach} 
-%     Seamless local and Cloud \cite{leclerc2016seamless}
-%     Serverless KafKEO \cite{guervos2018introducing}, 
-%     Docker Orchestation \cite{dziurzanski2020scalable,zhao2019cloud}
-% PSO 
-% PSO AWS \cite{li2015parallel}
-
-
 
 \section{Proposed Method} 
 \label{method} 
@@ -879,7 +852,7 @@ implementation details of the \texttt{worker} containers.
 \end{figure}
 
 
-% Maybe you should say here how everything wors: launch with
+% Maybe you should say here how everything works: launch with
 % Docker-compose, whatever. That's the issue that one of the reviewers
 % say - JJ 
 
@@ -1111,6 +1084,9 @@ data contained in the file in the next section.
 \end{lstlisting}
 
 % This is totally unexpected. Whose role is this? You didn't even introduce it. Also, extremely short - JJ
+% This is one of the applications described in the Workflow Figure. But this is better explained in other places.
+% We can delete it (even from the Figure)  
+% Will leave it until we decide - M 
 \subsection{Using the COCO Framework}
 
 Researchers can use these files to analyze and plot experiment data.  Python
@@ -1119,10 +1095,207 @@ experiments, and all other plots used in this paper;  there is also a script to
 generate the files needed by the COCO framework \cite{hansen2016coco}, which can generate standard
 comparisons against other methods.
 
+
+% TODO: connection to cloud subsection  - M
+
+\subsection{Deploying to a Cloud Provider}
+\label{cloud-aws}
+Container-based applications describe the deployment of loosely coupled
+processes in a consistent and portable way, in every phase of the life cycle of
+an application, from development through testing to production independently on
+the kind of infrastructure. The term cloud-native describes these
+container-based environments because they are deployed on an infrastructure that
+abstracts the underlying compute, storage, and networking primitives. This
+infrastructure does need to be a cloud provider; it could be a developer's
+laptop, a single server, or a production environment. When we deploy a
+cloud-native application to a cloud provider, we have some more options to
+choose:
+
+\begin{description}
+  
+  \item[A virtual machine] with a container-optimized operating system, for example,
+  Google Compute Engine VMs, or Amazon EC2.  We still need to provision the
+  virtual machine and run {\tt docker-compose} commands as we would do in a local 
+  workstation. Salza et al. \cite{salza2019speed} tested this option by using
+  CoreOs cluster. 
+
+  \item[A Kubernetes cluster] provides auto-scaling and management of containerized
+  applications, but it needs additional configuration for provisioning. All major
+  cloud-providers have Kubernetes services.
+
+  \item[A container orchestration service] these services are compatible with {\tt docker-compose}
+    files for configuration and provide transparent provisioning. Examples of these
+    services are Amazon Elastic Container Service,  Red Hat Openshift, and Marantis Docker Enterprise.
+
+\end{description}
+
+\subsubsection{Setup}
+
+As a proof-of-concept, we chose the third option, that is, a container orchestration service, and deployed the EvoSwarm application in Amazon Elastic
+Container Service (ECS),  since it needs fewer changes in configuration 
+(from deploying it locally using {\tt docker-compose}) and it is has a lower cost than the Kubernetes alternative. % Remember to mention cost at the end - JJ
+
+We can define an ECS cluster directly on AWS Elastic Cloud VMs or through the AWS Fargate service.
+Fargate is a serverless compute engine for containers that provides automatic provision 
+and management of AWS ECS resources. With this service, calculating the cost of execution
+is simplified because users only specify the computing units and memory for all the application,
+instead of every component. 
+
+Multicontainer applications are deployed to ECS as tasks, and a single cluster can run multiple tasks in
+parallel. When using the Fargate service as a backend, tasks are limited to a
+maximum of 10 containers.  
+
+Using the ECS CLI, we can provision a cluster with a configuration file
+specifying the computing resources needed. We can specify the configuration of a task 
+by using a task definition file (see Listing~\ref{code:ecs}) in YAML format.
+The main attributes are the {\texttt task\_size} indicating the memory and CPU units
+assigned, and network configuration. The complete configuration is generated
+by the {\texttt ecs compose command} that uses a {\texttt docker-compose.yml} file to generate 
+the configuration on-the-fly. For example to deploy the controller, setup and redis 
+containers we used the file in Listing ~\ref{code:compose}.
+Each container is defined as a  {\texttt service} , with the following attributes: {\texttt image},
+that reference the container images we have published in Docker hub
+\url{https://hub.docker.com/u/mariosky}, open {\texttt ports}, a {\texttt command} to be executed at
+startup, configuration for the AWS {\texttt logging} service, and finally {\texttt environment}
+variables used by code running inside containers.
+
+
+We deployed two configurations, one that included all containers in a single task,
+and another one, where we assigned each worker to a different task and the controller, 
+redis, and setup in another, for a total of nine concurrent Fargate tasks. 
+
+For the first option, we deployed an AWS Fargate cluster and defined a task configuration file with
+8GBs of memory and 4096 computing units, equivalent to 4 CPUs. Because of the
+ten container limit, we only used seven workers and tested function $f_4$ as
+in the previous experiment, and to save resources we only tested for dimensions 10 and 20 for 15 instances.
+
+For the second option, we used the same cluster and additionally
+assigned each worker to a task with 4GBs of memory and 2048 computing units. Then scale the 
+number of worker tasks to eight. We can scale the number of tasks for up to 100 instances in 
+a Fargate configuration. 
+
+\begin{lstlisting}[caption=ecs-params.yml , label=code:ecs]
+version: 1
+task_definition:
+  task_execution_role: ecsTaskExecutionRole
+  ecs_network_mode: awsvpc
+  task_size:
+    mem_limit: 8GB
+    cpu_limit: 4096
+\end{lstlisting}
+% Do you need the details about the subnets? As long as they are here,
+% you'll have to explain them. Why two subnets? It's probably better to
+% leave that network configuration out anyway - JJ
+% Ok, I removed that section. those parameters are required, but are used 
+% internally by the cluster. - M 
+% The security group was required to have external access to redis. - M
+% Please clarify that those images are published in Docker hub by yourself - JJ
+% I have done this a few commits back. (4 paragraphs up) - M
+
+\begin{lstlisting}[caption={docker-compose.yml for setup, controller and redis containers}, label=code:compose]
+  version: '3'
+  services:
+    redis:
+      image: "redis:alpine"
+      ports:
+        - "6379:6379"
+      logging:
+        driver: awslogs
+        options:
+          awslogs-region: us-west-2
+          awslogs-group: docker-logs
+          awslogs-stream-prefix: redis
+  
+    setup:
+      image: mariosky/setup
+      command: python experiment.py
+      environment:
+        PYTHONUNBUFFERED: 1
+        REDIS_HOST: localhost
+      logging:
+        driver: awslogs
+        options:
+          awslogs-region: us-west-2
+          awslogs-group: docker-logs
+          awslogs-stream-prefix: setup
+        
+    controller:
+      image: mariosky/controller
+      command: python controller.py
+      environment:
+          PYTHONUNBUFFERED: 1
+          REDIS_HOST: localhost
+      logging:
+        driver: awslogs
+        options:
+          awslogs-region: us-west-2
+          awslogs-group: docker-logs
+          awslogs-stream-prefix: controller
+  \end{lstlisting}
+% You will probably need to explain this a bit - JJ 
+% done - M  
+\subsubsection{Experimental Results} 
+
+
+The results are shown in Figure~\ref{fig:aws-results} and Table~\ref{tab:aws}. 
+
+As we can see, the local environment (see section \ref{setup}) achieved a higher
+ratio of evaluations per second (in bold). Still, we must consider that there is a minimum
+network overhead in a local workstation and a clock speed of 3.8 GHz. The first
+option (labeled Single) is straightforward to deploy, needing only a single
+{\tt docker-compose} file, and one command to execute. But with the limit of 4CPUs and
+ten containers, it is the slower option. The second option (labeled Multi), is
+faster, and not too far from the local execution, especially when solving the
+$f_4$ in 20 dimensions (underline in table). With the capacity for increasing the number of worker
+containers, it is reasonable to think that we can achieve a higher number of
+evaluations with an appropriate configuration. Nevertheless, the goal of this
+experiment was not to increase the number of evaluations but to test the
+flexibility of a cloud-native application.
+
+\begin{figure}[h!tbp]
+  \centering
+  \includegraphics[width=\textwidth]{aws}
+  \caption{Boxplot of the number of evaluations per second, for 15 instances of function $f_4$,
+   with three execution environments Local, Single task and Multi-task.
+   }
+  \label{fig:aws-results}
+\end{figure}
+%
+\begin{table}[h!tbp]
+  \small
+  \caption{ Median number of the evaluations per second ratio, for 15 instances of function $f_4$,
+  with three execution environments Local, Single task and Multi task}
+  \label{tab:aws}
+  \vspace{0.25cm}
+  \centering
+
+  \begin{tabular}{lll}
+  \hline
+  Dim & Env         & Median of ratio \\
+  \hline
+  10  & Local       & \textbf{47,166.29}       \\
+      & Multi task  & 40,466.45    \\
+      & Single task & 18,193.05      \\
+  \hline
+  20  & Local       & \textbf{36,101.86}   \\
+      & Multi task  & {\ul 33,916.02}       \\
+      & Single task & 16,546.95  \\
+  \hline
+  \end{tabular}
+\end{table}
+
+
+
+
+
 % You should clarify that, before, you were explaining how to set up an experiment. In this section, you are explaining the experiments that you are doing in this paper. But you should relate both sections to the general objectives of the paper. In the prior section, you want to prove that EvoSwarm can be used by the public to create reproductive research (and maybe you should add a small conclusion sub or sub-sub section), in the next you explain the experiment we are doing for this paper. It would be interesting to make references from the next section to the previous one, indicating how the general setup of EvoSwarm helps _us_ to create this experiment - JJ
 
-\section{General Experimental Setup} 
-\label{setup}
+
+
+
+
+\section{Experimental Study} 
+\label{setup} % To be renamed 
 
 We aimed to learn if the proposed solution can efficiently
 improve the scalability and performance of population-based optimization
@@ -1150,6 +1323,9 @@ and resources to an orchestration service? % This does not fit in here... It's r
 \end{itemize}
 
 % Also, point forward to the section (or subsections) that will be devoted to proving each point. BTW, they should probably be subsections.
+
+\subsection{General Experimental Setup} 
+\label{sec:general-setup} % To be renamed 
 
 To validate these questions, we used benchmark functions from the Continuous
 Noiseless BBOB testbed, which is part of the Comparing Continuous Optimizers
@@ -1303,7 +1479,7 @@ The BOBB experiments were performed with COCO \cite{hansen2016coco} version bbob
 the plots were produced with version 2.3.2. % Are we using BBOB plots? - JJ
 
 % Maybe subsection? Also say the question you're answering - JJ
-\section{Measuring Scalability}
+\subsection{Measuring Scalability}
 \label{sec:exp1}
 % Experiment 1
 As we mentioned before % say where - JJ
@@ -1365,7 +1541,7 @@ decrease the workload of workers:
   \end{tabular}
 \end{table}
 
-\subsection{Setup}
+\subsubsection{Setup}
 
 To evaluate the effect of these parameters on the scalability of the system, we
 propose  an experiment in which we selected $f_4$ (Skew Rastrigin-Bueche separable) from the
@@ -1497,8 +1673,8 @@ for the complete list.
   \end{tabular}
   \end{table}
 
-\subsection{Experimental Results} 
-\label{results}
+%\subsubsection{Experimental Results} 
+%\label{results}
 
 In this experiment, we wanted to test how the number of workers affected the
 time needed to reach a solution and the speedup that each configuration can
@@ -1512,6 +1688,7 @@ and the summary of the speedup in section Section~ref{sec:speedup}.
 
 \subsubsection{Execution Time}
 \label{sec:exec-time}
+
 
 Figure \ref{fig:spworker} shows the execution time achieved by a certain number of
 workers, for every problem dimension, which, besides, changes the
@@ -1555,14 +1732,13 @@ overhead needed to migrate and process incoming and outgoing
 population and the total computing time: more populations will need
 more time to do that.
 
-
 \subsubsection{Speedup}
 \label{sec:speedup}
 
 % TBD? - JJ
 
 % No idea where this fits in. I think it's the second question in 7, so it should probably be a subsection - JJ
-\section{Performance of Heterogeneous Populations in the BBOB Benchmark}
+\subsection{Performance of Heterogeneous Populations in the BBOB Benchmark}
 \label{sec:exp2}
 
 \begin{figure*}[h!tb]
@@ -1609,7 +1785,7 @@ All values are divided by dimension and plotted as $log_{10}$ values versus dime
 \end{figure*}
 
 
-\subsection{Setup}
+\subsubsection{Setup}
 
 A multi-population based algorithm can decrease the execution time
 because of parallel execution. But, having heterogeneous 
@@ -1627,7 +1803,7 @@ versus an ensemble of GA and PSO algorithms. We have tested on the first five fu
 BBOB testbed; we have used ten populations and eight workers for the experiment and the
 same parameters as before.
 
-\subsection{Experimental Results} 
+\subsubsection{Experimental Results} 
 
 The results obtained by the experiments show (see Figure \ref{fig:bbob}) how
 the runtime scales with dimension to reach certain target values $\Delta f$;
@@ -1670,191 +1846,6 @@ that the later have better performance.
 % better than single-algorithm versions - JJ
 % Ok, stated like that - M
 
-\section{Deploying to a Cloud Provider}
-\label{cloud-aws}
-Container-based applications describe the deployment of loosely coupled
-processes in a consistent and portable way, in every phase of the life cycle of
-an application, from development through testing to production independently on
-the kind of infrastructure. The term cloud-native describes these
-container-based environments because they are deployed on an infrastructure that
-abstracts the underlying compute, storage, and networking primitives. This
-infrastructure does need to be a cloud provider; it could be a developer's
-laptop, a single server, or a production environment. When we deploy a
-cloud-native application to a cloud provider, we have some more options to
-choose:
-
-\begin{description}
-  
-  \item[A virtual machine] with a container-optimized operating system, for example,
-  Google Compute Engine VMs, or Amazon EC2.  We still need to provision the
-  virtual machine and run {\tt docker-compose} commands as we would do in a local 
-  workstation. Salza et al. \cite{salza2019speed} tested this option by using
-  CoreOs cluster. 
-
-  \item[A Kubernetes cluster] provides auto-scaling and management of containerized
-  applications, but it needs additional configuration for provisioning. All major
-  cloud-providers have Kubernetes services.
-
-  \item[A container orchestration service] these services are compatible with {\tt docker-compose}
-    files for configuration and provide transparent provisioning. Examples of these
-    services are Amazon Elastic Container Service,  Red Hat Openshift, and Marantis Docker Enterprise.
-
-\end{description}
-
-\subsection{Setup}
-
-As a proof-of-concept, we chose the third option, that is, a container orchestration service, and deployed the EvoSwarm application in Amazon Elastic
-Container Service (ECS),  since it needs fewer changes in configuration 
-(from deploying it locally using {\tt docker-compose}) and it is has a lower cost than the Kubernetes alternative. % Remember to mention cost at the end - JJ
-
-We can define an ECS cluster directly on AWS Elastic Cloud VMs or through the AWS Fargate service.
-Fargate is a serverless compute engine for containers that provides automatic provision 
-and management of AWS ECS resources. With this service, calculating the cost of execution
-is simplified because users only specify the computing units and memory for all the application,
-instead of every component. 
-
-Multicontainer applications are deployed to ECS as tasks, and a single cluster can run multiple tasks in
-parallel. When using the Fargate service as a backend, tasks are limited to a
-maximum of 10 containers.  
-
-Using the ECS CLI, we can provision a cluster with a configuration file
-specifying the computing resources needed. We can specify the configuration of a task 
-by using a task definition file (see Listing~\ref{code:ecs}) in YAML format.
-The main attributes are the {\texttt task\_size} indicating the memory and CPU units
-assigned, and network configuration. The complete configuration is generated
-by the {\texttt ecs compose command} that uses a {\texttt docker-compose.yml} file to generate 
-the configuration on-the-fly. For example to deploy the controller, setup and redis 
-containers we used the file in Listing ~\ref{code:compose}.
-Each container is defined as a  {\texttt service} , with the following attributes: {\texttt image},
-that reference the container images we have published in Docker hub
-\url{https://hub.docker.com/u/mariosky}, open {\texttt ports}, a {\texttt command} to be executed at
-startup, configuration for the AWS {\texttt logging} service, and finally {\texttt environment}
-variables used by code running inside containers.
-
-
-We deployed two configurations, one that included all containers in a single task,
-and another one, where we assigned each worker to a different task and the controller, 
-redis, and setup in another, for a total of nine concurrent Fargate tasks. 
-
-For the first option, we deployed an AWS Fargate cluster and defined a task configuration file with
-8GBs of memory and 4096 computing units, equivalent to 4 CPUs. Because of the
-ten container limit, we only used seven workers and tested function $f_4$ as
-in the previous experiment, and to save resources we only tested for dimensions 10 and 20 for 15 instances.
-
-For the second option, we used the same cluster and additionally
-assigned each worker to a task with 4GBs of memory and 2048 computing units. Then scale the 
-number of worker tasks to eight. We can scale the number of tasks for up to 100 instances in 
-a Fargate configuration. 
-
-\begin{lstlisting}[caption=ecs-params.yml , label=code:ecs]
-version: 1
-task_definition:
-  task_execution_role: ecsTaskExecutionRole
-  ecs_network_mode: awsvpc
-  task_size:
-    mem_limit: 8GB
-    cpu_limit: 4096
-\end{lstlisting}
-% Do you need the details about the subnets? As long as they are here,
-% you'll have to explain them. Why two subnets? It's probably better to
-% leave that network configuration out anyway - JJ
-% Ok, I removed that section. those parameters are required, but are used 
-% internally by the cluster. - M 
-% The security group was required to have external access to redis. - M
-% Please clarify that those images are published in Docker hub by yourself - JJ
-% I have done this a few commits back. (4 paragraphs up) - M
-
-\begin{lstlisting}[caption={docker-compose.yml for setup, controller and redis containers}, label=code:compose]
-  version: '3'
-  services:
-    redis:
-      image: "redis:alpine"
-      ports:
-        - "6379:6379"
-      logging:
-        driver: awslogs
-        options:
-          awslogs-region: us-west-2
-          awslogs-group: docker-logs
-          awslogs-stream-prefix: redis
-  
-    setup:
-      image: mariosky/setup
-      command: python experiment.py
-      environment:
-        PYTHONUNBUFFERED: 1
-        REDIS_HOST: localhost
-      logging:
-        driver: awslogs
-        options:
-          awslogs-region: us-west-2
-          awslogs-group: docker-logs
-          awslogs-stream-prefix: setup
-        
-    controller:
-      image: mariosky/controller
-      command: python controller.py
-      environment:
-          PYTHONUNBUFFERED: 1
-          REDIS_HOST: localhost
-      logging:
-        driver: awslogs
-        options:
-          awslogs-region: us-west-2
-          awslogs-group: docker-logs
-          awslogs-stream-prefix: controller
-  \end{lstlisting}
-% You will probably need to explain this a bit - JJ 
-% done - M  
-\subsection{Experimental Results} 
-
-
-The results are shown in Figure~\ref{fig:aws-results} and Table~\ref{tab:aws}. 
-
-As we can see, the local environment (see section \ref{setup}) achieved a higher
-ratio of evaluations per second (in bold). Still, we must consider that there is a minimum
-network overhead in a local workstation and a clock speed of 3.8 GHz. The first
-option (labeled Single) is straightforward to deploy, needing only a single
-{\tt docker-compose} file, and one command to execute. But with the limit of 4CPUs and
-ten containers, it is the slower option. The second option (labeled Multi), is
-faster, and not too far from the local execution, especially when solving the
-$f_4$ in 20 dimensions (underline in table). With the capacity for increasing the number of worker
-containers, it is reasonable to think that we can achieve a higher number of
-evaluations with an appropriate configuration. Nevertheless, the goal of this
-experiment was not to increase the number of evaluations but to test the
-flexibility of a cloud-native application.
-
-\begin{figure}[h!tbp]
-  \centering
-  \includegraphics[width=\textwidth]{aws}
-  \caption{Boxplot of the number of evaluations per second, for 15 instances of function $f_4$,
-   with three execution environments Local, Single task and Multi-task.
-   }
-  \label{fig:aws-results}
-\end{figure}
-%
-\begin{table}[h!tbp]
-  \small
-  \caption{ Median number of the evaluations per second ratio, for 15 instances of function $f_4$,
-  with three execution environments Local, Single task and Multi task}
-  \label{tab:aws}
-  \vspace{0.25cm}
-  \centering
-
-  \begin{tabular}{lll}
-  \hline
-  Dim & Env         & Median of ratio \\
-  \hline
-  10  & Local       & \textbf{47,166.29}       \\
-      & Multi task  & 40,466.45    \\
-      & Single task & 18,193.05      \\
-  \hline
-  20  & Local       & \textbf{36,101.86}   \\
-      & Multi task  & {\ul 33,916.02}       \\
-      & Single task & 16,546.95  \\
-  \hline
-  \end{tabular}
-\end{table}
 
 
 
