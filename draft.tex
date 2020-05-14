@@ -111,14 +111,15 @@ and researchers have found additional benefits
 besides the execution speed; these include avoiding a premature convergence and
 maintaining the diversity of the global population \cite{li2015multi}. 
 
-Moreover, parallel implementations can run in two ways: synchronous and
-asynchronous. When operations run in parallel but must maintain synchrony with
+% Probably it's not the time for this, but maybe it would be interesting to mention that asynchronous implementations in most cases need a change in the underlying algorithm, while synchronous might not need it - JJ
+Moreover, parallel implementations can run in two different ways: synchronous and
+asynchronous. When operations run in parallel but every node must maintain synchrony with
 the other operations,  all operations need to finish to continue to the next
 step. For instance, in a  master/worker model, the master needs to wait for all
 workers to finish their operations before moving to the next iteration.  In
 contrast, in an asynchronous execution,  operations are not synchronized with
 each other, so there's no time lost waiting for other populations to
-arrive to the synchronization point. Following the previous example, now the master operation can
+arrive to the synchronization point; results arriving from other workers are incorporated as soon as they are received. Following the previous example, now the master operation can
 continue to the next iteration, even if a worker has not finished its work.  In
 the literature, we can find many asynchronous algorithms
 \cite{coleman89,baugh2003asynchronous}, reporting benefits in execution time,
@@ -128,41 +129,40 @@ through a central repository \cite{sofea:cec2012, JSON} or message queues
 \cite{salza2019speed, guervos2018introducing}, in this work we follow this
 practice.
 
-The trend concerning the parallel execution multi-population algorithms go from
+The trend concerning the parallel execution multi-population algorithms goes from
 earlier hardware-based implementations using transputers
-\cite{gorges1990explicit}, multi-threaded \cite{merelo2019scaling}, and
-multi-core systems \cite{Serrano2008,lai2019adaptive}. % many citations here - JJ 
+\cite{gorges1990explicit} through 
+multi-core systems \cite{Serrano2008,lai2019adaptive} to multi-threaded \cite{merelo2019scaling} ones.
 And recently the focus has been on exploiting a higher number of processing
 units by using GPUs \cite{tan2015survey,li2007efficient}, or distributed
-systems; techniques used to achieve this include web-based \cite{JSON},
-map-reduce \cite{fazenda2012},  grid \cite{munawar2010design,Gonzalez09},
-voluntary computing \cite{MilkyWay}, and, more importantly, cloud computing
-\cite{GValdez2015,salza2019speed,valenzuela2015implementing,FlexGP}. 
-
-Cloud computing has become the standard way of running
+systems, including web-based \cite{JSON} systems,
+map-reduce \cite{fazenda2012} implementations,  grids \cite{munawar2010design,Gonzalez09},
+voluntary computing systems \cite{MilkyWay}, % Maybe add one of our own voluntary computing references? - JJ
+and, more importantly, cloud computing
+\cite{GValdez2015,salza2019speed,valenzuela2015implementing,FlexGP}. Cloud computing has become the standard way of running
 enterprise applications, not only because of the convenience of the
-pay-as-you-go model or the non-existent cost of physical facilities, but also because
+pay-as-you-go model or the non-existent sunk cost of physical facilities, but also because
 it offers a way of describing the infrastructure as part of the code, so that it
 is much easier to reproduce results and this has been a boon for scientific
 computing.  However,  cloud computing has also been evolving, going from simply
-putting using virtual machines elsewhere than on premises old-style monolithic applications, that is, applications
+putting on virtual machines elsewhere than on premises old-style monolithic applications, that is, applications
 built on a single stack of services that communicate by layers, to microservices
 \cite{microservices} and serverless architectures \cite{varghese2018next,Varghese2018849} that favor the parallel and asynchronous communication of
-heterogeneous resources; in the process, a new process for designing {\em cloud
-native applications} has been created, with brand new methodologies and
+heterogeneous resources; in the process, a new methodology for designing {\em cloud
+native applications} has been created, with brand new methods and
 techniques \cite{Baldini2016287}. In these architectures, services or even
-functions are seen as single processing points, departing from the monolithic
-and even distributed paradigms, become a loosely coupled collection of {\em
+functions are seen as independent processing nodes, departing from the monolithic
+and even distributed paradigms, and becoming a loosely coupled collection of {\em
 stateless functions} \cite{malawski2017serverless}, that react to events and
 only come into existence while they are doing some processing.
 Systems developed with the patterns outlined above have the
 properties of a reactive system \cite{boner2014reactive} and they are commonly
-more flexible, loosely-coupled, and scalable. % Some properies and reference - Mario  
+more flexible, fault-tolerant, and scalable. % Some properies and reference - Mario  
 % Again, you have to justify the need for a reactive architecture and define it before this paragraph - JJ
 
-
-When designing efficient multi-population algorithms, researchers need to
-consider additional issues \cite{Ma2019}. These include the number and size of populations,
+% There's a gap here. You've finished the previous paragraph talking about the cloud, and now you talk about something else. I'll make some intro - JJ
+Beyond the choice of design methodology and implementation, researchers need to
+consider additional issues \cite{Ma2019} when designing efficient multi-population algorithms. These include the number and size of populations,
 the interaction between them, the search area of each population, and the search
 strategy and parametrization of each population. We must take into account
 these high-level issues when designing a parallel architecture. Researchers 
