@@ -1737,19 +1737,15 @@ task_definition:
   task_size:
     mem_limit: 8GB
     cpu_limit: 4096
-run_params:
-  network_configuration:
-    awsvpc_configuration:
-      subnets:
-        - "subnet-0ca2a542bbd74239e"
-        - "subnet-0dfd367b5ca531b07"
-      security_groups:
-        - "sg-0681c18469874b391"
-      assign_public_ip: ENABLED
 \end{lstlisting}
-% Do you need the details about the subnets? As long as they are here, you'll have to explain them. Why two subnets? It's probably better to leave that network configuration out anyway - JJ
-
+% Do you need the details about the subnets? As long as they are here,
+% you'll have to explain them. Why two subnets? It's probably better to
+% leave that network configuration out anyway - JJ
+% Ok, I removed that section. those parameters are required, but are used 
+% internally by the cluster. - M 
+% The security group was required to have external access to redis. - M
 % Please clarify that those images are published in Docker hub by yourself - JJ
+% I have done this a few commits back. (4 paragraphs up) - M
 
 \begin{lstlisting}[caption={docker-compose.yml for setup, controller and redis containers}, label=code:compose]
   version: '3'
