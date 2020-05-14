@@ -22,7 +22,8 @@ basicstyle=\small\ttfamily,
 \lstset{language=Python} 
 \begin{frontmatter}
 
-\title{EvoSwarm: An Event-based Architecture for Multi-population Optimization Algorithms}
+  \title{EvoSwarm: An Event-based Architecture for Multi-population Optimization Algorithms}
+  % maybe introduce "reproducible" here, somewhere, as well as "cloud native"
 
 \author[itt]{Mario Garc\'ia Valdez}\corref{mycorrespondingauthor}
 \cortext[mycorrespondingauthor]{Corresponding author}
@@ -668,12 +669,14 @@ possibility of implementing the system using serverless functions.
 % (and he next one too) - JJ
 % done - Mario
 % But also change title? - JJ
+% Experimental design of a container-based application or something like that - JJ
 \section{Container-based application} 
 \label{docker}
 
 We have mentioned several advantages of a cloud-native application for running
 multi-population based algorithms, but there are in our experience several
-practical issues of this approach. In general, cloud platforms have free-tiers
+practical issues of this approach. % several issues that make it practical or useful instead? - JJ
+In general, cloud platforms have free-tiers
 for their services, and many offer academic discounts to students. But once we
 pass to the pay-as-you-go tier, computing resources need to be
 managed, and, where possible, its cost minimized.  First,
@@ -713,13 +716,14 @@ the interaction APIs. Of course, that makes them more economical in a
 pay-per-use cloud provider, but that is not the main reason why we
 have chosen them in this paper; reproducibility of experiments and a
 clear and idempotent description of the architecture through docker
-compose are the main reasons. 
+compose % Be consistent with docker compose. Either {\tt docker-compose} or {\sf docker-compose}, but not docker compose, for instance. - JJ
+are the main reasons. 
 
 In this section, we propose a design of a reactive container-based application
 for executing multi-population based optimization experiments.  For the design,
 we followed the design patterns highlighted in the previous section, and again
 we can go back to Figure \ref{fig:kafkEO} and use it as a guide for explaining
-the main components and their interactions. 
+the main components and their interactions. The containers used in this design will be explained next. 
 
 % But first, we give a brief description of the technology we used. 
 
@@ -888,6 +892,7 @@ the execution to the infinite loop. This process is shown in Figure
 % taking care of #5 - M
 \label{experiment_flow}
 
+% You can't start with this. Explain what this section is about, and link it with the previous one. Maybe it's better to create a big section with "Experimental setup", and make this a subsection, with subsections becoming subsubsections - JJ
 Figure \ref{fig:experiment_flow} shows the general workflow to run experiments
 in Evo\-Swarm, and the three roles users can play. The first step is to develop the
 search strategy algorithms that are going to be used by the multi-population
@@ -1049,6 +1054,8 @@ and tracking different versions of both images and image definitions by using
 tags. This infrastructure supports the objective of the paper, which is to
 contribute to the reproducibility of experiments and platform independence.
 
+% You said "subsections will talk about roles", this is not a role. Change the title to that of a role. Would that be administrator? - JJ
+
 \subsection{EvoSwarm Configuration}
 \label{sec:evoswarm:config}
 The administrator role is responsible for
@@ -1059,8 +1066,9 @@ for the experiments. The {\tt docker-compose} application is responsible for
 starting all the containers, and downloading new versions if it is necessary,
 by executing the command {\tt docker-compose up}  inside the EvoSwarm directory
 
+% Also, it's a bit short. Maybe merge it into the next? - JJ
 
-
+% Again, not a role - JJ
 \subsection{Experiment Execution}
 \label{sec:exeperimentalDefinition}
 
@@ -1091,6 +1099,7 @@ data contained in the file in the next section.
 }
 \end{lstlisting}
 
+% This is totally unexpected. Whose role is this? You didn't even introduce it. Also, extremely short - JJ
 \subsection{Using the COCO Framework}
 
 Researchers can use these files to analyze and plot experiment data.  Python
@@ -1099,7 +1108,7 @@ experiments, and all other plots used in this paper;  there is also a script to
 generate the files needed by the COCO framework \cite{hansen2016coco}, which can generate standard
 comparisons against other methods.
 
-%
+% You should clarify that, before, you were explaining how to set up an experiment. In this section, you are explaining the experiments that you are doing in this paper. But you should relate both sections to the general objectives of the paper. In the prior section, you want to prove that EvoSwarm can be used by the public to create reproductive research (and maybe you should add a small conclusion sub or sub-sub section), in the next you explain the experiment we are doing for this paper. It would be interesting to make references from the next section to the previous one, indicating how the general setup of EvoSwarm helps _us_ to create this experiment - JJ
 
 \section{General Experimental Setup} 
 \label{setup}
@@ -1110,6 +1119,7 @@ algorithms. % If you want to prove it *improves*, you need to provide a baseline
             %What will be your baseline? You need to specify anyway 
             %in which way it really improves - JJ
             % The baseline is a single population GA or PSO? - M
+% For instance. But I was actually looking for another word that does not imply a comparison - JJ
 Hence, in the following sections, we verify the following:
 
 % JJ these are the three experiments, please check them. The last two addressing
@@ -1117,17 +1127,18 @@ Hence, in the following sections, we verify the following:
 
 \begin{itemize}
 \item Can we improve the execution time of the algorithm by adding populations
- and serverless functions to the system and, in particular, what is its effect on the scalability of the system? 
+ and serverless functions to the system and, in particular, what is its effect on the scalability of the system? % Improve with respect to what? Single population? Please explain carefully the issues and how scaling is related to the number of populations. - JJ
  
 \item Does having a multi-population enabled platform, with heterogeneous populations and
-the support for mixing search strategies,  increases the performance of the
+the support for mixing search strategies,  increase the performance of the
 search by needing fewer function evaluations than a homogeneous setting? % But in this case the answer is no, right? - JJ
                                                                          % Is yes, but is in the second experiment - M
 \item Can EvoSwarm as a cloud-native, container-based application,  be deployed
 locally or in the cloud by just specifying the configuration of container images
-and resources to an orchestration service?
+and resources to an orchestration service? % This does not fit in here... It's related to reproducibility, and as such belongs in the previous section. The subsections that answer this should also go to the previous section - JJ
 \end{itemize}
 
+% Also, point forward to the section (or subsections) that will be devoted to proving each point. BTW, they should probably be subsections.
 
 To validate these questions, we used benchmark functions from the Continuous
 Noiseless BBOB testbed, which is part of the Comparing Continuous Optimizers
@@ -1255,7 +1266,7 @@ the GA algorithm. % Opening up the door to ask for testing with
             40              & 80      & 250                 &      5                 & 40                \\ \hline
   \end{tabular}
 \end{table}
-                  
+
 
 Next, we specify a list indicating which of the 24 benchmark
 functions will be tested. In the example, the experiment will use the first five
@@ -1280,14 +1291,14 @@ in Ubuntu Linux 18.04; coce is run using Python 3.7.5. Container images and the 
 The BOBB experiments were performed with COCO \cite{hansen2016coco} version bbob.v15.03 in Python, 
 the plots were produced with version 2.3.2. % Are we using BBOB plots? - JJ
 
+% Maybe subsection? Also say the question you're answering - JJ
 \section{Measuring Scalability}
 \label{sec:exp1}
 % Experiment 1
-As we mentioned before, reactive systems can scale by adding additional copies
+As we mentioned before % say where - JJ
+, reactive systems can scale by adding additional copies
 of serverless functions. In our case, we can start additional worker containers
-to have the same effect. Other authors, like Salza et al. \cite{salza2019speed},   % add
-                                % reference - JJ
-                                % done - Mario
+to have the same effect. Other authors, like Salza et al. \cite{salza2019speed},
 have used a
 similar architecture, which implies that worker nodes need to have at least a certain level
 of complexity, in terms of execution time,  to effectively scale on multiple
@@ -1370,7 +1381,7 @@ for the complete list.
 %
 \begin{table}[]
   \caption{The median of the time required to finish an instance of the function $f_4$, 30 runs
-  with different number of workers and populations}
+  with different number of workers and populations} % time or rate? - JJ
   \label{tab:time}
   \vspace{0.25cm}
     \centering
@@ -1533,23 +1544,13 @@ overhead needed to migrate and process incoming and outgoing
 population and the total computing time: more populations will need
 more time to do that.
 
-% I think this is not the case? 
-% Another additional issue is related to the algorithm itself. Many more
-% workers than populations will have a wider range of states of
-% evolution in the experiment; populations that will be mixed will have
-% very different fitness states, which means that a part of them will
-% probably have been not so useful, following the intermediate
-% disturbance hypothesis. When the number of workers is increased, the
-% difference between the state of evolution of populations will be
-% intermediate, leading to better results; eventually, when there are as
-% many workers as populations, the state will be quite similar, which is
-% shown with a smaller gap in the time won adding more workers.
 
 \subsubsection{Speedup}
 \label{sec:speedup}
 
+% TBD? - JJ
 
-
+% No idea where this fits in. I think it's the second question in 7, so it should probably be a subsection - JJ
 \section{Performance of Heterogeneous Populations in the BBOB Benchmark}
 \label{sec:exp2}
 
@@ -1645,6 +1646,8 @@ difficult functions. This experiment also exemplifies the type of analyses that
 we can perform with the results of the EvoSwarm application by reusing the COCO framework. % If this is what you want to prove, it's not a very strong point. Maybe it would be stronger if you proved that these mixed algorithms can be tested in the same conditions as single-algorithm, and also that these mixed algorithms work better than single-algorithm versions - JJ
 
 \section{Deploying to a cloud provider}
+
+% This should probably be a subsection of section 5, where you describe what any user needs to do to get this running and you  talk about reproducibility - JJ
 
 % This is only an idea of the section
 %
@@ -1811,13 +1814,13 @@ flexibility of a cloud-native application.
 \begin{figure}[h!tbp]
   \centering
   \includegraphics[width=\textwidth]{aws}
-  \caption{Boxplot of the number of evaluations per second ratio, for 15 instances of function $f_4$,
+  \caption{Boxplot of the number of evaluations per second, for 15 instances of function $f_4$,
    with three execution environments Local, Single task and Multi-task.
    }
   \label{fig:aws-results}
 \end{figure}
-
-\begin{table}[]
+%
+\begin{table}[h!tbp]
   \small
   \caption{ Median number of the evaluations per second ratio, for 15 instances of function $f_4$,
   with three execution environments Local, Single task and Multi task}
@@ -1872,6 +1875,7 @@ evaluations are being split between different workers.
 % this is not a conclusion. The conclusion is an answer to the
 % research question. This works, and works precisely for the reasons
 % we say it works. - JJ
+% Again, revise search questions and explain answers - JJ
 As a conclusion, EvoSwarm is a framework designed and tested according
 to industry standards which is able to bring many benefits to the
 bioinspired algorithm community, by showing the possibility of
