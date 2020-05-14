@@ -1711,8 +1711,12 @@ The main attributes are the {\texttt task\_size} indicating the memory and CPU u
 assigned, and network configuration. The complete configuration is generated
 by the {\texttt ecs compose command} that uses a {\texttt docker-compose.yml} file to generate 
 the configuration on-the-fly. For example to deploy the controller, setup and redis 
-containers we used the file in Listing ~\ref{code:compose}. We have 
-provided the container images and are published in Docker hub \url{https://hub.docker.com/u/mariosky}.
+containers we used the file in Listing ~\ref{code:compose}.
+Each container is defined as a  {\texttt service} , with the following attributes: {\texttt image},
+that reference the container images we have published in Docker hub
+\url{https://hub.docker.com/u/mariosky}, open {\texttt ports}, a {\texttt command} to be executed at
+startup, configuration for the AWS {\texttt logging} service, and finally {\texttt environment}
+variables used by code running inside containers.
 
 
 We deployed two configurations, one that included all containers in a single task,
@@ -1764,8 +1768,6 @@ task_definition:
     setup:
       image: mariosky/setup
       command: python experiment.py
-      volumes:
-        - /code
       environment:
         PYTHONUNBUFFERED: 1
         REDIS_HOST: localhost
@@ -1778,8 +1780,6 @@ task_definition:
         
     controller:
       image: mariosky/controller
-      volumes:
-          - /code
       command: python controller.py
       environment:
           PYTHONUNBUFFERED: 1
@@ -1792,7 +1792,7 @@ task_definition:
           awslogs-stream-prefix: controller
   \end{lstlisting}
 % You will probably need to explain this a bit - JJ 
-  
+% done - M  
 \subsection{Experimental Results} 
 
 
