@@ -112,7 +112,10 @@ and researchers have found additional benefits
 besides the execution speed; these include avoiding a premature convergence and
 maintaining the diversity of the global population \cite{li2015multi}. 
 
-% Probably it's not the time for this, but maybe it would be interesting to mention that asynchronous implementations in most cases need a change in the underlying algorithm, while synchronous might not need it - JJ
+% Probably it's not the time for this, but maybe it would be interesting to 
+% mention that asynchronous implementations in most cases need a change in 
+% the underlying algorithm, while synchronous might not need it - JJ 
+% TO DO - Mario 
 Moreover, parallel implementations can run in two different ways: synchronous and
 asynchronous. When operations run in parallel but every node must maintain synchrony with
 the other operations,  all operations need to finish to continue to the next
@@ -120,7 +123,8 @@ step. For instance, in a  master/worker model, the master needs to wait for all
 workers to finish their operations before moving to the next iteration.  In
 contrast, in an asynchronous execution,  operations are not synchronized with
 each other, so there's no time lost waiting for other populations to
-arrive to the synchronization point; results arriving from other workers are incorporated as soon as they are received. Following the previous example, now the master operation can
+arrive to the synchronization point; results arriving from other workers are 
+incorporated as soon as they are received. Following the previous example, now the master operation can
 continue to the next iteration, even if a worker has not finished its work.  In
 the literature, we can find many asynchronous algorithms
 \cite{coleman89,baugh2003asynchronous}, reporting benefits in execution time,
@@ -183,7 +187,7 @@ multi-population solutions face the additional challenges:
     worker processes and their capabilities.  
 \end{itemize}
 
-% I have moved these sentences here, since they seem to fit the best.
+% I have moved these sentences here, since they seem to fit the best.(OK - M)
 Beyond the choice of design methodology and implementation, researchers need to
 consider additional issues \cite{Ma2019} when designing efficient multi-population algorithms. These include the number and size of populations,
 the interaction between them, the search area of each population, and the search
