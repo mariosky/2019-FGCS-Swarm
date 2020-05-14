@@ -1583,13 +1583,16 @@ more time to do that.
   \end{tabular}
   \vspace{-3ex}
    \caption{
-Scaling of running time with problem dimension to reach certain target values $\Delta f$. Lines:
-average runtime (aRT); Cross ($+$): median runtime of successful runs to reach
+Scaling of expected runtime (RT defined as the number of function
+evaluations to reach a target function value for the first time) for  
+each problem dimension. Target values $\Delta f$ = 10, 1, $10^{-1}$, $10^{-2}$,$10^{-3}$,$10^{-5}$,$10^{-8}$
+(the exponent and line colors are given in the legend of $f_1$ in the top row). 
+Lines are the average RT (aRT); Cross ($+$): median RT of successful runs to reach
 the most difficult target that was reached at least once (but not always);
-Cross (\textcolor{red}{$\times$}): maximum number of f-evaluations in any trial. Notched boxes:
-interquartile range with median of simulated runs; all values are divided by
-dimension and plotted as $log_{10}$ values versus dimension.
+Cross (\textcolor{red}{$\times$}): maximum number of f-evaluations in any trial. 
+All values are divided by dimension and plotted as $log_{10}$ values versus dimension.
 % More explanation for those not familiar with BBOB - JJ
+% I think is more clear? - M
 }
 \label{fig:bbob}
 \end{figure*}
