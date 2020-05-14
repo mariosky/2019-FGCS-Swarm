@@ -1648,19 +1648,18 @@ Finally, the proposed PSO\&GA mixed algorithm has reached the $10^{-8}$ target
 value on all functions ($f_1-f_5$) and scales well to higher dimensions, even on
 $f_3$ and $f_4$ (charts on the lower rows), which are usually considered
 difficult functions. This experiment also exemplifies the type of analyses that
-we can perform with the results of the EvoSwarm application by reusing the COCO framework. % If this is what you want to prove, it's not a very strong point. Maybe it would be stronger if you proved that these mixed algorithms can be tested in the same conditions as single-algorithm, and also that these mixed algorithms work better than single-algorithm versions - JJ
+we can perform with the results of the EvoSwarm application by reusing the COCO framework.
+We also proved that multi-population algorithms can be compared under the same 
+conditions, including single and multi-algorithm versions, and results show 
+that the later have better performance.
+
+% If this is what you want to prove, it's not a very strong point. Maybe it
+% would be stronger if you proved that these mixed algorithms can be tested in the
+% same conditions as single-algorithm, and also that these mixed algorithms work
+% better than single-algorithm versions - JJ
+% Ok, stated like that - M
 
 \section{Deploying to a cloud provider}
-
-% This should probably be a subsection of section 5, where you describe what any user needs to do to get this running and you  talk about reproducibility - JJ
-
-% This is only an idea of the section
-%
-
-% First you have to say that cloud is a way of describing deployment to any kind
-% of infrastructure in a reproducible way, and it needn't be in the cloud proper,
-% it can be deployed to anything, that's precisely the thing. But make clear that
-% when you use a cloud provider, there are more options to do it... - JJ
 
 Container-based applications describe the deployment of loosely coupled
 processes in a consistent and portable way, in every phase of the life cycle of
