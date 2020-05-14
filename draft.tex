@@ -1580,7 +1580,8 @@ average runtime (aRT); Cross ($+$): median runtime of successful runs to reach
 the most difficult target that was reached at least once (but not always);
 Cross (\textcolor{red}{$\times$}): maximum number of f-evaluations in any trial. Notched boxes:
 interquartile range with median of simulated runs; all values are divided by
-dimension and plotted as $log_{10}$ values versus dimension. 
+dimension and plotted as $log_{10}$ values versus dimension.
+% More explanation for those not familiar with BBOB - JJ
 }
 \label{fig:bbob}
 \end{figure*}
@@ -1588,10 +1589,10 @@ dimension and plotted as $log_{10}$ values versus dimension.
 
 \subsection{Setup}
 
-Having a multi-population based algorithm can decrease the execution time
-because of the parallel execution of the evolution. But, having heterogeneous 
-populations might enhance evolutionary search and needless
-evaluations than homogeneous systems; heterogeneous settings, if
+A multi-population based algorithm can decrease the execution time
+because of parallel execution. But, having heterogeneous 
+populations might enhance evolutionary search and avoid unneeded
+evaluations more than homogeneous systems systems do; heterogeneous settings, if
 done right, increases the diversity of the whole population\cite{araujo2008multikulti}.
 
 But this is a rule of thumb, and it will depend on the degree of heterogeneity,
@@ -1599,32 +1600,32 @@ as well as on the algorithm itself. Some level of heterogeneity can be
 implemented by just changing the configuration parameters of each population,
 as in the previous experiment, but in this case, we are interested in a heterogeneous search strategy.
 
-Therefore, in this experiment we compare a multi-population with only GA and PSO populations,
-versus an ensemble of GA and PSO algorithms. We tested on the first five functions of the
-BBOB testbed. We used ten populations and eight workers for the experiment and the
-same parameters as before.  
+Therefore, in this experiment we compare a multi-population with  GA- and PSO- only populations,
+versus an ensemble of GA and PSO algorithms. We have tested on the first five functions of the
+BBOB testbed; we have used ten populations and eight workers for the experiment and the
+same parameters as before.
 
 \subsection{Experimental Results} 
 
 The results obtained by the experiments show (see Figure \ref{fig:bbob}) how
 the runtime scales with dimension to reach certain target values $\Delta f$;
 The color of the lines indicates the average runtime, for each target reached
-at least one time. A red circle without a number on top indicates the algorithm
+at least once. A red circle without a number on top indicates the algorithm
 has reached the $10^{-8}$ target on all instances for that dimension. If there
-is a number on the top, it indicates how many times the algorithm has reached
+is that number, it indicates how many times the algorithm has reached
 the target. Fixed values of targets $\Delta f = 10^{k}$ with $k$ colors are
 given in the legend of $f_1$, $k$ values are $[-8,-5,-3,-2,-1,0,1]$. Results
 from each configuration are presented in each column, GA, PSO, and GA\&PSO
-populations.
+populations. % clarify which colors for every level - JJ
 
-We can see that the GA algorithm (on the left column) has a hard time reaching even the
+We can see that the GA algorithm (on the leftmost column) has a hard time reaching even the
 $10^{-5}$ target in functions ($f_1-f_4$) for all dimensions, and has the worst
 performance in 20 and 40 dimensions. Finally, it performs better on $f_5$
 reaching the $10^{-8}$ on all dimensions but with a higher runtime on lower
 dimensions.
 
 On the other hand, the multi-population PSO (taking the column on the middle) 
-has better performance; its results take a smaller range,
+has better performance; its results are spread over a smaller range,
 reaching all targets for functions $f_1$ and $f_2$ but with a slightly higher
 runtime than the multi-strategy configuration. It is not able to reach the
 $10^{-8}$ target on the higher dimensions of $f_3$ and $f_4$. Moreover, the PSO
@@ -1634,7 +1635,7 @@ Finally, the proposed PSO\&GA mixed algorithm has reached the $10^{-8}$ target
 value on all functions ($f_1-f_5$) and scales well to higher dimensions, even on
 $f_3$ and $f_4$ (charts on the lower rows), which are usually considered
 difficult functions. This experiment also exemplifies the type of analyses that
-we can perform with the EvoSwarm application by reusing the COCO framework.
+we can perform with the results of the EvoSwarm application by reusing the COCO framework. % If this is what you want to prove, it's not a very strong point. Maybe it would be stronger if you proved that these mixed algorithms can be tested in the same conditions as single-algorithm, and also that these mixed algorithms work better than single-algorithm versions - JJ
 
 \section{Deploying to a cloud provider}
 
@@ -1664,7 +1665,6 @@ choose:
   virtual machine and run docker-compose commands as we would do in a local 
   workstation. Salza et al. \cite{salza2019speed} tested this option by using
   CoreOs cluster. 
-  % Remember that Salza et al. used CoreOS, which is optimized for containers - JJ
 
   \item[A Kubernetes cluster] provides auto-scaling and management of containerized
   applications, but it needs additional configuration for provisioning. All major
@@ -1676,10 +1676,7 @@ choose:
 
 \end{description}
     
-% This is the second option. The first option was already tested, right? - JJ
-% This is the third option.  - M
-
-As a proof-of-concept, we chose the third option and deployed the EvoSwarm application in Amazon Elastic
+As a proof-of-concept, we chose the third option, that is, a container orchestration service, and deployed the EvoSwarm application in Amazon Elastic
 Container Service (ECS),  since it needs fewer changes in configuration 
 (from deploying it locally using docker-compose) and it is has a lower cost than the Kubernetes alternative. % Remember to mention cost at the end - JJ
 
@@ -1717,9 +1714,6 @@ For the second option, we used the same cluster and additionally
 assigned each worker to a task with 4GBs of memory and 2048 computing units. Then scale the 
 number of worker tasks to eight. We can scale the number of tasks for up to 100 instances in 
 a Fargate configuration. 
-                                  % Please use caps or not for Tasks in a consistent way - JJ
-                                  % Done -Mario
-                                  % Done above - M
 
 \begin{lstlisting}[caption=ecs-params.yml , label=code:ecs]
 version: 1
@@ -1739,8 +1733,9 @@ run_params:
         - "sg-0681c18469874b391"
       assign_public_ip: ENABLED
 \end{lstlisting}
+% Do you need the details about the subnets? As long as they are here, you'll have to explain them. Why two subnets? It's probably better to leave that network configuration out anyway - JJ
 
-
+% Please clarify that those images are published in Docker hub by yourself - JJ
 
 \begin{lstlisting}[caption={docker-compose.yml for setup, controller and redis containers}, label=code:compose]
   version: '3'
@@ -1786,10 +1781,11 @@ run_params:
           awslogs-group: docker-logs
           awslogs-stream-prefix: controller
   \end{lstlisting}
-
+% You will probably need to explain this a bit - JJ 
+  
 \subsection{Experimental Results} 
 
-% Please clarify that those images are published in Docker hub by yourself - JJ
+
 The results are shown in Figure~\ref{fig:aws-results} and Table~\ref{tab:aws}. 
 
 As we can see, the local environment (see section \ref{setup}) achieved a higher
