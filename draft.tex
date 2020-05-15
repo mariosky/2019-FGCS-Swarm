@@ -871,7 +871,7 @@ the execution to the infinite loop. This process is shown in Figure
 
 \begin{itemize}
   % Question move to here for the moment, at least we need to mention this in this intro.
-  
+
   \item Can EvoSwarm as a cloud-native, container-based application,  be deployed
   locally or in the cloud by just specifying the configuration of container images
   and resources to an orchestration service? 
@@ -1039,7 +1039,8 @@ and tracking different versions of both images and image definitions by using
 tags. This infrastructure supports the objective of the paper, which is to
 contribute to the reproducibility of experiments and platform independence.
 
-% You said "subsections will talk about roles", this is not a role. Change the title to that of a role. Would that be administrator? - JJ
+% You said "subsections will talk about roles", this is not a role. 
+% Change the title to that of a role. Would that be administrator? - JJ
 
 \subsection{EvoSwarm Configuration}
 \label{sec:evoswarm:config}
@@ -1184,14 +1185,6 @@ task_definition:
     mem_limit: 8GB
     cpu_limit: 4096
 \end{lstlisting}
-% Do you need the details about the subnets? As long as they are here,
-% you'll have to explain them. Why two subnets? It's probably better to
-% leave that network configuration out anyway - JJ
-% Ok, I removed that section. those parameters are required, but are used 
-% internally by the cluster. - M 
-% The security group was required to have external access to redis. - M
-% Please clarify that those images are published in Docker hub by yourself - JJ
-% I have done this a few commits back. (4 paragraphs up) - M
 
 \begin{lstlisting}[caption={docker-compose.yml for setup, controller and redis containers}, label=code:compose]
   version: '3'
@@ -1233,8 +1226,8 @@ task_definition:
           awslogs-group: docker-logs
           awslogs-stream-prefix: controller
   \end{lstlisting}
-% You will probably need to explain this a bit - JJ 
-% done - M  
+
+  
 \subsubsection{Experimental Results} 
 
 % Write some introduction to this subsubsection. 
@@ -1330,7 +1323,8 @@ search by needing fewer function evaluations than a homogeneous setting?
 % Moved reproducibility question from here - M
 \end{itemize}
 
-% Also, point forward to the section (or subsections) that will be devoted to proving each point. BTW, they should probably be subsections.
+% Also, point forward to the section (or subsections) that will be devoted to proving each point.
+% BTW, they should probably be subsections.
 
 \subsection{General Experimental Setup} 
 \label{sec:general-setup} % To be renamed 
@@ -1413,11 +1407,7 @@ of initial parameters \cite{garcia2014randomized}.
 
 The experiments can be easily reproduced by using the configuration
 files the EvoSwarm application uses to run the noiseless BBOB testbed
-experiments as seen in Section~\ref{sec:exeperimentalDefinition}. % Specify this a bit more (with commands such as
-             % docker-compose up and so on and use an itemize
-             % environment to highlight it and answer to the reviewer
-             % - JJ
-             % Done, a few lines down - M
+experiments as seen in Section~\ref{sec:exeperimentalDefinition}. 
 As a first step, we must deploy the docker application using a
 {\tt docker-compose.yml} file, as described in Section~\ref{sec:evoswarm:config}. 
 Then a JSON file containing the configuration parameters of the
@@ -1427,10 +1417,7 @@ populations that will use the GA algorithm.  In the example, with a value of
 $0.50$ there will be about the same proportion of GA and PSO populations. If we
 specify a value of $0$, this will give us an algorithm with only PSO
 populations, and finally, a value of  $1$ means that all populations will run
-the GA algorithm. % Opening up the door to ask for testing with
-                  % different proportion. You have to justify this
-                  % value - JJ  
-                  % We mention earlier that we replicated the params of another paper - M 
+the GA algorithm. 
 
 \begin{table}[h!tbp]
   \small
@@ -1479,7 +1466,7 @@ and 16 GB RAM. We used Docker version 19.03.3, build a872fc2f86, and {\tt docker
 in Ubuntu Linux 18.04; coce is run using Python 3.7.5. Container images and the {\tt docker-compose} file are available at
 \url{https://hub.docker.com/u/mariosky}, and \url{https://github.com/mariosky/EvoSwarm} respectively. 
 The BOBB experiments were performed with COCO \cite{hansen2016coco} version bbob.v15.03 in Python, 
-the plots were produced with version 2.3.2. % Are we using BBOB plots? - JJ
+the plots were produced with version 2.3.2.
 
 % Maybe subsection? Also say the question you're answering - JJ
 \subsection{Measuring Scalability}
@@ -1620,8 +1607,6 @@ for the complete list.
   \centering
   \includegraphics[width=\textwidth]{evalspersecond}
   \caption{Boxplot of the number of evaluations per second, for 30 instances of function $f_4$, with different number of workers and populations sizes }
-   
-  % Which function? - JJ
   \label{fig:spworker}
 \end{figure}
 
@@ -1647,7 +1632,8 @@ for the complete list.
 
 \begin{table}[h!tbp]
   \small
-  \caption{Speedup achieved with incrementing the number of workers for each dimension showing the p-rate for the Wilcoxon test}
+  \caption{Speedup achieved with incrementing the number of workers for
+   each dimension showing the p-rate for the Wilcoxon test}
   % mark significant differences in some way - JJ
   \label{tab:speedup:test}
   \vspace{0.25cm}
@@ -1740,7 +1726,9 @@ more time to do that.
 
 % TBD? - JJ
 
-% No idea where this fits in. I think it's the second question in 7, so it should probably be a subsection - JJ
+% No idea where this fits in. I think it's the second question in 7,
+% so it should probably be a subsection - JJ
+
 \subsection{Performance of Heterogeneous Populations in the BBOB Benchmark}
 \label{sec:exp2}
 
