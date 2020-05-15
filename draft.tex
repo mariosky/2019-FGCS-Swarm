@@ -1238,7 +1238,7 @@ task_definition:
 % done - M  
 \subsubsection{Experimental Results} 
 
-
+% Write some introduction to this subsubsection. 
 The results are shown in Figure~\ref{fig:aws-results} and Table~\ref{tab:aws}. 
 
 As we can see, the local environment (see section \ref{setup}) achieved a higher
@@ -1246,13 +1246,14 @@ ratio of evaluations per second (in bold). Still, we must consider that there is
 network overhead in a local workstation and a clock speed of 3.8 GHz. The first
 option (labeled Single) is straightforward to deploy, needing only a single
 {\tt docker-compose} file, and one command to execute. But with the limit of 4CPUs and
-ten containers, it is the slower option. The second option (labeled Multi), is
+ten containers, it is the slowest option. The second option (labeled Multi), is
 faster, and not too far from the local execution, especially when solving the
 $f_4$ in 20 dimensions (underline in table). With the capacity for increasing the number of worker
 containers, it is reasonable to think that we can achieve a higher number of
 evaluations with an appropriate configuration. Nevertheless, the goal of this
 experiment was not to increase the number of evaluations but to test the
 flexibility of a cloud-native application.
+% Mention costs - JJ
 
 \begin{figure}[h!tbp]
   \centering
@@ -1265,8 +1266,8 @@ flexibility of a cloud-native application.
 %
 \begin{table}[h!tbp]
   \small
-  \caption{ Median number of the evaluations per second ratio, for 15 instances of function $f_4$,
-  with three execution environments Local, Single task and Multi task}
+  \caption{ Median number of the evaluations per second, for 15 instances of function $f_4$,
+  with three execution environments Local, Single task and Multi task. The best result is shown in {\bf boldface}.}
   \label{tab:aws}
   \vspace{0.25cm}
   \centering
@@ -1280,7 +1281,7 @@ flexibility of a cloud-native application.
       & Single task & 18,193.05      \\
   \hline
   20  & Local       & \textbf{36,101.86}   \\
-      & Multi task  & {\ul 33,916.02}       \\
+      & Multi task  & {\ul 33,916.02}       \\ % why the underline?
       & Single task & 16,546.95  \\
   \hline
   \end{tabular}
@@ -1288,9 +1289,19 @@ flexibility of a cloud-native application.
 
 
 
+% Emphasize these results for the purpose of the paper - JJ
 
-
-% You should clarify that, before, you were explaining how to set up an experiment. In this section, you are explaining the experiments that you are doing in this paper. But you should relate both sections to the general objectives of the paper. In the prior section, you want to prove that EvoSwarm can be used by the public to create reproductive research (and maybe you should add a small conclusion sub or sub-sub section), in the next you explain the experiment we are doing for this paper. It would be interesting to make references from the next section to the previous one, indicating how the general setup of EvoSwarm helps _us_ to create this experiment - JJ
+% You should clarify that, before, you were explaining how to set up
+% an experiment. In this section, you are explaining the experiments
+% that you are doing in this paper. But you should relate both
+% sections to the general objectives of the paper. In the prior
+% section, you want to prove that EvoSwarm can be used by the public
+% to create reproductive research (and maybe you should add a small
+% conclusion sub or sub-sub section), in the next you explain the
+% experiment we are doing for this paper. It would be interesting to
+% make references from the next section to the previous one,
+% indicating how the general setup of EvoSwarm helps _us_ to create
+% this experiment - JJ  
 
 
 
@@ -1321,7 +1332,13 @@ search by needing fewer function evaluations than a homogeneous setting? % But i
                                                                          % Is yes, but is in the second experiment - M
 \item Can EvoSwarm as a cloud-native, container-based application,  be deployed
 locally or in the cloud by just specifying the configuration of container images
-and resources to an orchestration service? % This does not fit in here... It's related to reproducibility, and as such belongs in the previous section. The subsections that answer this should also go to the previous section - JJ
+and resources to an orchestration service? % This does not fit in
+                                % here... It's related to
+                                % reproducibility, and as such belongs
+                                % in the previous section. The
+                                % subsections that answer this should
+                                % also go to the previous section - JJ
+% Still need to check this out - JJ
 \end{itemize}
 
 % Also, point forward to the section (or subsections) that will be devoted to proving each point. BTW, they should probably be subsections.
@@ -1339,11 +1356,6 @@ over 2, 3, 5, 10, 20, and 40 dimensions. The maximum number of Function
 Evaluations (FEs) changes according to the dimension (D), and it is determined
 by the expression $10^5 \cdot D$. As an example, if we have $D = 2$, the
 maximum number of FEs is $200,000$.
-% How do you manage to stop exactly at that number of evaluations in a distributed system? - JJ
-% In the controller we check the number of messages received, we assume that each message 
-% needs a X amount of #FEs we stop at the maximum number of messages parameter.
-% If the solution is found we stop sending messages and ignore messages from that
-% experiment ID - M
 
 The COCO framework offers several tools to compare the performance of
 algorithms, generating data sets, tables, and reports for an experiment. There
@@ -1539,7 +1551,7 @@ decrease the workload of workers:
     Generations      & 40 & 25 & 28 & 50 & 66  & 80  \\ \hline
     Population Size  & 100 & 120 & 120 & 140 & 200 & 250 \\ \hline
     Populations      & 5 & 5 & 5 & 5 & 5  & 5  \\ \hline
-    Iterations       & 10 & 20 & 30 & 30 & 30  & 40  \\ \hline  
+    Iterations       & 10 & 20 & 30 & 30 & 30  & 40  \\ \hline
   \end{tabular}
 \end{table}
 
