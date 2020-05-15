@@ -860,34 +860,42 @@ the main script pushes the results to the \texttt{Output} queue, and continues
 the execution to the infinite loop. This process is shown in Figure
 \ref{fig:worker}.
 
-\section{Reproducible Experimental Workflow in EvoSwarm} 
+\section{Workflow for Reproducible Experiment Design in EvoSwarm} 
 \label{experiment_flow}
 % Changed the section title to give more focus on reproducibility - M
-
 % You can't start with this. Explain what this section is about, and link it with 
-% the previous one. Maybe it's better to create a big section with "Experimental setup",
-% and make this a subsection, with subsections becoming subsubsections - JJ
+% the previous one. Maybe it's better to create a big section with "Experimental setup", 
+% and make this a subsection, with subsections becoming subsubsections - JJ 
+% done - M 
 
+An essential goal of our EvoSwarm application is to allow researchers the
+description and orchestration of reproducible multi-population experiments.
+Following the application design described in the previous section, we now
+present the workflow of an experiment's entire life-cycle viewed from the
+perspective of the two roles users can play. On one side is the user role that
+designs and runs experiments and, on the other, the role of a developer of
+algorithms. The scenario presented in Figure~\ref{fig:experiment_flow} shows the
+workflow of an experiment in Evo\-Swarm the two roles users can play. The first
+step is to develop the search strategy algorithms that are going to be used by
+the multi-population algorithm; algorithm developers do this. Then users are
+responsible for the configuration and deployment of the resources needed for the
+experiment. Once the application is running, users can start one or several
+experiments, monitor the execution, and analyze the results. Depending on the
+type of experiment executed, users could have additional needs, in this case
+there are additional scripts for processing the results of experiments to be
+used with the COCO framework. In the next sections, we give more details about
+these roles and their workflows, and at the end we present a proof-of-concept example of a
+reproducible experiment in EvoSwarm.
 
-\begin{itemize}
-  % Question move to here for the moment, at least we need to mention this in this intro.
+%\begin{itemize}
+  % Question move to here for the moment, I mention this in this intro. - Mario
 
-  \item Can EvoSwarm as a cloud-native, container-based application,  be deployed
-  locally or in the cloud by just specifying the configuration of container images
-  and resources to an orchestration service? 
+%  \item Can EvoSwarm as a cloud-native, container-based application,  be deployed
+%  locally or in the cloud by just specifying the configuration of container images
+%  and resources to an orchestration service? 
+%\end{itemize}
 
-\end{itemize}
-
-Figure \ref{fig:experiment_flow} shows the general workflow to run experiments
-in Evo\-Swarm, and the three roles users can play. The first step is to develop the
-search strategy algorithms that are going to be used by the multi-population
-algorithm; algorithm developers do this. Then administrators are responsible for
-the installation and configuration of the application. Once the application is
-running, users can start one or several experiments, monitor the execution, and
-analyze the results. Depending on the type of experiment executed, users could
-have additional needs, in this case there are additional scripts for
-processing the results of experiments to be used with the COCO framework. In the
-next sections, we give more details about these roles and their workflows.  
+  
 
 \begin{sidewaysfigure}
     \centering
@@ -1005,8 +1013,7 @@ container for posterior analyses.
 \end{lstlisting}
 
 For the secondary level of integration, developers need to add code to the setup
-
-container
+container to specify additional configuration options. For instance,
 in the current configuration message (see Listing \ref{code:config})
 workers executing a GA, initialize the mutation and crossover 
 probabilities randomly from a specific range of values. Users specify
@@ -1020,7 +1027,6 @@ populations (swarms) can follow a topology, indicating valid connections
 between them (i.e., ring or hypercube). The controller
 can apply these rules selectively only to swarm-based algorithms. 
 In general, these configuration options will be algorithm and library specific. 
-
 
 On either level of integration and after making the changes outlined before,
 algorithm developers can upload the container 
@@ -1042,7 +1048,9 @@ contribute to the reproducibility of experiments and platform independence.
 % You said "subsections will talk about roles", this is not a role. 
 % Change the title to that of a role. Would that be administrator? - JJ
 
-\subsection{EvoSwarm Configuration}
+\subsection{EvoSwarm from the User Point of View} 
+
+\subsubsection{EvoSwarm Configuration}
 \label{sec:evoswarm:config}
 The administrator role is responsible for
 editing the Docker Compose configuration files that reference the images created
@@ -1055,7 +1063,7 @@ by executing the command {\tt docker-compose up}  inside the EvoSwarm directory
 % Also, it's a bit short. Maybe merge it into the next? - JJ
 
 % Again, not a role - JJ
-\subsection{Experiment Execution}
+\subsubsection{Experiment Execution}
 \label{sec:exeperimentalDefinition}
 
 After starting the application, users can push several Experiment Definition 
@@ -1089,7 +1097,7 @@ data contained in the file in the next section.
 % This is one of the applications described in the Workflow Figure. But this is better explained in other places.
 % We can delete it (even from the Figure)  
 % Will leave it until we decide - M 
-\subsection{Using the COCO Framework}
+\subsubsection{Using the COCO Framework}
 
 Researchers can use these files to analyze and plot experiment data.  Python
 scripts are included in the repository to plot the running times for the
