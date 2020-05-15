@@ -23,10 +23,6 @@ basicstyle=\small\ttfamily,
 \begin{frontmatter}
 
   \title{EvoSwarm: A Cloud-Native Architecture for the Reproducible Execution of Multi-population Optimization Algorithms}
-  % maybe introduce "reproducible" here, somewhere, as well as "cloud native"
-  % I like cloud-native more than event-based. 
-  % How about that one?  - M
-  % better than the previous one.
   
    
 \author[itt]{Mario Garc\'ia Valdez}\corref{mycorrespondingauthor}
@@ -69,6 +65,11 @@ kinds of algorithms, % Did we compare it to other kind of algorithms?
                      % If we didn't, this should go - JJ 
                      % Compared against GA and PSO and others from BBOB - Mario
                      % on the algorithm, not speedup 
+                     % I like the sentence, If we did not prove it, 
+                     % at least we build a tool that will allow
+                     % algorithms to run in their natural environment.
+                     % The focus of the Journal after all is in computer systems - M
+
 and setting a new baseline for scaling and
 performance in the cloud.
 \end{abstract}
@@ -711,21 +712,6 @@ we followed the design patterns highlighted in the previous section, and again
 we can go back to Figure \ref{fig:kafkEO} and use it as a guide for explaining
 the main components and their interactions. The containers used in this design will be explained next. 
 
-% But first, we give a brief description of the technology we used. 
-
-% Add if needed
-%\subsection{Containers} 
-%\label{containers}
-% TO DO
-
-%\subsection{Docker Compose} 
-%\label{compose}
-% TO DO
- 
-
-% Do we need a description of every container? Wouldn't a general 
-% description  of the containers used be enough? - JJ 
-% Ok, I think only workers and the controller need to be described in detail - Mario 
 \subsection{Message Queue Container} 
 \label{message_container}
 
@@ -874,11 +860,24 @@ the main script pushes the results to the \texttt{Output} queue, and continues
 the execution to the infinite loop. This process is shown in Figure
 \ref{fig:worker}.
 
-\section{Experimental Workflow in EvoSwarm} % We could upgrade this to a section and explain in detail 
-% taking care of #5 - M
+\section{Reproducible Experimental Workflow in EvoSwarm} 
 \label{experiment_flow}
+% Changed the section title to give more focus on reproducibility - M
 
-% You can't start with this. Explain what this section is about, and link it with the previous one. Maybe it's better to create a big section with "Experimental setup", and make this a subsection, with subsections becoming subsubsections - JJ
+% You can't start with this. Explain what this section is about, and link it with 
+% the previous one. Maybe it's better to create a big section with "Experimental setup",
+% and make this a subsection, with subsections becoming subsubsections - JJ
+
+
+\begin{itemize}
+  % Question move to here for the moment, at least we need to mention this in this intro.
+  
+  \item Can EvoSwarm as a cloud-native, container-based application,  be deployed
+  locally or in the cloud by just specifying the configuration of container images
+  and resources to an orchestration service? 
+
+\end{itemize}
+
 Figure \ref{fig:experiment_flow} shows the general workflow to run experiments
 in Evo\-Swarm, and the three roles users can play. The first step is to develop the
 search strategy algorithms that are going to be used by the multi-population
@@ -1319,8 +1318,6 @@ algorithms. % If you want to prove it *improves*, you need to provide a baseline
 % For instance. But I was actually looking for another word that does not imply a comparison - JJ
 Hence, in the following sections, we verify the following:
 
-% JJ these are the three experiments, please check them. The last two addressing
-% issues from a reviewer - M 
 
 \begin{itemize}
 \item Can we improve the execution time of the algorithm by adding populations
@@ -1328,17 +1325,9 @@ Hence, in the following sections, we verify the following:
  
 \item Does having a multi-population enabled platform, with heterogeneous populations and
 the support for mixing search strategies,  increase the performance of the
-search by needing fewer function evaluations than a homogeneous setting? % But in this case the answer is no, right? - JJ
-                                                                         % Is yes, but is in the second experiment - M
-\item Can EvoSwarm as a cloud-native, container-based application,  be deployed
-locally or in the cloud by just specifying the configuration of container images
-and resources to an orchestration service? % This does not fit in
-                                % here... It's related to
-                                % reproducibility, and as such belongs
-                                % in the previous section. The
-                                % subsections that answer this should
-                                % also go to the previous section - JJ
-% Still need to check this out - JJ
+search by needing fewer function evaluations than a homogeneous setting? 
+
+% Moved reproducibility question from here - M
 \end{itemize}
 
 % Also, point forward to the section (or subsections) that will be devoted to proving each point. BTW, they should probably be subsections.
