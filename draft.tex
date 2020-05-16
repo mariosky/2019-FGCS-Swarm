@@ -22,9 +22,8 @@ basicstyle=\small\ttfamily,
 \lstset{language=Python} 
 \begin{frontmatter}
 
-  \title{EvoSwarm: A Cloud-Native Architecture for the Reproducible Execution of Multi-population Optimization Algorithms}
-  
-   
+\title{EvoSwarm: A Cloud-Native Architecture for the Reproducible Execution of Multi-population Optimization Algorithms}
+
 \author[itt]{Mario Garc\'ia Valdez}\corref{mycorrespondingauthor}
 \cortext[mycorrespondingauthor]{Corresponding author}
 \ead{mario@tectijuana.edu.mx}
@@ -649,12 +648,6 @@ possibility of implementing the system using serverless functions.
 \end{figure}
 
 
-% Maybe these three sections should be merged; they are all experimental set up and the two next ones start with "experimental"
-% (and he next one too) - JJ
-% done - Mario
-% But also change title? - JJ
-% Experimental design of a container-based application or something like that - JJ 
-% Like it - M
 \section{Experimental Design of a Container-based Application} 
 \label{docker}
 
@@ -1064,9 +1057,6 @@ comparisons against other methods.
 \end{lstlisting}
 
 
-% TODO: connection to cloud subsection  - M
-% Done - M 
-
 \subsection{Deploying to a Cloud Provider}
 \label{cloud-aws}
 
@@ -1100,7 +1090,7 @@ cloud provider, we have some more options to choose:
 
 \end{description}
 
-\subsubsection{Setup}
+\subsubsection{Setup} % Even if it's a sub-sub section, flesh this out ... - JJ
 \label{setup:local-cloud}
 
 We chose the third option, that is, a container orchestration service, and
@@ -1110,7 +1100,7 @@ since it needs fewer changes in configuration (from deploying it locally using
 alternative.
 
 % Remember to mention cost at the end - JJ
-
+% Ping - JJ
 We can define an ECS cluster directly on AWS Elastic Cloud VMs or through the AWS Fargate service.
 Fargate is a serverless compute engine for containers that provides automatic provision 
 and management of AWS ECS resources. With this service, calculating the cost of execution
@@ -1209,11 +1199,10 @@ task_definition:
           awslogs-stream-prefix: controller
   \end{lstlisting}
 
+% Mention cost here - JJ
   
 \subsubsection{Experimental Results} 
 
-% Write some introduction to this subsubsection.
-% Done - M
 In this experiment, we wanted to test several deployment options for the 
 cloud-native application, and have an idea of the computing capacity of each option
 measured as the number of function evaluations per second.
@@ -1231,9 +1220,6 @@ evaluations with an appropriate configuration. Nevertheless, the goal of this
 experiment was not to increase the number of evaluations but to test the
 flexibility of a cloud-native application. The total cost of testing, configuration, 
 and execution of the experiments in ECS was less than \$1.00 US Dollar.
-
-% Mention costs - JJ
-% Done  - M
 
 \begin{figure}[h!tbp]
   \centering
@@ -1261,7 +1247,7 @@ and execution of the experiments in ECS was less than \$1.00 US Dollar.
       & Single task & 18,193.05      \\
   \hline
   20  & Local       & \textbf{36,101.86}   \\
-      & Multi task  & {\ul 33,916.02}       \\ 
+      & Multi task  & {\ul 33,916.02}       \\
       & Single task & 16,546.95  \\
   \hline
   \end{tabular}
@@ -1274,27 +1260,10 @@ and portable way, an it was used in each phase of the life cycle, from
 development through testing to production independently on the kind of
 infrastructure.
 
-% Emphasize these results for the purpose of the paper - JJ
-% done - Mario
-
 
 \section{Experimental Study} 
 \label{setup} % To be renamed 
 
-
-
-% You should clarify that, before, you were explaining how to set up
-% an experiment. In this section, you are explaining the experiments
-% that you are doing in this paper. But you should relate both
-% sections to the general objectives of the paper. In the prior
-% section, you want to prove that EvoSwarm can be used by the public
-% to create reproductive research (and maybe you should add a small
-% conclusion sub or sub-sub section), in the next you explain the
-% experiment we are doing for this paper. It would be interesting to
-% make references from the next section to the previous one,
-% indicating how the general setup of EvoSwarm helps _us_ to create
-% this experiment - JJ  
-% Connected below - M  
 
 In the prior section, we wanted to prove that EvoSwarm can be used by 
 the public to create reproductive research, but in this section are
@@ -1323,10 +1292,6 @@ search by needing fewer function evaluations than a homogeneous setting?
 
 Section~\label{sec:exp1} is devoted to answering the first question, and Section~\label{sec:exp2} to the second.
 Next, we describe the general experimental setup to both experiments.
-
-% Also, point forward to the section (or subsections) that will be devoted to proving each point.
-% BTW, they should probably be subsections.
-% Done - M
 
 \subsection{General Experimental Setup} 
 \label{sec:general-setup} 
