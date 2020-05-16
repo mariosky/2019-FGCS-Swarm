@@ -1364,8 +1364,7 @@ with five dimensions. After about fifteen experiments, the most challenging
 targets were achieved for this particular function. We tested again with
 functions one to three, and after obtaining favorable results, the PSO and GA
 algorithm parameters were set. In the GA, we randomly set the mutation and
-crossover probabilities to have more heterogeneous workers; % highlight this and add citation - JJ 
-% done below - M
+crossover probabilities to have more heterogeneous workers; 
 in these parameters, the range of values is specified. We did not change these parameters during the 
 experiments, and only the population size and number of generations were
 provided as parameters. This strategy has been applied successfully for increasing 
@@ -1432,8 +1431,6 @@ software described in Section~\ref{setup:local-cloud}, additionally the BOBB
 experiments were performed with COCO \cite{hansen2016coco} version bbob.v15.03
 in Python, the plots were produced with version 2.3.2.
 
-% Maybe subsection? Also say the question you're answering - JJ
-% Done, I added the research question at the beginning of the setup question - M
 \subsection{Measuring Scalability}
 \label{sec:exp1}
 % Experiment 1
@@ -1495,7 +1492,7 @@ decrease the workload of workers:
   \end{tabular}
 \end{table}
 
-\subsubsection{Setup}
+\subsubsection{Setup} % Again, this in the index with no context should say something. Please flesh it out.
 
 To answer the first research question, we need to evaluate the effect of these parameters on the scalability of the system,   we
 propose  an experiment in which we selected $f_4$ (Skew Rastrigin-Bueche separable) from the
@@ -1564,67 +1561,6 @@ for the complete list.
 \end{table}
 
 
-%
-%
-\begin{figure}[h!tbp]
-  \centering
-  \includegraphics[width=\textwidth]{evalspersecond}
-  \caption{Boxplot of the number of evaluations per second, for 30 instances of function $f_4$, with different number of workers and populations sizes }
-  \label{fig:spworker:evalspersecond}
-\end{figure}
-
-\begin{table}[h!tbp]
-  \caption{Speedup by worker and dimension, taking one worker as the baseline.}
-  \label{tab:speedup-table}
-  \vspace{0.25cm}
-  \centering
-
-  \begin{tabular}{c|r|r|r|r|r|r|}
-  \cline{2-7}
-  \multicolumn{1}{l|}{}           & \multicolumn{3}{c|}{5 Populations}                                          & \multicolumn{3}{c|}{10 Populations}                                         \\ \hline
-  \multicolumn{1}{|l|}{Dimension} & \multicolumn{1}{c|}{2W} & \multicolumn{1}{c|}{4W} & \multicolumn{1}{c|}{8W} & \multicolumn{1}{c|}{2W} & \multicolumn{1}{c|}{4W} & \multicolumn{1}{c|}{8W} \\ \hline
-  \multicolumn{1}{|c|}{2}         & \textbf{1.94}           & 3.12                    & 3.86                    & 1.84                    & \textbf{3.38}                    & \textbf{5.98}                    \\ \hline
-  \multicolumn{1}{|c|}{3}         & \textbf{1.93}           & 2.77                    & 3.15                    & 1.90                    & \textbf{3.26}                   & \textbf{5.96}                    \\ \hline
-  \multicolumn{1}{|c|}{5}         & 1.91                    & 2.90                    & 3.09                    & 1.91                    & \textbf{3.46}                    & \textbf{6.14}                    \\ \hline
-  \multicolumn{1}{|c|}{10}        & \textbf{1.92}           & 3.03                    & 3.30                    & 1.90                    & \textbf{3.61}                   & \textbf{6.41}                    \\ \hline
-  \multicolumn{1}{|c|}{20}        & \textbf{1.91}           & 3.14                    & 3.27                    & 1.89                    & \textbf{3.73}                   & \textbf{6.71}                    \\ \hline
-  \multicolumn{1}{|c|}{40}        & \textbf{2.00}           & 2.92                    & 3.12                    & 1.95                    & \textbf{3.80}                     & \textbf{7.52}                    \\ \hline
-  \end{tabular}
-\end{table}
-%
-
-\begin{table}[h!tbp]
-  \small
-  \caption{Speedup achieved with incrementing the number of workers for
-   each dimension showing the p-rate for the Wilcoxon test}
-  % mark significant differences in some way - JJ
-  \label{tab:speedup:test}
-  \vspace{0.25cm}
-  \centering
-  \begin{tabular}{lllllll}
-            &               &               & \multicolumn{2}{l}{5 Populations} & \multicolumn{2}{l}{10 Populations} \\
-  Dimension & \multicolumn{2}{l}{Increment} & Speedup         & p-value         & Speedup          & p-value         \\
-  2         & 1w            & 2w            & {\ul 1.94}            & 6E-16           & 1.84             & 2E-16           \\
-            & 2w            & 4w            & 1.61            & 2E-15           & 1.83             & 1E-15           \\
-            & 4w            & 8w            & 1.24            & 1E-06           & 1.77             & 2E-16           \\
-  3         & 1w            & 2w            & {\ul 1.93}            & 2E-16           & 1.90             & 2E-16           \\
-            & 2w            & 4w            & 1.44            & 8E-15           & 1.71             & 2E-16           \\
-            & 4w            & 8w            & 1.14            & 3E-05           & 1.83             & 2E-16           \\
-  5         & 1w            & 2w            & 1.91            & 9E-16           & 1.91             & 2E-16           \\
-            & 2w            & 4w            & 1.52            & 3E-11           & 1.82             & 2E-16           \\
-            & 4w            & 8w            & 1.06            & 5E-03           & 1.77             & 2E-16           \\
-  10        & 1w            & 2w            & 1.92            & 3E-16           & 1.90             & 2E-16           \\
-            & 2w            & 4w            & 1.58            & 3E-16           & 1.89             & 2E-16           \\
-            & 4w            & 8w            & {\ul 1.09}      & 1E-03           & 1.78             & 2E-16           \\
-  20        & 1w            & 2w            & 1.91            & 2E-16           & 1.89             & 2E-16           \\
-            & 2w            & 4w            & 1.64            & 2E-15           & 1.97             & 2E-16           \\
-            & 4w            & 8w            & {\ul 1.04 }     & 1E-02           & 1.80             & 2E-16           \\
-  40        & 1w            & 2w            & \textbf{2.00}   & 2E-16           & 1.95             & 2E-16           \\
-            & 2w            & 4w            & 1.46            & 1E-09           & 1.95             & 2E-16           \\
-            & 4w            & 8w            & {\ul 1.07}            & 3E-02           & \textbf{1.98}    & 2E-16          
-  \end{tabular}
-  \end{table}
-
 %\subsubsection{Experimental Results} 
 %\label{results}
 
@@ -1669,38 +1605,66 @@ In Table~\ref{tab:time} results with p-value of the two-tailed Wilcoxon
 signed-ranks test was grater than the level of significance of 0.05 
 (i.e., accepting the null hypothesis of inequality) are marked in boldface.
 A reason for this could be that the migration of individuals takes more time to
-reach the worker. For instance, when a single worker has 10 populations, only
+reach the worker. % how come? - JJ
+For instance, when a single worker has 10 populations, only
 after processing every one of them, it will start receiving mixed populations.  Although, in
-all cases, and even a single worker, populations are heterogeneous, this
-advantage takes more time to propagate. With four workers, almost the same
+all cases, and even with a single worker, populations are heterogeneous, this
+advantage takes more time to propagate. % which advantage? - JJ
+With four workers, almost the same
 results can be achieved regardless of our selection between five or ten
 populations. Also, there is not much difference between 4 and 8 workers, when
 using five populations, which might indicate that some workers are
 idling while populations are being processed by other workers. In
-general, we can observe that keeping a ratio close to 1:1, but a bit
-better than that, between the number of workers and populations, better exploits the computing
+general, we can observe that keeping a ratio between the number of workers and populations a bit over 1:1  exploits better the computing
 resources available. This also decreases the relation between the
 overhead needed to migrate and process incoming and outgoing
 population and the total computing time: more populations will need
 more time to do that.
 
+%
+%
+\begin{figure}[h!tbp]
+  \centering
+  \includegraphics[width=\textwidth]{evalspersecond}
+  \caption{Boxplot of the number of evaluations per second, for 30 instances of function $f_4$, with different number of workers and populations sizes }
+  \label{fig:spworker:evalspersecond}
+\end{figure}
+%
 \subsubsection{Speedup}
 \label{sec:speedup}
 
-% TBD? - JJ
-
+% Introduction saying why we are measuring this, how it's related to the objectives of the paper - JJ
 To measure the speedup obtained by the addition of workers, we will use the
 number of evaluations per second, instead of the time required to finish an
 instance of a problem. The reason for this is that in some cases reaching the
 desired target can require less work. We are going to measure the total increase
 of work done in a second by adding more workers. The baseline for the comparison
-will be one worker, and the minimum amount of work available will be five
-populations. Five populations are selected because the controller needs at least
+will be the algorithm with a single worker, and the minimum amount of work available will be five
+populations. This number is selected because the controller needs at least
 three populations to migrate individuals between them, and we add two more to
-keep even a single worker busy.Figure \ref{fig:spworker:evalspersecond} 
+keep even a single worker busy. Figure \ref{fig:spworker:evalspersecond} 
 shows the number of function evaluation per second, achieved by a certain number of
-workers, for every problem dimension, for five and ten dimensions of $f_4$.  
+workers, for every problem dimension, for five and ten dimensions of $f_4$.  % Why did you choose f4? - JJ
 
+\begin{table}[h!tbp]
+  \caption{Speedup by worker and dimension, taking one worker as the baseline.}
+  \label{tab:speedup-table}
+  \vspace{0.25cm}
+  \centering
+
+  \begin{tabular}{c|r|r|r|r|r|r|}
+  \cline{2-7}
+  \multicolumn{1}{l|}{}           & \multicolumn{3}{c|}{5 Populations}                                          & \multicolumn{3}{c|}{10 Populations}                                         \\ \hline
+  \multicolumn{1}{|l|}{Dimension} & \multicolumn{1}{c|}{2W} & \multicolumn{1}{c|}{4W} & \multicolumn{1}{c|}{8W} & \multicolumn{1}{c|}{2W} & \multicolumn{1}{c|}{4W} & \multicolumn{1}{c|}{8W} \\ \hline
+  \multicolumn{1}{|c|}{2}         & \textbf{1.94}           & 3.12                    & 3.86                    & 1.84                    & \textbf{3.38}                    & \textbf{5.98}                    \\ \hline
+  \multicolumn{1}{|c|}{3}         & \textbf{1.93}           & 2.77                    & 3.15                    & 1.90                    & \textbf{3.26}                   & \textbf{5.96}                    \\ \hline
+  \multicolumn{1}{|c|}{5}         & 1.91                    & 2.90                    & 3.09                    & 1.91                    & \textbf{3.46}                    & \textbf{6.14}                    \\ \hline
+  \multicolumn{1}{|c|}{10}        & \textbf{1.92}           & 3.03                    & 3.30                    & 1.90                    & \textbf{3.61}                   & \textbf{6.41}                    \\ \hline
+  \multicolumn{1}{|c|}{20}        & \textbf{1.91}           & 3.14                    & 3.27                    & 1.89                    & \textbf{3.73}                   & \textbf{6.71}                    \\ \hline
+  \multicolumn{1}{|c|}{40}        & \textbf{2.00}           & 2.92                    & 3.12                    & 1.95                    & \textbf{3.80}                     & \textbf{7.52}                    \\ \hline
+  \end{tabular}
+\end{table}
+%
 As expected, within the same number of populations, there is a linear speedup
 when we add more workers. The speedup is marginal in the case of five
 populations when increasing the number of workers above 4. The reason for this
@@ -1708,21 +1672,52 @@ is that at any given time, there are at least two populations in the message
 queue, leaving four workers waiting. We can also notice that the spread in the
 amount of work is less when using up to four workers.
 
+\begin{table}[h!tbp]
+  \small
+  \caption{Speedup achieved with incrementing the number of workers for
+    each dimension showing the p-rate for the Wilcoxon test.}
+  % Say what highlights mean - JJ
+  \label{tab:speedup:test}
+  \vspace{0.25cm}
+  \centering
+  \begin{tabular}{lllllll}
+            &               &               & \multicolumn{2}{l}{5 Populations} & \multicolumn{2}{l}{10 Populations} \\
+  Dimension & \multicolumn{2}{l}{Increment} & Speedup         & p-value         & Speedup          & p-value         \\
+  2         & 1w            & 2w            & {\ul 1.94}            & 6E-16           & 1.84             & 2E-16           \\
+            & 2w            & 4w            & 1.61            & 2E-15           & 1.83             & 1E-15           \\
+            & 4w            & 8w            & 1.24            & 1E-06           & 1.77             & 2E-16           \\
+  3         & 1w            & 2w            & {\ul 1.93}            & 2E-16           & 1.90             & 2E-16           \\
+            & 2w            & 4w            & 1.44            & 8E-15           & 1.71             & 2E-16           \\
+            & 4w            & 8w            & 1.14            & 3E-05           & 1.83             & 2E-16           \\
+  5         & 1w            & 2w            & 1.91            & 9E-16           & 1.91             & 2E-16           \\
+            & 2w            & 4w            & 1.52            & 3E-11           & 1.82             & 2E-16           \\
+            & 4w            & 8w            & 1.06            & 5E-03           & 1.77             & 2E-16           \\
+  10        & 1w            & 2w            & 1.92            & 3E-16           & 1.90             & 2E-16           \\
+            & 2w            & 4w            & 1.58            & 3E-16           & 1.89             & 2E-16           \\
+            & 4w            & 8w            & {\ul 1.09}      & 1E-03           & 1.78             & 2E-16           \\
+  20        & 1w            & 2w            & 1.91            & 2E-16           & 1.89             & 2E-16           \\
+            & 2w            & 4w            & 1.64            & 2E-15           & 1.97             & 2E-16           \\
+            & 4w            & 8w            & {\ul 1.04 }     & 1E-02           & 1.80             & 2E-16           \\
+  40        & 1w            & 2w            & \textbf{2.00}   & 2E-16           & 1.95             & 2E-16           \\
+            & 2w            & 4w            & 1.46            & 1E-09           & 1.95             & 2E-16           \\
+            & 4w            & 8w            & {\ul 1.07}            & 3E-02           & \textbf{1.98}    & 2E-16          
+  \end{tabular}
+  \end{table}
+%
 Table~\ref{tab:speedup-table} shows the speedup obtained against the baseline of
 one worker. When using eight workers, we achieved the maximum speed up for five
 and ten populations, but interestingly, it was in dimension 40 and dimension 2 
-(these values are shown in bold in the table).
+(these values are shown in bold in the table). 
 
 Table~\ref{tab:speedup:test} shows the speedup obtained taking as the baseline
 the previous configuration, for example, when increasing from four to eight
 workers, and the p-rate for the left-tailed Wilcoxon test. There was an
 increment in all cases, but again, for smaller dimensions, five populations with
-fewer workers is a better option (see values underlined in the table) with the best  
-for 40 dimensions (in bold). The worst speed was going from four to eight workers 
+fewer workers is a better option (see values underlined in the table) with the best speedup, achieved for 40 dimensions, shown in bold. The worst speed was going from four to eight workers 
 at higher dimensions (underlined in the table). For ten populations, overall 
-has the linear speedup but the best is from four to eight workers at 40 dimensions
+has the linear speedup % don't understand this - JJ
+but the best is from four to eight workers at 40 dimensions
 (shown in bold).
-
 
 
 % No idea where this fits in. I think it's the second question in 7, 
@@ -1730,6 +1725,8 @@ has the linear speedup but the best is from four to eight workers at 40 dimensio
 
 \subsection{Performance of Heterogeneous Populations in the BBOB Benchmark}
 \label{sec:exp2}
+
+% Write an introduction - JJ
 
 \begin{figure*}[h!tb]
   \begin{tabular}
