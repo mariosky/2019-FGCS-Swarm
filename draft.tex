@@ -1200,6 +1200,7 @@ task_definition:
   \end{lstlisting}
 
 % Mention cost here - JJ
+% I putted earlier literally at the end of the section :) - M  
   
 \subsubsection{Experimental Results} 
 
@@ -1492,16 +1493,33 @@ decrease the workload of workers:
   \end{tabular}
 \end{table}
 
-\subsubsection{Setup} % Again, this in the index with no context should say something. Please flesh it out.
+From these parameters, we give more importance in this paper to the number of
+populations, because they are the basic unit of work that can be executed in
+parallel. Together with the size of each population and the number of
+generations, this parameter determines the maximum number of function
+evaluations for a single iteration. We do not have control over each algorithm's
+complexity, but future analyses could focus on balancing populations according
+to this.  
 
-To answer the first research question, we need to evaluate the effect of these parameters on the scalability of the system,   we
+In this experiment, we evaluate how the number of populations and the number of
+workers in the system are related to the scalability of the system. In the next
+section, we describe the experimental setup, and a discussion of the results
+follows, with respect to execution time (Section~\ref{sec:exec-time}) 
+and speedup Section~\ref{sec:speedup}.
+
+\subsubsection{Setup} % Again, this in the index with no context should say something. Please flesh it out.
+ % I will add more context in the parent section, and continue here
+
+To answer the first research question, we need to evaluate the effect of 
+the number of populations and the number of
+workers on the scalability of the system, we 
 propose  an experiment in which we selected $f_4$ (Skew Rastrigin-Bueche separable) from the
 BBOB testbed. This function has been used because it is computationally demanding,
 and in higher dimensions has been difficult for PSO \cite{el2009black} and GAs
 \cite{nicolau2009application} to solve with the required FEs. As we
-are only comparing in terms of execution time, the results from a single function
+are only comparing in terms of scalability, the results from a single function
 can be better understood, since there are fewer factors involved.
-Following the procedure described in the previous section, we executed 
+Following the procedure described in Section~\ref{setup}, we executed 
 two sets of experiments with five and ten initial populations,
 repeating each experiment 30 times using  1, 2, 4, and 8 workers.  We kept the same 
 maximum number of FEs, changing the relevant parameters for this. 
@@ -1564,19 +1582,28 @@ for the complete list.
 %\subsubsection{Experimental Results} 
 %\label{results}
 
+% Added some explanation % here - JJ
+
+%We report the comparison regarding the execution time in Section~\ref{sec:exec-time}
+%and the summary of the speedup in section Section~ref{sec:speedup}.
+% Move this to parent - M
+
+\subsubsection{Results Regarding Execution Time}
+\label{sec:exec-time}
+
+% I think this is now a bit redundant or we need to move it to the parent section - M
+% But is a good intro to the results.
+
 In this experiment, we wanted to test how the number of workers affected the
 time needed to reach a solution and the speedup that each configuration can
 produce. Adding more populations might add more overhead, so this might have a
-noticeable effect. In principle, the main issue is how to find the right number
-of workers for a particular problem, but in general, we wanted to check the
-communication overhead when the size of the problem increases and how the
-presented framework reacted to it.    % Added some explanation % here - JJ
-We report the comparison regarding the execution time in Section~\ref{sec:exec-time}
-and the summary of the speedup in section Section~ref{sec:speedup}.
+noticeable effect. 
 
-\subsubsection{Execution Time}
-\label{sec:exec-time}
-
+%In principle, the main issue is how to find the right number
+%of workers for a particular problem, but in general, we wanted to check the
+%communication overhead when the size of the problem increases and how the
+%presented framework reacted to it.
+% Commenting because we did not checked the communication over head - M
 
 Figure \ref{fig:spworker:time} shows the execution time achieved by a certain number of
 workers, for every problem dimension, which, besides, changes the
@@ -1630,10 +1657,11 @@ more time to do that.
   \label{fig:spworker:evalspersecond}
 \end{figure}
 %
-\subsubsection{Speedup}
+\subsubsection{Results Regarding Speedup}
 \label{sec:speedup}
 
 % Introduction saying why we are measuring this, how it's related to the objectives of the paper - JJ
+% This is done on the parent section, I renamed the sections to clarify this - M
 To measure the speedup obtained by the addition of workers, we will use the
 number of evaluations per second, instead of the time required to finish an
 instance of a problem. The reason for this is that in some cases reaching the
@@ -1644,7 +1672,8 @@ populations. This number is selected because the controller needs at least
 three populations to migrate individuals between them, and we add two more to
 keep even a single worker busy. Figure \ref{fig:spworker:evalspersecond} 
 shows the number of function evaluation per second, achieved by a certain number of
-workers, for every problem dimension, for five and ten dimensions of $f_4$.  % Why did you choose f4? - JJ
+workers, for every problem dimension, for five and ten dimensions of $f_4$.  % Why did you choose f4? - JJ This is mentioned on the setup - M
+
 
 \begin{table}[h!tbp]
   \caption{Speedup by worker and dimension, taking one worker as the baseline.}
@@ -1714,19 +1743,24 @@ the previous configuration, for example, when increasing from four to eight
 workers, and the p-rate for the left-tailed Wilcoxon test. There was an
 increment in all cases, but again, for smaller dimensions, five populations with
 fewer workers is a better option (see values underlined in the table) with the best speedup, achieved for 40 dimensions, shown in bold. The worst speed was going from four to eight workers 
-at higher dimensions (underlined in the table). For ten populations, overall 
-has the linear speedup % don't understand this - JJ
-but the best is from four to eight workers at 40 dimensions
+at higher dimensions (underlined in the table). 
+For ten populations, adding more workers resulted in a linear speedup, % don't understand this - JJ % Me either - M, rewritten  
+but the best speedup is obtained when increasing from four to eight workers at 40 dimensions
 (shown in bold).
 
 
 % No idea where this fits in. I think it's the second question in 7, 
 % so it should probably be a subsection - JJ
+% done - M
 
 \subsection{Performance of Heterogeneous Populations in the BBOB Benchmark}
 \label{sec:exp2}
 
 % Write an introduction - JJ
+% I removed the Setup section, because we use the same configuration as before
+% I will mention something about it - M
+% mm but I don't like to have a single subsection, as I remember is not right.
+
 
 \begin{figure*}[h!tb]
   \begin{tabular}
@@ -1771,7 +1805,7 @@ most difficult target.
 \end{figure*}
 
 
-\subsubsection{Setup}
+%\subsubsection{Setup}
 
 A multi-population based algorithm can decrease the execution time
 thanks to running the algorithm on several populations at the same
@@ -1788,10 +1822,14 @@ answering the second research question, and we want to validate if by using
 heterogeneous populations and mixing search strategies,  we can increase the performance of the
 search.
 
-Therefore, in this experiment we compare a multi-population with  GA- and PSO- only populations,
+Therefore, in this experiment we compare a multi-population with GA and PSO only populations,
 versus an ensemble of GA and PSO algorithms. We have tested on the first five functions of the
 BBOB testbed; we have used ten populations and eight workers for the experiment and the
 same parameters as before.
+
+In order to run this experiment, we just needed to edit a configuration file and run 
+the experiments. The plots presented in the results are generated by the BBOB framework
+from the JOSN log file of each run. There was no additional setup needed. 
 
 \subsubsection{Experimental Results} 
 
