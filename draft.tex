@@ -1219,13 +1219,13 @@ cloud-native application, and have an idea of the computing capacity of each opt
 measured as the number of function evaluations per second.
 The results are shown in Figure~\ref{fig:aws-results} and Table~\ref{tab:aws}. 
 As we can see, the local environment (see section \ref{setup}) achieved a higher
-ratio of evaluations per second (in bold). Still, we must consider that there is a minimum
+ratio of evaluations per second (in bold). Still, we must consider that there is minimum
 network overhead in a local workstation and a clock speed of 3.8 GHz. The first
 option (labeled Single) is straightforward to deploy, needing only a single
-{\tt docker-compose} file, and one command to execute. But with the limit of 4CPUs and
+{\tt docker-compose} file, and one command to execute. But with the limit of 4 CPUs and
 ten containers, it is the slowest option. The second option (labeled Multi), is
 faster, and not too far from the local execution, especially when solving the
-$f_4$ in 20 dimensions (underline in table). With the capacity for increasing the number of worker
+$f_4$ in 20 dimensions (underlined in table). With the capacity for increasing the number of worker
 containers, it is reasonable to think that we can achieve a higher number of
 evaluations with an appropriate configuration. Nevertheless, the goal of this
 experiment was not to increase the number of evaluations but to test the
@@ -1261,7 +1261,7 @@ and execution of the experiments in ECS was less than \$1.00 US Dollar.
       & Single task & 18,193.05      \\
   \hline
   20  & Local       & \textbf{36,101.86}   \\
-      & Multi task  & {\ul 33,916.02}       \\ % why the underline? [Best between cloud options :) - Mario] Then why not above too? - JJ
+      & Multi task  & {\ul 33,916.02}       \\ 
       & Single task & 16,546.95  \\
   \hline
   \end{tabular}
@@ -1334,7 +1334,7 @@ Next, we describe the general experimental setup to both experiments.
 To validate these questions, we used benchmark functions from the Continuous
 Noiseless BBOB testbed, which is part of the Comparing Continuous Optimizers
 (COCO) framework \cite{hansen2016coco}. The testbed includes 24 real-parameter,
-single-objective benchmark functions, and the capability to provide additional
+single-objective ben chmark functions, and the capability to provide additional
 instances of each function. Each instance of a function has a different optimal
 value. The standard benchmark of the testbed utilizes 15 instances per function
 over 2, 3, 5, 10, 20, and 40 dimensions. The maximum number of Function
@@ -1551,7 +1551,7 @@ for the complete list.
   \includegraphics[width=\textwidth]{time_diff}
   \caption{Boxplot of the median time required for the execution of 30 
   instances of function $f_4$, in seconds, different number of workers and populations sizes.  }
-  \label{fig:spworker}
+  \label{fig:spworker:time}
 \end{figure}
 %
 \begin{table}[]
@@ -1605,7 +1605,7 @@ for the complete list.
   \centering
   \includegraphics[width=\textwidth]{evalspersecond}
   \caption{Boxplot of the number of evaluations per second, for 30 instances of function $f_4$, with different number of workers and populations sizes }
-  \label{fig:spworker}
+  \label{fig:spworker:evalspersecond}
 \end{figure}
 
 \begin{table}[h!tbp]
@@ -1618,12 +1618,12 @@ for the complete list.
   \cline{2-7}
   \multicolumn{1}{l|}{}           & \multicolumn{3}{c|}{5 Populations}                                          & \multicolumn{3}{c|}{10 Populations}                                         \\ \hline
   \multicolumn{1}{|l|}{Dimension} & \multicolumn{1}{c|}{2W} & \multicolumn{1}{c|}{4W} & \multicolumn{1}{c|}{8W} & \multicolumn{1}{c|}{2W} & \multicolumn{1}{c|}{4W} & \multicolumn{1}{c|}{8W} \\ \hline
-  \multicolumn{1}{|c|}{2}         & 1.94                    & 3.12                    & 3.86                    & 1.84                    & 3.38                    & 5.98                    \\ \hline
-  \multicolumn{1}{|c|}{3}         & 1.93                    & 2.77                    & 3.15                    & 1.90                    & 3.26                    & 5.96                    \\ \hline
-  \multicolumn{1}{|c|}{5}         & 1.91                    & 2.90                    & 3.09                    & 1.91                    & 3.46                    & 6.14                    \\ \hline
-  \multicolumn{1}{|c|}{10}        & 1.92                    & 3.03                    & 3.30                    & 1.90                    & 3.61                    & 6.41                    \\ \hline
-  \multicolumn{1}{|c|}{20}        & 1.91                    & 3.14                    & 3.27                    & 1.89                    & 3.73                    & 6.71                    \\ \hline
-  \multicolumn{1}{|c|}{40}        & 2.00                    & 2.92                    & 3.12                    & 1.95                    & 3.80                    & 7.52                    \\ \hline
+  \multicolumn{1}{|c|}{2}         & \textbf{1.94}           & 3.12                    & 3.86                    & 1.84                    & \textbf{3.38}                    & \textbf{5.98}                    \\ \hline
+  \multicolumn{1}{|c|}{3}         & \textbf{1.93}           & 2.77                    & 3.15                    & 1.90                    & \textbf{3.26}                   & \textbf{5.96}                    \\ \hline
+  \multicolumn{1}{|c|}{5}         & 1.91                    & 2.90                    & 3.09                    & 1.91                    & \textbf{3.46}                    & \textbf{6.14}                    \\ \hline
+  \multicolumn{1}{|c|}{10}        & \textbf{1.92}           & 3.03                    & 3.30                    & 1.90                    & \textbf{3.61}                   & \textbf{6.41}                    \\ \hline
+  \multicolumn{1}{|c|}{20}        & \textbf{1.91}           & 3.14                    & 3.27                    & 1.89                    & \textbf{3.73}                   & \textbf{6.71}                    \\ \hline
+  \multicolumn{1}{|c|}{40}        & \textbf{2.00}           & 2.92                    & 3.12                    & 1.95                    & \textbf{3.80}                     & \textbf{7.52}                    \\ \hline
   \end{tabular}
 \end{table}
 %
@@ -1639,10 +1639,10 @@ for the complete list.
   \begin{tabular}{lllllll}
             &               &               & \multicolumn{2}{l}{5 Populations} & \multicolumn{2}{l}{10 Populations} \\
   Dimension & \multicolumn{2}{l}{Increment} & Speedup         & p-value         & Speedup          & p-value         \\
-  2         & 1w            & 2w            & 1.94            & 6E-16           & 1.84             & 2E-16           \\
+  2         & 1w            & 2w            & {\ul 1.94}            & 6E-16           & 1.84             & 2E-16           \\
             & 2w            & 4w            & 1.61            & 2E-15           & 1.83             & 1E-15           \\
             & 4w            & 8w            & 1.24            & 1E-06           & 1.77             & 2E-16           \\
-  3         & 1w            & 2w            & 1.93            & 2E-16           & 1.90             & 2E-16           \\
+  3         & 1w            & 2w            & {\ul 1.93}            & 2E-16           & 1.90             & 2E-16           \\
             & 2w            & 4w            & 1.44            & 8E-15           & 1.71             & 2E-16           \\
             & 4w            & 8w            & 1.14            & 3E-05           & 1.83             & 2E-16           \\
   5         & 1w            & 2w            & 1.91            & 9E-16           & 1.91             & 2E-16           \\
@@ -1650,13 +1650,13 @@ for the complete list.
             & 4w            & 8w            & 1.06            & 5E-03           & 1.77             & 2E-16           \\
   10        & 1w            & 2w            & 1.92            & 3E-16           & 1.90             & 2E-16           \\
             & 2w            & 4w            & 1.58            & 3E-16           & 1.89             & 2E-16           \\
-            & 4w            & 8w            & 1.09            & 1E-03           & 1.78             & 2E-16           \\
+            & 4w            & 8w            & {\ul 1.09}      & 1E-03           & 1.78             & 2E-16           \\
   20        & 1w            & 2w            & 1.91            & 2E-16           & 1.89             & 2E-16           \\
             & 2w            & 4w            & 1.64            & 2E-15           & 1.97             & 2E-16           \\
-            & 4w            & 8w            & 1.04            & 1E-02           & 1.80             & 2E-16           \\
-  40        & 1w            & 2w            & 2.00            & 2E-16           & 1.95             & 2E-16           \\
+            & 4w            & 8w            & {\ul 1.04 }     & 1E-02           & 1.80             & 2E-16           \\
+  40        & 1w            & 2w            & \textbf{2.00}   & 2E-16           & 1.95             & 2E-16           \\
             & 2w            & 4w            & 1.46            & 1E-09           & 1.95             & 2E-16           \\
-            & 4w            & 8w            & 1.07            & 3E-02           & 1.98             & 2E-16          
+            & 4w            & 8w            & {\ul 1.07}            & 3E-02           & \textbf{1.98}    & 2E-16          
   \end{tabular}
   \end{table}
 
@@ -1677,7 +1677,7 @@ and the summary of the speedup in section Section~ref{sec:speedup}.
 \label{sec:exec-time}
 
 
-Figure \ref{fig:spworker} shows the execution time achieved by a certain number of
+Figure \ref{fig:spworker:time} shows the execution time achieved by a certain number of
 workers, for every problem dimension, which, besides, changes the
 population size.
 Each box-plot indicates the time required for the execution of 30 function
@@ -1723,6 +1723,42 @@ more time to do that.
 \label{sec:speedup}
 
 % TBD? - JJ
+
+To measure the speedup obtained by the addition of workers, we will use the
+number of evaluations per second, instead of the time required to finish an
+instance of a problem. The reason for this is that in some cases reaching the
+desired target can require less work. We are going to measure the total increase
+of work done in a second by adding more workers. The baseline for the comparison
+will be one worker, and the minimum amount of work available will be five
+populations. Five populations are selected because the controller needs at least
+three populations to migrate individuals between them, and we add two more to
+keep even a single worker busy.Figure \ref{fig:spworker:evalspersecond} 
+shows the number of function evaluation per second, achieved by a certain number of
+workers, for every problem dimension, for five and ten dimensions of $f_4$.  
+
+As expected, within the same number of populations, there is a linear speedup
+when we add more workers. The speedup is marginal in the case of five
+populations when increasing the number of workers above 4. The reason for this
+is that at any given time, there are at least two populations in the message
+queue, leaving four workers waiting. We can also notice that the spread in the
+amount of work is less when using up to four workers.
+
+Table~\ref{tab:speedup-table} shows the speedup obtained against the baseline of
+one worker. When using eight workers, we achieved the maximum speed up for five
+and ten populations, but interestingly, it was in dimension 40 and dimension 2 
+(these values are shown in bold in the table).
+
+Table~\ref{tab:speedup:test} shows the speedup obtained taking as the baseline
+the previous configuration, for example, when increasing from four to eight
+workers, and the p-rate for the left-tailed Wilcoxon test. There was an
+increment in all cases, but again, for smaller dimensions, five populations with
+fewer workers is a better option (see values underlined in the table) with the best  
+for 40 dimensions (in bold). The worst speed was going from four to eight workers 
+at higher dimensions (underlined in the table). For ten populations, overall 
+has the linear speedup but the best is from four to eight workers at 40 dimensions
+(shown in bold).
+
+
 
 % No idea where this fits in. I think it's the second question in 7, 
 % so it should probably be a subsection - JJ
