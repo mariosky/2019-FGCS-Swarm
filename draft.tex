@@ -1058,17 +1058,23 @@ comparisons against other methods.
 \subsection{Deploying to a Cloud Provider}
 \label{cloud-aws}
 
-As a proof-of-concept, we present a brief experiment that is deployed in three
-distinct environments, taking advantage that as a container-based application,
-EvoSwarm describes the deployment of loosely coupled processes in a consistent
-and portable way.   
 
-The term cloud-native describes these container-based
+EvoSwarm describes the deployment of loosely coupled processes in a consistent
+and portable way. The term cloud-native describes these container-based
 environments because we can deploy them on an infrastructure that abstracts the
-underlying compute, storage, and networking primitives. This infrastructure does not
-need to be a cloud provider; it could be a developer's laptop, a single server,
-or a production environment. When we deploy a cloud-native application to a
-cloud provider, we have some more options to choose:
+underlying compute, storage, and networking primitives. This infrastructure does
+not need to be a cloud provider; it could be a developer's laptop, a single
+server, or a production environment. In this section, we answer the following
+question:
+
+Can EvoSwarm as a cloud-native, container-based application be deployed locally
+or in the cloud by specifying the configuration of container images and
+resources in an orchestration service?
+
+To prove this question, we present a brief optimization experiment that is
+deployed in three distinct environments, taking advantage of it as a
+container-based application. When we deploy a cloud-native application to a cloud provider, we have some more
+options to choose:
 
 \begin{description}
   
@@ -1867,24 +1873,29 @@ that the later have better performance.
 \section{Conclusions} 
 \label{conclusions}
 
-In this paper, we have presented the EvoSwarm framework that implements an
-event-based, cloud-native architecture suitable for hosting multi-population % multi-algorithm? - JJ
-optimization algorithms. % reproducible? It's in the title - JJ
+In this paper, we have presented the EvoSwarm framework for 
+the reproducible execution of experiments with an event-based, cloud-native architecture 
+suitable for hosting multi-population, multi-algorithm optimization algorithms. % reproducible? It's in the title - JJ Yes - M
 The framework is based in industry-standard development
 tools such as Docker and Docker Compose, making it easy for scientists and practitioners to develop and deploy
 multi-algorithm distributed experiments. The model is based on the asynchronous
 exchange of messages between stateless functions that react to a continuous
-stream of data. We compared the message-driven architecture we presented against
-four other proposals for multi-population algorithms found in the literature. % But it's not a practical comparison, but a theoretical one. Show the differences instead of compare? - JJ
-We
-found that it is best suited for asynchronous multi-population algorithms. % This is not really proved. You chose, you didn't find - JJ
+stream of data. We show the differences of the message-driven architecture we presented against
+four other proposals for multi-population algorithms found in the literature, and highlight the 
+advantages for conducting asynchronous multi-population algorithms.
+% But it's not a practical comparison, but a theoretical one. Show the differences instead of compare? - JJ - Ok 
+% We found that it is best suited for asynchronous multi-population algorithms. % This is not really proved. You chose, you didn't find - JJ
+% Ok, I put it in the same package - M
 
 We proposed a new methodology for the reproducible deployment and execution of
 multiple experiments by specifying the infrastructure as part of an experiment
 definition in both local or cloud environments. We presented the workflow of an
 experiment's entire life-cycle viewed from the perspective of developers and
-researchers. We tested the deployment on both local and Amazon's Elastic
-Container Service. % and we proved... Remember the experimental hypothesis - JJ
+researchers.  % and we proved... Remember the experimental hypothesis - JJ - Ok - 
+We tested the deployment of an experiment on Amazon's Elastic
+Container Service, and proved that as cloud-native, container-based application,
+EvoSwarm could be deployed locally or in the cloud by specifying the configuration 
+of container images and resources in an orchestration service.
 
 We did an empirical evaluation of the same framework to learn if the proposed
 solution can efficiently improve the scalability and performance of
@@ -1893,7 +1904,9 @@ population-based optimization algorithms.
 First, we focused on knowing how scaling is related to the number of populations
 and workers in the system. This experiment concludes that there is an
 interesting interplay, with the most benefit obtained with a number of
-populations slightly above the number of workers, which brings performance gains. % of what kind? - JJ
+populations slightly above the number of workers, which brings performance gains 
+in terms of execution speed with experiments taking less time because
+evaluations are shared between different workers. % of what kind? - JJ
 Also, we found that for lower dimensions, there is an advantage in using fewer
 populations.
 
@@ -1901,7 +1914,9 @@ A second experiment centered on evaluating the algorithmic benefits (experiments
 taking less time because they need fewer evaluations) of distributed
 multi-algorithm algorithms. We compared the homogeneous and an ensemble of
 multi-populations, using Genetic Algorithms (GAs) and Particle Swarm
-Optimization (PSO) using the COCO benchmark framework for continuous functions. % as a visualization device? - JJ
+Optimization (PSO) using the COCO benchmark framework 
+for visualization and definition of the optimization problems. % as a visualization device? - JJ  
+% we also used their functions -M
 We found that the set-up of these algorithms has a significant influence on
 their results since diversity is essential for their performance. The ensemble
 achieved better results and, in most cases, needed fewer evaluations.
