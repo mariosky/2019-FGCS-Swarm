@@ -954,7 +954,7 @@ of the algorithm, including the best solution found. The controller uses this
 information to track the execution of the algorithm and keep a log in the Redis
 container for posterior analyses.
 
-\begin{lstlisting}[language=Python, caption=Fragment of output message, label=code:result ]
+\begin{lstlisting}[language=Python, caption=Fragment of an output message, label=code:result ]
 {
 "time_stamp": 1588455316.698875,
 "evals": [
@@ -1229,7 +1229,7 @@ Dollar.
   \centering
   \includegraphics[width=\textwidth]{aws}
   \caption{Boxplot of the number of evaluations per second, for 15 instances of function $f_4$,
-   with three execution environments Local, Single task and Multi-task.
+   with three execution environments Local, Single task, and Multi-task.
    }
   \label{fig:aws-results}
 \end{figure}
@@ -1237,7 +1237,7 @@ Dollar.
 \begin{table}[h!tbp]
   \small
   \caption{ Median number of the evaluations per second, for 15 instances of function $f_4$,
-  with three execution environments Local, Single task and Multi task. The best result is shown in {\bf boldface}.}
+  with three execution environments Local, Single task, and Multi task. The best result is shown in {\bf boldface}.}
   \label{tab:aws}
   \vspace{0.25cm}
   \centering
@@ -1707,7 +1707,7 @@ amount of work is less when using up to four workers.
 \begin{table}[h!tbp]
   \small
   \caption{Speedup achieved with incrementing the number of workers for
-    each dimension showing the p-rate for the Wilcoxon test.}
+    each dimension showing the p-value for the Wilcoxon test. Best and Worst are highlighted (bold and underlined) }
   % Say what highlights mean - JJ
   \label{tab:speedup:test}
   \vspace{0.25cm}
@@ -1743,7 +1743,7 @@ and ten populations, but interestingly, it was in dimension 40 and dimension 2
 
 Table~\ref{tab:speedup:test} shows the speedup obtained taking as the baseline
 the previous configuration, for example, when increasing from four to eight
-workers, and the p-rate for the left-tailed Wilcoxon test. There was an
+workers, and the p-value for the left-tailed Wilcoxon test. There was an
 increment in all cases, but again, for smaller dimensions, five populations with
 fewer workers is a better option (see values underlined in the table) with the
 best speedup, achieved for 40 dimensions, shown in bold. The worst speed was
