@@ -1873,27 +1873,29 @@ that the later have better performance.
 \section{Conclusions} 
 \label{conclusions}
 
-In this paper, we have presented the EvoSwarm framework for 
+In this paper we have presented the EvoSwarm framework for 
 the reproducible execution of experiments with an event-based, cloud-native architecture 
-suitable for hosting multi-population, multi-algorithm optimization algorithms. % reproducible? It's in the title - JJ Yes - M
+suitable for hosting multi-population, multi-algorithm optimization
+methods. % Too many algorithms, there's no such thing as a
+         % multi-algorithm algorithm - JJ
 The framework is based in industry-standard development
 tools such as Docker and Docker Compose, making it easy for scientists and practitioners to develop and deploy
-multi-algorithm distributed experiments. The model is based on the asynchronous
+multi-algorithm distributed experiments. The model implemented by the
+framework is based on the asynchronous % Please distinguish model,
+                                % framework, implementation, algorithm
+                                % - JJ
 exchange of messages between stateless functions that react to a continuous
-stream of data. We show the differences of the message-driven architecture we presented against
+stream of data; populations are the messages that flow in this stream. We show the differences of the message-driven architecture we presented against
 four other proposals for multi-population algorithms found in the literature, and highlight the 
 advantages for conducting asynchronous multi-population algorithms.
-% But it's not a practical comparison, but a theoretical one. Show the differences instead of compare? - JJ - Ok 
-% We found that it is best suited for asynchronous multi-population algorithms. % This is not really proved. You chose, you didn't find - JJ
-% Ok, I put it in the same package - M
 
 We proposed a new methodology for the reproducible deployment and execution of
 multiple experiments by specifying the infrastructure as part of an experiment
-definition in both local or cloud environments. We presented the workflow of an
+definition in both local and cloud environments. We presented the workflow of an
 experiment's entire life-cycle viewed from the perspective of developers and
-researchers.  % and we proved... Remember the experimental hypothesis - JJ - Ok - 
+researchers. 
 We tested the deployment of an experiment on Amazon's Elastic
-Container Service, and proved that as cloud-native, container-based application,
+Container Service, and proved that as a cloud-native, container-based application,
 EvoSwarm could be deployed locally or in the cloud by specifying the configuration 
 of container images and resources in an orchestration service.
 
@@ -1915,8 +1917,7 @@ taking less time because they need fewer evaluations) of distributed
 multi-algorithm algorithms. We compared the homogeneous and an ensemble of
 multi-populations, using Genetic Algorithms (GAs) and Particle Swarm
 Optimization (PSO) using the COCO benchmark framework 
-for visualization and definition of the optimization problems. % as a visualization device? - JJ  
-% we also used their functions -M
+for visualization and definition of the optimization problems.
 We found that the set-up of these algorithms has a significant influence on
 their results since diversity is essential for their performance. The ensemble
 achieved better results and, in most cases, needed fewer evaluations.
