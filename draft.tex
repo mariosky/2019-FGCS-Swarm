@@ -464,8 +464,7 @@ message queue by defining an event handler method that is going to be triggered 
 message is pushed to it. The two components at each end of the queue are
 Producers that push messages to the queue and Consumers that pull them. This
 pattern is an essential component of a reactive architecture and makes
-it 
-highly scalable; one of the reasons for this is the use of functions
+it highly scalable; one of the reasons for this is the use of functions
 that have no secondary effects or access global storage, that is,
 stateless functions. These functions do not need to read, keep, or modify data outside of the method. If
 Consumers are implemented using stateless functions, and thus, there is no difference
@@ -679,7 +678,6 @@ the interaction APIs. Of course, that makes them more economical in a
 pay-per-use cloud provider, but that is not the main reason why we
 have chosen them in this paper; reproducibility of experiments and a
 clear and idempotent description of the architecture through {\tt docker-compose} 
-% Be consistent with docker compose. Either {\tt docker-compose} or {\sf docker-compose}, but not docker compose, for instance. - JJ - ok
 are the main reasons. 
 
 In this section, we propose a design of a reactive container-based application
@@ -1202,23 +1200,24 @@ task_definition:
 
 \subsubsection{Experimental Results} 
 
-In this experiment, we wanted to test several deployment options for the 
-cloud-native application, and have an idea of the computing capacity of each option
-measured as the number of function evaluations per second.
-The results are shown in Figure~\ref{fig:aws-results} and Table~\ref{tab:aws}. 
-As we can see, the local environment (see section \ref{setup}) achieved a higher
-ratio of evaluations per second (in bold). Still, we must consider that there is minimum
+In this experiment, we wanted to test several deployment options for the
+cloud-native application, and have an idea of the computing capacity of each
+option measured as the number of function evaluations per second. The results
+are shown in Figure~\ref{fig:aws-results} and Table~\ref{tab:aws}. As we can
+see, the local environment (see section \ref{setup}) achieved a higher ratio of
+evaluations per second (in bold). Still, we must consider that there is minimum
 network overhead in a local workstation and a clock speed of 3.8 GHz. The first
-option (labeled Single) is straightforward to deploy, needing only a single
-{\tt docker-compose} file, and one command to execute. But with the limit of 4 CPUs and
-ten containers, it is the slowest option. The second option (labeled Multi), is
-faster, and not too far from the local execution, especially when solving the
-$f_4$ in 20 dimensions (underlined in table). With the capacity for increasing the number of worker
-containers, it is reasonable to think that we can achieve a higher number of
-evaluations with an appropriate configuration. Nevertheless, the goal of this
-experiment was not to increase the number of evaluations but to test the
-flexibility of a cloud-native application. The total cost of testing, configuration, 
-and execution of the experiments in ECS was less than \$1.00 US Dollar.
+option (labeled Single) is straightforward to deploy, needing only a single {\tt
+docker-compose} file, and one command to execute. But with the limit of 4 CPUs
+and ten containers, it is the slowest option. The second option (labeled Multi),
+is faster, and not too far from the local execution, especially when solving the
+$f_4$ in 20 dimensions (underlined in table). With the capacity for increasing
+the number of worker containers, it is reasonable to think that we can achieve a
+higher number of evaluations with an appropriate configuration. Nevertheless,
+the goal of this experiment was not to increase the number of evaluations but to
+test the flexibility of a cloud-native application. The total cost of testing,
+configuration, and execution of the experiments in ECS was less than \$1.00 US
+Dollar.
 
 \begin{figure}[h!tbp]
   \centering
@@ -1491,13 +1490,13 @@ decrease the workload of workers:
   \end{tabular}
 \end{table}
 
-From this description it can be deduced that we give more importance in this paper to the number of
-populations, since they are the basic unit of work that can be executed in
-parallel. Together with the size of each population and the number of
-generations, this parameter determines the maximum number of function
+From this description it can be deduced that we give more importance in this
+paper to the number of populations, since they are the basic unit of work that
+can be executed in parallel. Together with the size of each population and the
+number of generations, this parameter determines the maximum number of function
 evaluations for a single iteration. We do not have control over each algorithm's
-complexity, but future analyses could focus on balancing populations and number of worker nodes according
-to this.
+complexity, but future analyses could focus on balancing populations and number
+of worker nodes according to this.
 
 In this experiment, we evaluate how the number of populations and the number of
 workers in the system are related to the scalability of the system. In the next
@@ -1508,21 +1507,22 @@ and speedup Section~\ref{sec:speedup}.
 \subsubsection{Setup} % Again, this in the index with no context should say something. Please flesh it out.
  % I will add more context in the parent section, and continue here
 
-To answer the first research question, we need to evaluate the effect of 
-the number of populations and the number of
-workers on the scalability of the system, we 
-propose  an experiment in which we selected $f_4$ (Skew Rastrigin-Bueche separable) from the
-BBOB testbed. This function has been used because it is computationally demanding,
-and in higher dimensions has been difficult for PSO \cite{el2009black} and GAs
-\cite{nicolau2009application} to solve with the required FEs. As we
-are only comparing in terms of scalability, the results from a single function
-can be better understood, since there are fewer factors involved.
-Following the procedure described in Section~\ref{setup}, we executed 
-two sets of experiments with five and ten initial populations,
-repeating each experiment 30 times using  1, 2, 4, and 8 workers.  We kept the same 
-maximum number of FEs, changing the relevant parameters for this. 
-See Tables \ref{tab:params:10} and \ref{tab:params:5} 
-for the complete list. 
+To answer the first research question, we need to evaluate the effect of the
+number of populations and the number of workers on the scalability of the
+system, we propose an experiment in which we selected $f_4$ (Skew
+Rastrigin-Bueche separable) from the BBOB testbed. This function has been used
+because it is computationally demanding, and in higher dimensions has been
+difficult for PSO \cite{el2009black} and GAs \cite{nicolau2009application} to
+solve with the required FEs. As we are only comparing in terms of scalability,
+the results from a single function can be better understood, since there are
+fewer factors involved. Following the procedure described in
+Section~\ref{setup}, we executed two sets of experiments with five and ten
+initial populations, repeating each experiment 30 times using 1, 2, 4, and 8
+workers. We kept the same maximum number of FEs, changing the relevant
+parameters for this. See Tables \ref{tab:params:10} and \ref{tab:params:5} for
+the complete list.
+
+
 %
 \begin{figure}[h!tbp]
   \centering
@@ -1624,28 +1624,26 @@ the time does not decrease when progressing from four to eight workers.
 That is because most of the time, workers are waiting for a population 
 to be available in the message queue.
 
-However, when we compare the two
-options, we find some subtle differences: When using one or two
-workers, using 5 populations takes less time in most cases. 
-In Table~\ref{tab:time} results with p-value of the two-tailed Wilcoxon
-signed-ranks test was grater than the level of significance of 0.05 
-(i.e., accepting the null hypothesis of inequality) are marked in boldface.
-A reason for this could be that when having more populations, the migration
-of individuals takes more time from the beginning to reach to all of them.
-For instance, when a single worker has 10 populations, only
-after processing every one of them, it will start receiving mixed populations.  Although, in
-all cases, and even with a single worker, populations are heterogeneous, 
- individuals resulting from the mixing of populations take more time to propagate. 
-With four workers, almost the same
-results can be achieved regardless of our selection between five or ten
-populations. Also, there is not much difference between 4 and 8 workers, when
-using five populations, which might indicate that some workers are
-idling while populations are being processed by other workers. In
-general, we can observe that keeping a ratio between the number of workers and populations a bit over 1:1  exploits better the computing
-resources available. This also decreases the relation between the
-overhead needed to migrate and process incoming and outgoing
-population and the total computing time: more populations will need
-more time to do that.
+However, when we compare the two options, we find some subtle differences: When
+using one or two workers, using 5 populations takes less time in most cases. In
+Table~\ref{tab:time} results with p-value of the two-tailed Wilcoxon
+signed-ranks test was grater than the level of significance of 0.05 (i.e.,
+accepting the null hypothesis of inequality) are marked in boldface. A reason
+for this could be that when having more populations, the migration of
+individuals takes more time from the beginning to reach to all of them. For
+instance, when a single worker has 10 populations, only after processing every
+one of them, it will start receiving mixed populations. Although, in all cases,
+and even with a single worker, populations are heterogeneous, individuals
+resulting from the mixing of populations take more time to propagate. With four
+workers, almost the same results can be achieved regardless of our selection
+between five or ten populations. Also, there is not much difference between 4
+and 8 workers, when using five populations, which might indicate that some
+workers are idling while populations are being processed by other workers. In
+general, we can observe that keeping a ratio between the number of workers and
+populations a bit over 1:1 exploits better the computing resources available.
+This also decreases the relation between the overhead needed to migrate and
+process incoming and outgoing population and the total computing time: more
+populations will need more time to do that.
 
 %
 %
@@ -1741,11 +1739,12 @@ Table~\ref{tab:speedup:test} shows the speedup obtained taking as the baseline
 the previous configuration, for example, when increasing from four to eight
 workers, and the p-rate for the left-tailed Wilcoxon test. There was an
 increment in all cases, but again, for smaller dimensions, five populations with
-fewer workers is a better option (see values underlined in the table) with the best speedup, achieved for 40 dimensions, shown in bold. The worst speed was going from four to eight workers 
-at higher dimensions (underlined in the table). 
-For ten populations, adding more workers resulted in a linear speedup, 
-but the best speedup is obtained when increasing from four to eight workers at 40 dimensions
-(shown in bold).
+fewer workers is a better option (see values underlined in the table) with the
+best speedup, achieved for 40 dimensions, shown in bold. The worst speed was
+going from four to eight workers at higher dimensions (underlined in the table).
+For ten populations, adding more workers resulted in a linear speedup, but the
+best speedup is obtained when increasing from four to eight workers at 40
+dimensions (shown in bold).
 
 
 \subsection{Performance of Heterogeneous Populations in the BBOB Benchmark}
@@ -1822,8 +1821,12 @@ versus an ensemble of GA and PSO algorithms. We have tested on the first five fu
 BBOB testbed; we have used ten populations and eight workers for the experiment and the
 same parameters as before.
 
-In order to run this experiment, we just needed to edit a configuration file and start it up. The plots presented in the results are generated by the BBOB framework
-from the JOSN log file for each run. There was no additional setup needed, proving how this framework is able to not only offer an reproducible way to run experiments, but also how easily it interfaces with other common tools in the EC ecosystem.
+In order to run this experiment, we just needed to edit a configuration file and
+start it up. The plots presented in the results are generated by the BBOB
+framework from the JOSN log file for each run. There was no additional setup
+needed, proving how this framework is able to not only offer an reproducible way
+to run experiments, but also how easily it interfaces with other common tools in
+the EC ecosystem.
 
 \subsubsection{Experimental Results} 
 
@@ -1864,41 +1867,79 @@ that the later have better performance.
 \section{Conclusions} 
 \label{conclusions}
 
-In this paper we have presented the EvoSwarm framework that implements
-an event-based, cloud native architecture suitable for hosting any
-kind of multi-population optimization algorithm. The framework is
-based in industry-standard development tools such as Docker and Docker
-Compose, making easy to develop and deploy multi-algorithm distributed
-experiments.
+In this paper, we have presented the EvoSwarm framework that implements an
+event-based, cloud-native architecture suitable for hosting multi-population
+optimization algorithms. The framework is based in industry-standard development
+tools such as Docker and Docker Compose, making it easy to develop and deploy
+multi-algorithm distributed experiments. The model is based on the asynchronous
+exchange of messages between stateless functions that react to a continuous
+stream of data. We compared the message-driven architecture we presented against
+four other proposals for multi-population algorithms found in the literature. We
+found that it is best suited for asynchronous multi-population algorithms.
 
-The set up of this kind of algorithms will have a big influence on the
-results, since diversity is important for this kind of algorithms and
-its creation and destruction play a big part of the algorithm's
-performance. One of the main levers to control it in EvoSwarm is via
-the number of workers that will be allocated from the beginning, which
-is why we have performed an experiment mainly intended as a proof of
-concept, but also devoted to show how two parameters in the framework,
-number of workers and number of populations used to initially seed the
-system, interact with each other. The conclusion of this experiment is
-that there is an interesting interplay, with the most benefit being
-obtained with a number of populations equal to the number of workers
-or slightly inferior or superior, which brings algorithmic benefit
-(experiment taking less time because it needs less evaluations) and
-also performance benefits (experiment taking less time because
-evaluations are being split between different workers.
+We proposed a new methodology for the reproducible deployment and execution of
+multiple experiments by specifying the infrastructure as part of an experiment
+definition in both local or cloud environments. We presented the workflow of an
+experiment's entire life-cycle viewed from the perspective of developers and
+researchers. We tested the deployment on both local and Amazon's Elastic
+Container Service.
 
-% this is not a conclusion. The conclusion is an answer to the
-% research question. This works, and works precisely for the reasons
-% we say it works. - JJ
-% Again, revise search questions and explain answers - JJ
-As a conclusion, EvoSwarm is a framework designed and tested according
-to industry standards which is able to bring many benefits to the
-bioinspired algorithm community, by showing the possibility of
-creating new, high performance, mixed algorithms, which can also be
-easily deployed to the cloud, or locally to systems that simply need
-to have Docker and {\tt docker-compose} installed.
+We did an empirical evaluation of the same framework to learn if the proposed
+solution can efficiently improve the scalability and performance of
+population-based optimization algorithms.
 
-It also opens new possibilities. From the design point of view, it
+First, we focused on knowing how scaling is related to the number of populations
+and workers in the system. This experiment concludes that there is an
+interesting interplay, with the most benefit obtained with a number of
+populations near-equal to the number of workers, which brings performance gains.
+Also, we found that for lower dimensions, there is an advantage in using fewer
+populations.
+
+A second experiment centered on evaluating the algorithmic benefits (experiments
+taking less time because they need fewer evaluations) of distributed
+multi-algorithm algorithms. We compared the homogeneous and an ensemble of
+multi-populations, using Genetic Algorithms (GAs) and Particle Swarm
+Optimization (PSO) using the COCO benchmark framework for continuous functions.
+We found that the set-up of these algorithms has a significant influence on
+their results since diversity is essential for their performance. The ensemble
+achieved better results and, in most cases, needed fewer evaluations.
+
+
+% In this paper, we have presented the EvoSwarm framework that implements
+% an event-based, cloud-native architecture suitable for hosting 
+% multi-population optimization algorithms. The framework is
+% based in industry-standard development tools such as Docker and Docker
+% Compose, making it easy to develop and deploy multi-algorithm distributed
+% experiments.
+
+% The set up of this kind of algorithms will have a big influence on the
+% results, since diversity is important for this kind of algorithms and
+% its creation and destruction play a big part of the algorithm's
+% performance. One of the main levers to control it in EvoSwarm is via
+% the number of workers that will be allocated from the beginning, which
+% is why we have performed an experiment mainly intended as a proof of
+% concept, but also devoted to show how two parameters in the framework,
+% number of workers and number of populations used to initially seed the
+% system, interact with each other. The conclusion of this experiment is
+% that there is an interesting interplay, with the most benefit being
+% obtained with a number of populations equal to the number of workers
+% or slightly inferior or superior, which brings algorithmic benefit
+% (experiment taking less time because it needs less evaluations) and
+% also performance benefits (experiment taking less time because
+% evaluations are being split between different workers.
+
+% % this is not a conclusion. The conclusion is an answer to the
+% % research question. This works, and works precisely for the reasons
+% % we say it works. - JJ
+% % Again, revise search questions and explain answers - JJ
+% As a conclusion, EvoSwarm is a framework designed and tested according
+% to industry standards which is able to bring many benefits to the
+% bioinspired algorithm community, by showing the possibility of
+% creating new, high performance, mixed algorithms, which can also be
+% easily deployed to the cloud, or locally to systems that simply need
+% to have Docker and {\tt docker-compose} installed.
+
+This work also opens new possibilities. From the design point of view, it
 would be interesting to try and use automatic scaling, instead of
 setting the number of workers by hand. This would need a certain
 amount of redesign, the most important of which would be using
