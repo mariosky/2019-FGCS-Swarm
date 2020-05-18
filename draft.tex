@@ -1868,21 +1868,23 @@ that the later have better performance.
 \label{conclusions}
 
 In this paper, we have presented the EvoSwarm framework that implements an
-event-based, cloud-native architecture suitable for hosting multi-population
-optimization algorithms. The framework is based in industry-standard development
-tools such as Docker and Docker Compose, making it easy to develop and deploy
+event-based, cloud-native architecture suitable for hosting multi-population % multi-algorithm? - JJ
+optimization algorithms. % reproducible? It's in the title - JJ
+The framework is based in industry-standard development
+tools such as Docker and Docker Compose, making it easy for scientists and practitioners to develop and deploy
 multi-algorithm distributed experiments. The model is based on the asynchronous
 exchange of messages between stateless functions that react to a continuous
 stream of data. We compared the message-driven architecture we presented against
-four other proposals for multi-population algorithms found in the literature. We
-found that it is best suited for asynchronous multi-population algorithms.
+four other proposals for multi-population algorithms found in the literature. % But it's not a practical comparison, but a theoretical one. Show the differences instead of compare? - JJ
+We
+found that it is best suited for asynchronous multi-population algorithms. % This is not really proved. You chose, you didn't find - JJ
 
 We proposed a new methodology for the reproducible deployment and execution of
 multiple experiments by specifying the infrastructure as part of an experiment
 definition in both local or cloud environments. We presented the workflow of an
 experiment's entire life-cycle viewed from the perspective of developers and
 researchers. We tested the deployment on both local and Amazon's Elastic
-Container Service.
+Container Service. % and we proved... Remember the experimental hypothesis - JJ
 
 We did an empirical evaluation of the same framework to learn if the proposed
 solution can efficiently improve the scalability and performance of
@@ -1891,7 +1893,7 @@ population-based optimization algorithms.
 First, we focused on knowing how scaling is related to the number of populations
 and workers in the system. This experiment concludes that there is an
 interesting interplay, with the most benefit obtained with a number of
-populations near-equal to the number of workers, which brings performance gains.
+populations slightly above the number of workers, which brings performance gains. % of what kind? - JJ
 Also, we found that for lower dimensions, there is an advantage in using fewer
 populations.
 
@@ -1899,7 +1901,7 @@ A second experiment centered on evaluating the algorithmic benefits (experiments
 taking less time because they need fewer evaluations) of distributed
 multi-algorithm algorithms. We compared the homogeneous and an ensemble of
 multi-populations, using Genetic Algorithms (GAs) and Particle Swarm
-Optimization (PSO) using the COCO benchmark framework for continuous functions.
+Optimization (PSO) using the COCO benchmark framework for continuous functions. % as a visualization device? - JJ
 We found that the set-up of these algorithms has a significant influence on
 their results since diversity is essential for their performance. The ensemble
 achieved better results and, in most cases, needed fewer evaluations.
