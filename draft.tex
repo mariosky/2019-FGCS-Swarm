@@ -1509,40 +1509,23 @@ parameters for this. See Table \ref{tab:params:10} for the complete list.
   \label{tab:time}
   \vspace{0.25cm}
     \centering
-    \begin{tabular}{ccrr}
+    \begin{tabular}{ccrrr}
     \hline
-              &         & 5 Populations    & 10 Populations \\
-     Dimension& Workers & Median of rate & Median of rate  \\
+              &         & 5 Populations    & 10 Populations & 20 Populations \\
+     Dimension& Workers & Median of rate & Median of rate & Median of rate  \\
     \hline
-          2   & 1w      & 2.96   & 3.15   \\
-              & 2w      & 1.84   & 1.72   \\
-              & 4w      & 1.22   & \textbf{0.96}   \\
-              & 8w      & 1.05   & \textbf{0.59}   \\
+          10  & 1w      & 22.24  & 20.48           & 24.55  \\
+              & 2w      & 10.31  & 10.00           & 12.79 \\
+              & 4w      &  6.23  & 4.75            &  5.70 \\
+              & 8w      &  5.86  &  2.33           & 2.74 \\
+              & 16w     &  5.96  &  2.33           & \textbf{1.59}\\
+    
     \hline
-          3   & 1w      & 6.53   & \textbf{7.76}   \\
-              & 2w      & 3.64   & 3.83   \\
-              & 4w      & 2.33   & 2.26   \\
-              & 8w      & 2.17   &  \textbf{1.36}   \\
-    \hline
-          5   & 1w      & \textbf{12.33}  & 14.19  \\
-              & 2w      & 6.63   & \textbf{7.41}   \\
-              & 4w      & 4.25   & 4.34   \\
-              & 8w      & 3.67   &  \textbf{2.41}   \\
-    \hline
-          10  & 1w      & \textbf{31.50}  & 38.30  \\
-              & 2w      & \textbf{16.07}  & 19.31  \\
-              & 4w      &  9.99   & 10.35  \\
-              & 8w      & 8.97   &  \textbf{5.92}  \\
-    \hline
-          20  & 1w      &  116.35 & 124.51 \\
-              & 2w      & \textbf{51.18}  & 63.68  \\
-              & 4w      & 32.26  & 33.07  \\
-              & 8w      & 28.64  & \textbf{18.25}  \\
-    \hline
-          40  & 1w      & \textbf{369.89} & 448.89 \\
-              & 2w      & \textbf{198.43} & 234.50 \\
-              & 4w      & 122.39 &  120.62 \\
-              & 8w      & 122.31 & \textbf{63.35} \\
+          20  & 1w   & 18.36   & 65.18  & 80.31 \\
+              & 2w   & 34.18   & 33.46  & 38.87 \\
+              & 4w   & 19.55   & 16.58  & 18.69 \\
+              & 8w   & 18.38   & 7.77   & 8.66 \\
+              & 16w  & 18.36   & 7.27   & \textbf{4.57} \\
     \hline
   \end{tabular}
 \end{table}
