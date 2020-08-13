@@ -1406,8 +1406,10 @@ complete loops will be performed. All these parameters give us the maximum
 number of FEs that will be performed. For instance, for $D = 2$, the maximum
 number of FEs is $200,000$, which is the same as $40*50*10*10$.
 
-We have deployed the EvoSwarm application in Amazon Elastic Container Service as described in Section~\ref{cloud-aws}, 
-additionally the BBOB experiments were performed with COCO \cite{hansen2016coco} version bbob.v15.03
+We have deployed the EvoSwarm application in Amazon Elastic Container Service as 
+described in Section~\ref{cloud-aws}, each EC2 instance was an Amazon Linux 2 AMI with 
+ECS Agent 1.42.0 and Docker version 19.03.6-ce.
+Additionally the BBOB experiments were performed with COCO \cite{hansen2016coco} version bbob.v15.03
 in Python, the plots were produced with version 2.3.2.
 
 \subsection{Measuring Scalability}
