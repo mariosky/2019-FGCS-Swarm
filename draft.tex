@@ -1132,15 +1132,20 @@ Figure \ref{fig:aws-configuration} shows the basic EC2 configuration used for th
 of experiments. We selected three types of EC2 instances according to our needs, the  
 {\texttt setup}, {\texttt controller}, and {\texttt redis} containers do not demand many resources
 and we do not need to scale them as the amount of parallel workers are increased. They run in a
-single {\texttt C5  High-CPU large} instance, with the available 2048 CPU shares divided as follows:
-{\texttt setup} (128),  {\texttt controller} (896),{\texttt redis} (1024). We assigned 2048 units to 
-each {\texttt worker}   container, by using a more capable {\texttt C5 High-CPU XLarge} instance,  with 
-four vCPUs and 4096 cpu shares. We scaled the number if instances as needed, using one instance
-for every two {\texttt worker} containers. Because all these instances run in a private subnet, we
-run a Bastion instance in a public subnet, from where we executed the experiments and collected the results,
-through a {\texttt ssh} session. This is a {\texttt R5AD Large} instance,  with 75GiB of storage for
-storing the logs, and more memory (16GiB) for processing the logs. The details and cost of these instances at the 
-time of writing are shown in Table \ref{tab:ec2}.       
+single {\texttt C5  High-CPU large} instance. With the available 2048 CPU shares divided as follows:
+{\texttt setup} (128),  {\texttt controller} (896),{\texttt redis} (1024). With this assignment 
+the {\texttt redis} container gets a dedicated vCPU, needed because it is the most demanding 
+task of the three. We assigned 2048 units to each {\texttt worker} container, and using a more 
+capable {\texttt C5 High-CPU XLarge} instance,  with 
+four vCPUs and 4096 cpu shares, with this configuration each worker gets a pair of vCPUs.  
+We scaled the number if instances as needed, using one instance for every two {\texttt worker} containers. 
+
+Because all these instances run in a private subnet, we also
+run a Bastion instance in a public subnet, from where we send the commands to execute the experiments 
+and later collected the results. We conected to this instance through a {\texttt ssh} session from 
+our personal workstation. This is a {\texttt R5AD Large} instance, selected with 75GiB of storage, needed for
+keeping the logs, and more memory (16GiB) for processing the logs in memory. The details these EC2 instabces 
+and their cost at the time of writing are shown in Table \ref{tab:ec2}.       
 
 
 \begin{table}[h!tbp]
@@ -1228,8 +1233,8 @@ time of writing are shown in Table \ref{tab:ec2}.
 %
 
 
-This configuration files will be
-used on the next section, to carry an extensive evaluation of the framework.
+The complete configuration files are available at public GitHub repository, and
+they are used on the next section to carry an extensive evaluation of the framework.
 Again, each configuration describes the deployment of containers in a consistent
 and portable way, an it was used in each phase of the life cycle, from
 development through testing to production independently on the kind of
