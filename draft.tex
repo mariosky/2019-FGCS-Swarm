@@ -1064,26 +1064,15 @@ and portable way. The term cloud-native describes these container-based
 environments because we can deploy them on an infrastructure that abstracts the
 underlying compute, storage, and networking primitives. This infrastructure does
 not need to be a cloud provider; it could be a developer's laptop, a single
-server, or a production environment. In this section, we answer the following
-question:
+server, or a production environment. In this section, we give specific details 
+about how we deployed  EvoSwarm in a cloud-setting for running the experiments 
+within this paper.
 
-Can EvoSwarm as a cloud-native, container-based application be deployed locally
-or in the cloud by specifying the configuration of container images and
-resources in an orchestration service?
-
-To prove this question, we present a brief optimization experiment that is
-deployed in three distinct environments, taking advantage of it as a
-container-based application. When we deploy a cloud-native application to a cloud provider, we have some more
+When we deploy a cloud-native application to a cloud provider, we have two
 options to choose:
 
 \begin{description}
   
-  \item[A virtual machine] with a container-optimized operating system, for example,
-  Google Compute Engine VMs, or Amazon EC2.  We still need to provision the
-  virtual machine and run {\tt docker-compose} commands as we would do in a local 
-  workstation. Salza et al. \cite{salza2019speed} tested this option by using
-  CoreOs cluster. 
-
   \item[A Kubernetes cluster] provides auto-scaling and management of containerized
   applications, but it needs additional configuration for provisioning. All major
   cloud-providers have Kubernetes services.
@@ -1091,75 +1080,100 @@ options to choose:
   \item[A container orchestration service] these services are compatible with {\tt docker-compose}
     files for configuration and provide transparent provisioning. Examples of these
     services are Amazon Elastic Container Service,  Red Hat Openshift, and Marantis Docker Enterprise.
+    Salza et al. \cite{salza2019speed} tested this option by using CoreOs cluster. 
 
 \end{description}
 
 \subsubsection{Setup} % Even if it's a sub-sub section, flesh this out ... - JJ
 \label{setup:local-cloud}
 
-We chose the third option, that is, a container orchestration service, and
+We chose the second option, that is, a container orchestration service, and
 deployed the EvoSwarm application in Amazon Elastic Container Service (ECS),
 since it needs fewer changes in configuration (from deploying it locally using
 {\tt docker-compose}) and it is has a lower cost than the Kubernetes
 alternative.
 
-% Remember to mention cost at the end - JJ
-% Ping - JJ
-We can define an ECS cluster directly on AWS Elastic Cloud VMs or through the AWS Fargate service.
-Fargate is a serverless compute engine for containers that provides automatic provision 
-and management of AWS ECS resources. With this service, calculating the cost of execution
-is simplified because users only specify the computing units and memory for all the application,
-instead of every component. 
+% Remember to mention cost at the end - JJ 
+% Ping - JJ 
+
+We can define an ECS cluster directly on the AWS Elastic Cloud VMs or through the
+AWS Fargate service. Fargate is a serverless compute engine for containers that
+provides automatic provision and management of AWS ECS resources. With this
+service, calculating the cost of execution is simplified because users only
+specify the computing units and memory for the application, instead of every
+component. However, AWS Fargate is not suited for an experimental setting because
+many of the details are out of user control. For this reason, we chose the
+alternative of using a cluster of EC2 containers. The drawback is that we need to manually
+provision the  EC2 containers, networking, and group permissions for each
+experimental setup, for instance, when going from 2 to 8 workers, we need to increase the
+number of EC2 instances to meet the required amount of CPU units.
 
 Multicontainer applications are deployed to ECS as tasks, and a single cluster can run multiple tasks in
-parallel. When using the Fargate service as a backend, tasks are limited to a
-maximum of 10 containers.  
-
-Using the ECS CLI, we can provision a cluster with a configuration file
-specifying the computing resources needed. We can specify the configuration of a task 
+parallel. Using the ECS CLI, we can provision a cluster with a configuration file
+specifying the computing resources needed. We can also specify the configuration of a task 
 by using a task definition file (see Listing~\ref{code:ecs}) in YAML format.
-The main attributes are the {\texttt task\_size} indicating the memory and CPU units
-assigned, and network configuration. The complete configuration is generated
-by the {\texttt ecs compose command} that uses a {\texttt docker-compose.yml} file to generate 
+The main attributes are the {\texttt cpu\_shares} indicating the CPU units
+assigned, in this case 2048; and the network configuration, we have two private 
+subnets and a security group in this configuration. When deploying to EC2 containers, these requirements
+need to be supported by the currently available cluster. For instance, we need to have all 
+the CPU units required by all tasks, if they are not available, the task initiation will fail.
+
+The complete task configuration is generated by the {\texttt ecs compose command} that uses a {\texttt docker-compose.yml} file to generate 
 the configuration on-the-fly. For example to deploy the controller, setup and Redis 
 containers we used the file in Listing ~\ref{code:compose}.
-Each container is defined as a  {\texttt service} , with the following attributes: {\texttt image},
+
+Each container is defined as a {\texttt service} (task in AWS terms) , with the following attributes: {\texttt image},
 that reference the container images we have published in Docker hub
 \url{https://hub.docker.com/u/mariosky}, open {\texttt ports}, a {\texttt command} to be executed at
 startup, configuration for the AWS {\texttt logging} service, and finally {\texttt environment}
 variables used by code running inside containers.
 
-We deployed two ECS configurations, one that included all containers in a single task,
-and another one, where we assigned each worker to a different task and the controller, 
-Redis, and setup in another, for a total of nine concurrent Fargate tasks. 
+Figure \ref{fig:aws-configuration} shows the basic EC2 configuration used for the deployment
+of experiments. We selected three types of EC2 instances according to our needs, the  
+{\texttt setup}, {\texttt controller}, and {\texttt redis} containers do not demand many resources
+and we do not need to scale them as the amount of parallel workers are increased. They run in a
+single {\texttt C5  High-CPU large} instance, with the available 2048 CPU shares divided as follows:
+{\texttt setup} (128),  {\texttt controller} (896),{\texttt redis} (1024). We assigned 2048 units to 
+each {\texttt worker}   container, by using a more capable {\texttt C5 High-CPU XLarge} instance,  with 
+four vCPUs and 4096 cpu shares. We scaled the number if instances as needed, using one instance
+for every two {\texttt worker} containers. Because all these instances run in a private subnet, we
+run a Bastion instance in a public subnet, from where we executed the experiments and collected the results,
+through a {\texttt ssh} session. This is a {\texttt R5AD Large} instance,  with 75GiB of storage for
+storing the logs, and more memory (16GiB) for processing the logs. The details and cost of these instances at the 
+time of writing are shown in Table \ref{tab:ec2}.       
 
-For the first option, we deployed an AWS Fargate cluster and defined a task configuration file with
-8GBs of memory and 4096 computing units, equivalent to 4 CPUs. Because of the
-ten container limit, we only used seven workers and tested function $f_4$ as
-in the previous experiment, and to save resources we only tested for dimensions 10 and 20 for 15 instances.
 
-For the second option, we used the same cluster and additionally
-assigned each worker to a task with 4GBs of memory and 2048 computing units. Then scale the 
-number of worker tasks to eight. We can scale the number of tasks for up to 100 instances in 
-a Fargate configuration.
-
-For local experiments, we have deployed the EvoSwarm application in a
-Desktop PC with an AMD Ryzen 9 3900x 12-core processor with 24 threads with a 3.8 GHz base clock, 
-and 16 GB RAM. We used Docker version 19.03.3, build a872fc2f86, and {\tt docker-compose} version 1.21.0, 
-in Ubuntu Linux 18.04; code is run using Python 3.7.5. Container images and the {\tt docker-compose} file are available at
-\url{https://hub.docker.com/u/mariosky}, and \url{https://github.com/mariosky/EvoSwarm} respectively.
-
-We reproduced the experiment of Listing~\ref{code:exp} in each environment. The experiment consists of
-solving $f_4$ for 10 and 20 dimensions. We give more details about additional parameters of the configuration in Section~\ref{setup}.
+\begin{table}[h!tbp]
+  \small
+  \caption{Details of EC2 instance types used in our deployment}
+  \label{tab:ec2} 
+  \centering
+  \small
+  \begin{tabular}{|l|l|r|l|l|}
+    \hline
+    Name & Memory & vCPUs & Storage  & Cost \\ \hline
+    R5AD Large	&	16.0 GiB	& 2 vCPUs	& 75 GiB 	& \$0.131000 hourly \\ \hline
+    C5 High-CPU Large	&	4.0 GiB	& 2 vCPUs	& EBS Only 	& \$0.102000 hourly \\ \hline
+    C5 High-CPU XLarge	&	8.0 GiB	& 4 vCPUs	& EBS Only 	& \$0.154000 hourly \\ \hline
+  \end{tabular}
+\end{table}
 
 \begin{lstlisting}[caption=ecs-params.yml , label=code:ecs]
-version: 1
-task_definition:
-  task_execution_role: ecsTaskExecutionRole
-  ecs_network_mode: awsvpc
-  task_size:
-    mem_limit: 8GB
-    cpu_limit: 4096
+  version: 1
+  task_definition:
+    ecs_network_mode: awsvpc
+    services:
+      worker:
+        cpu_shares: 2048
+  
+  run_params:
+    network_configuration:
+      awsvpc_configuration:
+        subnets:
+          - "subnet-0ca2a542bbd74239e"
+          - "subnet-0dfd367b5ca531b07"
+        security_groups:
+          - "sg-0681c18469874b391"  
 \end{lstlisting}
 
 \begin{lstlisting}[caption={docker-compose.yml for setup, controller and redis containers}, label=code:compose]
@@ -1204,62 +1218,19 @@ task_definition:
   \end{lstlisting}
 
 
-\subsubsection{Experimental Results} 
-
-In this experiment, we wanted to test several deployment options for the
-cloud-native application, and have an idea of the computing capacity of each
-option measured as the number of function evaluations per second. The results
-are shown in Figure~\ref{fig:aws-results} and Table~\ref{tab:aws}. As we can
-see, the local environment (see section \ref{setup}) achieved a higher ratio of
-evaluations per second (in bold). Still, we must consider that there is minimum
-network overhead in a local workstation and a clock speed of 3.8 GHz. The first
-option (labeled Single) is straightforward to deploy, needing only a single {\tt
-docker-compose} file, and one command to execute. But with the limit of 4 CPUs
-and ten containers, it is the slowest option. The second option (labeled Multi),
-is faster, and not too far from the local execution, especially when solving the
-$f_4$ in 20 dimensions (underlined in table). With the capacity for increasing
-the number of worker containers, it is reasonable to think that we can achieve a
-higher number of evaluations with an appropriate configuration. Nevertheless,
-the goal of this experiment was not to increase the number of evaluations but to
-test the flexibility of a cloud-native application. The total cost of testing,
-configuration, and execution of the experiments in ECS was less than \$1.00 US
-Dollar.
-
 \begin{figure}[h!tbp]
   \centering
-  \includegraphics[width=\textwidth]{aws}
-  \caption{Boxplot of the number of evaluations per second, for 15 instances of function $f_4$,
-   with three execution environments Local, Single task, and Multi-task.
+  \includegraphics[width=\textwidth]{aws_ec2}
+  \caption{AWS EC2 configuration for the deployment of EvoSwarm containers.
    }
-  \label{fig:aws-results}
+  \label{fig:aws-configuration}
 \end{figure}
 %
-\begin{table}[h!tbp]
-  \small
-  \caption{ Median number of the evaluations per second, for 15 instances of function $f_4$,
-  with three execution environments Local, Single task, and Multi task. The best result is shown in {\bf boldface}.}
-  \label{tab:aws}
-  \vspace{0.25cm}
-  \centering
 
-  \begin{tabular}{lll}
-  \hline
-  Dim & Env         & Median of ratio \\
-  \hline
-  10  & Local       & \textbf{47,166.29}       \\
-      & Multi task  & 40,466.45    \\
-      & Single task & 18,193.05      \\
-  \hline
-  20  & Local       & \textbf{36,101.86}   \\
-      & Multi task  & {\ul 33,916.02}       \\
-      & Single task & 16,546.95  \\
-  \hline
-  \end{tabular}
-\end{table}
 
-The same workflow and configuration files used by this brief experiment, will be
-used on the next section, to carry a more extensive evaluation of the framework.
-Again, each configuration describe the deployment of containers in a consistent
+This configuration files will be
+used on the next section, to carry an extensive evaluation of the framework.
+Again, each configuration describes the deployment of containers in a consistent
 and portable way, an it was used in each phase of the life cycle, from
 development through testing to production independently on the kind of
 infrastructure.
@@ -1269,8 +1240,8 @@ infrastructure.
 \label{setup} % To be renamed 
 
 
-In the prior section, we wanted to prove that EvoSwarm can be used by 
-the public to create reproductive research, but in this section are
+In the prior section, we describe an option for an EvoSwarm deployment that can be used by 
+the public to create reproductive research, in this section we are
 using the same framework to learn if the proposed solution can efficiently
 improve the scalability and performance of population-based optimization
 algorithms. % If you want to prove it *improves*, you need to provide a baseline. 
