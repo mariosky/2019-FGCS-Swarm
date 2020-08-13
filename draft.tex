@@ -1234,7 +1234,7 @@ and their cost at the time of writing are shown in Table \ref{tab:ec2}.
 
 
 The complete configuration files are available at public GitHub repository 
-\url{https://github.com/mariosky/EvoSwarm/tree/master/aws-EC2}, and
+\footnote{\url{https://github.com/mariosky/EvoSwarm/tree/master/aws-EC2}}, and
 they are used on the next section to carry an extensive evaluation of the framework.
 Again, each configuration describes the deployment of containers in a consistent
 and portable way, an it was used in each phase of the life cycle, from
@@ -1482,14 +1482,14 @@ and speedup Section~\ref{sec:speedup}.
 To answer the first research question, we need to evaluate the effect of the
 number of populations and the number of workers on the scalability of the
 system, we propose an experiment in which we selected $f_4$ (Skew
-Rastrigin-Bueche separable) from the BBOB testbed. This function has been used
+Rastrigin-Bueche separable) from the BBOB testbed, over 10 and 20 dimensions. This function has been used
 because it is computationally demanding, and in higher dimensions has been
 difficult for PSO \cite{el2009black} and GAs \cite{nicolau2009application} to
 solve with the required FEs. As we are only comparing in terms of scalability,
 the results from a single function can be better understood, since there are
 fewer factors involved. Following the procedure described in
-Section~\ref{setup}, we executed two sets of experiments with five and ten
-initial populations, repeating each experiment 30 times using 1, 2, 4, and 8
+Section~\ref{setup}, we executed two sets of experiments with five, ten, and twenty
+initial populations, repeating each experiment 30 times using 1, 2, 4, 8, and 16
 workers. We kept the same maximum number of FEs, changing the relevant
 parameters for this. See Table \ref{tab:params:10} for the complete list.
 
