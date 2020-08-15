@@ -1223,6 +1223,7 @@ and their cost at the time of writing are shown in Table \ref{tab:ec2}.
   \end{lstlisting}
 
 
+
 \begin{figure}[h!tbp]
   \centering
   \includegraphics[width=\textwidth]{aws_ec2}
@@ -1247,7 +1248,7 @@ infrastructure.
 
 
 In the prior section, we describe an option for an EvoSwarm deployment that can be used by 
-the public to create reproductive research, in this section we are
+the public to create reproductive research in the cloud, in this section we are
 using the same framework to learn if the proposed solution can efficiently
 improve the scalability and performance of population-based optimization
 algorithms. % If you want to prove it *improves*, you need to provide a baseline. 
@@ -1338,7 +1339,7 @@ functions.
 \end{table}
 
 Next, we show the parameters for each algorithm, with Table \ref{tab:GAparams} for
-the GA and Table \ref{tab:PSOparams} for PSO. We obtained these parameters
+the GA and Table \ref{tab:PSOparams} for the PSO. We obtained these parameters
 following the same method as in a previous work \cite{garcia2017benchmarking}.
 To obtain the parameters, we tested first on the Rastrigin separable function
 with five dimensions. After about fifteen experiments, the most challenging
@@ -1347,7 +1348,7 @@ functions one to three, and after obtaining favorable results, the PSO and GA
 algorithm parameters were set. In the GA, we randomly set the mutation and
 crossover probabilities to have more heterogeneous workers; 
 in these parameters, the range of values is specified. We did not change these parameters during the 
-experiments, and only the population size and number of generations were
+experiments, and only the number of populations, population size and number of generations were
 provided as parameters. This strategy has been applied successfully for increasing 
 the performance of multi-population algorithms without requiring the setting 
 of initial parameters \cite{garcia2014randomized}.
@@ -1355,8 +1356,9 @@ of initial parameters \cite{garcia2014randomized}.
 The experiments can be easily reproduced by using the configuration
 files the EvoSwarm application uses to run the noiseless BBOB testbed
 experiments as seen in Section~\ref{sec:evoswarm:config}. 
-As a first step, we must deploy the docker application using a
-{\tt docker-compose.yml} file, as described in Section~\ref{sec:evoswarm:config}. 
+As a first step, we can deploy the docker application using a
+{\tt docker-compose.yml} file, as described in Section~\ref{sec:evoswarm:config} for a local
+test, or by following the steps for a cloud setting as described in Section~\ref{cloud-aws}. 
 Then a JSON file containing the configuration parameters of the
 experiment has to be provided.  Table \ref{tab:params} shows an example of these
 parameters. The {\em GA-PSO Ratio} parameter indicates the proportion of
@@ -1398,7 +1400,7 @@ function will be tested. {\em Instances}  has a default value of 15. We used thi
 value because it is the standard for the BBOB benchmark \cite{hansen2016coco}.
 In the {\em Dimensions} parameter, we define a list of the dimensions that will
 be tested, and we must select additional parameters for each dimension.
-According to the maximum number of function evaluations (FEs) we mentioned
+According to the maximum number of FEs we mentioned
 earlier, we define for each dimension: the number of populations that will be
 generated in the setup, and for each population,  the number of generations, and
 population size. Finally, the {\em Iterations} parameter indicates how many
@@ -1408,8 +1410,8 @@ number of FEs is $200,000$, which is the same as $40*50*10*10$.
 
 We have deployed the EvoSwarm application in Amazon Elastic Container Service as 
 described in Section~\ref{cloud-aws}, each EC2 instance was an Amazon Linux 2 AMI with 
-ECS Agent 1.42.0 and Docker version 19.03.6-ce.
-Additionally the BBOB experiments were performed with COCO \cite{hansen2016coco} version bbob.v15.03
+ECS Agent 1.42.0 and Docker version 19.03.6-ce. Additionally the BBOB experiments 
+were performed with COCO \cite{hansen2016coco} version bbob.v15.03
 in Python, the plots were produced with version 2.3.2.
 
 \subsection{Measuring Scalability}
@@ -1431,7 +1433,7 @@ decrease the workload of workers:
     must wait for work to arrive. If there are too many populations, they could be
     standing in the queue for more time.
     \item The size of populations and the number of generations:
-    These parameters naturally increase the execution time.
+    These parameters naturally increase the execution time, because they mean more FEs.
     \item The complexity of the algorithm: For instance, in our case,
     the PSO implementation has a lower execution time than the GA.
 \end{itemize}
@@ -1460,8 +1462,6 @@ decrease the workload of workers:
   \end{tabular}
 \end{table}
 
-
-
 From this description it can be deduced that we give more importance in this
 paper to the number of populations, since they are the basic unit of work that
 can be executed in parallel. Together with the size of each population and the
@@ -1471,10 +1471,10 @@ complexity, but future analyses could focus on balancing populations and number
 of worker nodes according to this.
 
 In this experiment, we evaluate how the number of populations and the number of
-workers in the system are related to the scalability of the system. In the next
-section, we describe the experimental setup, and a discussion of the results
-follows, with respect to execution time (Section~\ref{sec:exec-time}) 
-and speedup Section~\ref{sec:speedup}.
+workers in the system are related to the scalability of the system. 
+In the next section, we describe the experimental setup, and a discussion of the results
+follows, with respect to the speedup in terms of evaluations per second (Section~\ref{sec:speedup}), and 
+execution time (Section~\ref{sec:exec-time}).
 
 \subsubsection{Setup} % Again, this in the index with no context should say something. Please flesh it out.
  % I will add more context in the parent section, and continue here
@@ -1493,6 +1493,116 @@ initial populations, repeating each experiment 30 times using 1, 2, 4, 8, and 16
 workers. We kept the same maximum number of FEs, changing the relevant
 parameters for this. See Table \ref{tab:params:10} for the complete list.
 
+\subsubsection{Results Regarding Speedup}
+\label{sec:speedup}
+
+\begin{figure}[h!tbp]
+  \centering
+  \includegraphics[width=\textwidth]{eval_ratio}
+  \caption{Boxplot of the number of evaluations per second, for 30 instances of function $f_4$,
+          with different number of workers and number of populations. The 7 axis is in log scale.}
+  \label{fig:spworker:evalspersecond}
+\end{figure}
+
+% Introduction saying why we are measuring this, how it's related to the objectives of the paper - JJ
+% This is done on the parent section, I renamed the sections to clarify this - M
+To measure the speedup obtained by the addition of workers, we will use the
+number of evaluations per second, instead of the time required to finish an
+instance of a problem. The reason for this is that in some cases reaching the
+desired target can require less work, because we are using a stochastic search. 
+%% JJ, can you please check if this is clear or if it needs more explanation?
+We are going to measure the total increase of work done in a second by adding more workers.
+The baseline for the comparison will be the algorithm with a single worker, 
+and the minimum amount of work available will be five populations. 
+This number is selected because the controller needs at least
+three populations to migrate individuals between them, and we add two more to
+keep even a single worker busy all the time. Figure \ref{fig:spworker:evalspersecond} 
+shows the number of function evaluations per second, achieved by a certain number of
+workers, for ten and twenty dimensions of $f_4$.  
+
+
+\begin{table}[h!tbp]
+  \caption{Speedup by worker and dimension, taking one worker as the baseline.}
+  \label{tab:speedup-table}
+  \vspace{0.25cm}
+  \centering
+
+  \begin{tabular}{c|r|r|r|r|}
+  \hline
+  \multicolumn{1}{|l|}{Dimension} & \multicolumn{1}{c|}{2W} & \multicolumn{1}{c|}{4W} & \multicolumn{1}{c|}{8W} & \multicolumn{1}{c|}{16W}  \\ \hline
+  \multicolumn{5}{| c|}{5 Populations} \\ \hline
+  \multicolumn{1}{|c|}{10}        & \textbf{2.15} & 3.61 & 3.75 & 3.96     \\ \hline
+  \multicolumn{1}{|c|}{20}        & \textbf{2.09} & 3.53 & 3.83 & 3.95     \\ \hline
+  \multicolumn{5}{| c|}{10 Populations} \\ \hline
+  \multicolumn{1}{|c|}{10}        & 1.91           & 3.82 & 7.67 & 8.25     \\ \hline
+  \multicolumn{1}{|c|}{20}        & 1.97           & 3.97 & 7.90 & 8.90     \\ \hline
+  \multicolumn{5}{| c|}{20 Populations} \\ \hline
+  \multicolumn{1}{|c|}{10}        & 1.96           & \textbf{4.05} & \textbf{8.29} & \textbf{14.50}     \\ \hline
+  \multicolumn{1}{|c|}{20}        & 2.00           & \textbf{4.09} & \textbf{8.18} & \textbf{15.16}     \\ \hline
+  \end{tabular}
+\end{table}
+%
+As expected, within the same number of populations, there is a linear speedup
+when we add more workers. The speedup is marginal in those cases where there 
+are fewer populations than workers.  The reason for this is that at any given time, 
+there are at least two populations in the message queue, leaving some of the workers 
+waiting for populations to be available in the queue.
+
+\begin{table}[h!tbp]
+  \small
+  \caption{Speedup achieved with increasing the number of workers for
+    each dimension showing the p-value for the Wilcoxon test. 
+    Best and Worst are highlighted (bold and underlined)}
+  % Say what highlights mean - JJ
+  \label{tab:speedup:test}
+  \vspace{0.25cm}
+  \centering
+  \begin{tabular}{llllll}
+  Populations & Dimension  & \multicolumn{2}{l}{Increment}  & Speedup            & p-value\\
+  5  & 10 & 1w & 2w  & 2.15 & 1.51E-11 \\
+  & 10 & 2w & 4w  & 1.68 & 1.51E-11 \\
+  & 10 & 4w & 8w  & 1.04 & 0.004942 \\
+  & 10 & 8w & 16w & 1.05 & 0.072660 \\
+  & 20 & 1w & 2w  & \textbf{2.09} & 1.51E-11 \\
+  & 20 & 2w & 4w  & 1.69 & 1.51E-11 \\
+  & 20 & 4w & 8w  & 1.08 & 5.97E-07 \\
+  & 20 & 8w & 16w & {\ul 1.03} & 0.214482 \\
+  &    &    &     &      &          \\
+10 & 10 & 1w & 2w  & 1.91 & 1.51E-11 \\
+  & 10 & 2w & 4w  & 2.00 & 1.51E-11 \\
+  & 10 & 4w & 8w  & 2.01 & 1.51E-11 \\
+  & 10 & 8w & 16w & 1.08 & 1.39E-05 \\
+  & 20 & 1w & 2w  & 1.97 & 1.51E-11 \\
+  & 20 & 2w & 4w  & 2.01 & 1.51E-11 \\
+  & 20 & 4w & 8w  & 1.99 & 1.51E-11 \\
+  & 20 & 8w & 16w & 1.13 & 4.24E-09 \\
+  &    &    &     &      &          \\
+ 20 & 10 & 1w & 2w  & 1.96 & 1.51E-11 \\
+  & 10 & 2w & 4w  & 2.07 & 1.51E-11 \\
+  & 10 & 4w & 8w  & 2.05 & 1.51E-11 \\
+  & 10 & 8w & 16w & 1.75 & 1.51E-11 \\
+  & 20 & 1w & 2w  & 2.00 & 1.51E-11 \\
+  & 20 & 2w & 4w  & 2.04 & 1.51E-11 \\
+  & 20 & 4w & 8w  & 2.00 & 1.51E-11 \\
+  & 20 & 8w & 16w & 1.85 & 1.51E-11 \\
+ \end{tabular}
+  \end{table}
+
+
+Table~\ref{tab:speedup-table} shows the speedup obtained against the baseline of
+one worker. We achieved the maximum speedup when using four workers or more with
+twenty populations. On the other hand, the maximum speedup when we consider the
+cost it was with eight workers. The best speedups for each number of workers are
+shown in bold in the table.  
+
+Table~\ref{tab:speedup:test} shows the speedup obtained taking as the baseline
+the previous configuration, for example, when increasing from four to eight
+workers, and the p-value for the left-tailed Wilcoxon test. There was an
+increment in all cases. Again, the best effect is achieved when the number of
+populations is higher than the number of workers. Configurations following this
+basic rule doubled the speed or where near it. Using five populations, we
+obtained the best and worst speedup depending on the number of workers (shown in
+underline and bold, respectively).
 
 %
 \begin{figure}[h!tbp]
@@ -1547,11 +1657,6 @@ parameters for this. See Table \ref{tab:params:10} for the complete list.
 % But is a good intro to the results.
 % OK - JJ
 
-In this experiment, we wanted to test how the number of workers affected the
-time needed to reach a solution and the speedup that each configuration can
-produce. Adding more populations might add more overhead, so this might have a
-noticeable effect. 
-
 %In principle, the main issue is how to find the right number
 %of workers for a particular problem, but in general, we wanted to check the
 %communication overhead when the size of the problem increases and how the
@@ -1561,6 +1666,7 @@ noticeable effect.
 Figure \ref{fig:spworker:time} shows the execution time achieved by a certain number of
 workers, for every problem dimension, which, besides, changes the
 population size.
+
 Each box-plot indicates the time required for the execution of 30 function
 instances, in seconds. Each row has a different scale on the y-axis, to
 compensate for the dimension increments. It is important to notice that the
@@ -1573,10 +1679,7 @@ required for the execution of an instance,
 mainly when using the same parameters
 (number of populations and number of workers), that is, performance
 scales with the number of workers for a fixed problem and number of
-sub-populations used. The exception is the case when using five populations;
-the time does not decrease when progressing from four to eight workers.  
-That is because most of the time, workers are waiting for a population 
-to be available in the message queue.
+sub-populations used. 
 
 However, when we compare the two options, we find some subtle differences: When
 using one or two workers, using 5 populations takes less time in most cases. In
@@ -1608,119 +1711,15 @@ populations will need more time to do that.
   \centering
   \includegraphics[width=\textwidth]{evals_per_instance}
   \caption{Boxplot of the number of function evaluations required to reach the target, for 30 instances of function $f_4$, with different number of workers and populations sizes}
-  \label{fig:spworker:evalspersecond}
+  \label{fig:spworker:evals}
 \end{figure}
 
 %
 
-\begin{figure}[h!tbp]
-  \centering
-  \includegraphics[width=\textwidth]{eval_ratio}
-  \caption{Boxplot of the number of evaluations per second, for 30 instances of function $f_4$, with different number of workers and populations sizes }
-  \label{fig:spworker:evalspersecond}
-\end{figure}
 
 
-\subsubsection{Results Regarding Speedup}
-\label{sec:speedup}
-
-% Introduction saying why we are measuring this, how it's related to the objectives of the paper - JJ
-% This is done on the parent section, I renamed the sections to clarify this - M
-To measure the speedup obtained by the addition of workers, we will use the
-number of evaluations per second, instead of the time required to finish an
-instance of a problem. The reason for this is that in some cases reaching the
-desired target can require less work. We are going to measure the total increase
-of work done in a second by adding more workers. The baseline for the comparison
-will be the algorithm with a single worker, and the minimum amount of work available will be five
-populations. This number is selected because the controller needs at least
-three populations to migrate individuals between them, and we add two more to
-keep even a single worker busy. Figure \ref{fig:spworker:evalspersecond} 
-shows the number of function evaluation per second, achieved by a certain number of
-workers, for every problem dimension, for five and ten dimensions of $f_4$.  
 
 
-\begin{table}[h!tbp]
-  \caption{Speedup by worker and dimension, taking one worker as the baseline.}
-  \label{tab:speedup-table}
-  \vspace{0.25cm}
-  \centering
-
-  \begin{tabular}{c|r|r|r|r|}
-  \hline
-  \multicolumn{1}{|l|}{Dimension} & \multicolumn{1}{c|}{2W} & \multicolumn{1}{c|}{4W} & \multicolumn{1}{c|}{8W} & \multicolumn{1}{c|}{16W}  \\ \hline
-  \multicolumn{5}{| c|}{5 Populations} \\ \hline
-  \multicolumn{1}{|c|}{10}        & 2.15           & 3.61                    & 3.75                    & 3.96     \\ \hline
-  \multicolumn{1}{|c|}{20}        & 2.09           & 3.53                    & 3.83                    & 3.95     \\ \hline
-  \multicolumn{5}{| c|}{10 Populations} \\ \hline
-  \multicolumn{1}{|c|}{10}        & 1.91           & 3.82                    & 7.67                    & 8.25     \\ \hline
-  \multicolumn{1}{|c|}{20}        & 1.97           & 3.97                    & 7.90                    & 8.90     \\ \hline
-  \multicolumn{5}{| c|}{20 Populations} \\ \hline
-  \multicolumn{1}{|c|}{10}        & 1.96           & 4.05                    & 8.29                    & 14.50     \\ \hline
-  \multicolumn{1}{|c|}{20}        & 2.00           & 4.09                    & 8.18                    & 15.16     \\ \hline
-  \end{tabular}
-\end{table}
-%
-As expected, within the same number of populations, there is a linear speedup
-when we add more workers. The speedup is marginal in the case of five
-populations when increasing the number of workers above 4. The reason for this
-is that at any given time, there are at least two populations in the message
-queue, leaving four workers waiting. We can also notice that the spread in the
-amount of work is less when using up to four workers.
-
-\begin{table}[h!tbp]
-  \small
-  \caption{Speedup achieved with increasing the number of workers for
-    each dimension showing the p-value for the Wilcoxon test. Best and Worst are highlighted (bold and underlined) }
-  % Say what highlights mean - JJ
-  \label{tab:speedup:test}
-  \vspace{0.25cm}
-  \centering
-  \begin{tabular}{llllll}
-  Populations & Dimension  & \multicolumn{2}{l}{Increment}  & Speedup            & p-value\\
-  5  & 10 & 1w & 2w  & 2.15 & 1.51E-11 \\
-  & 10 & 2w & 4w  & 1.68 & 1.51E-11 \\
-  & 10 & 4w & 8w  & 1.04 & 0.004942 \\
-  & 10 & 8w & 16w & 1.05 & 0.072660 \\
-  & 20 & 1w & 2w  & 2.09 & 1.51E-11 \\
-  & 20 & 2w & 4w  & 1.69 & 1.51E-11 \\
-  & 20 & 4w & 8w  & 1.08 & 5.97E-07 \\
-  & 20 & 8w & 16w & 1.03 & 0.214482 \\
-  &    &    &     &      &          \\
-10 & 10 & 1w & 2w  & 1.91 & 1.51E-11 \\
-  & 10 & 2w & 4w  & 2.00 & 1.51E-11 \\
-  & 10 & 4w & 8w  & 2.01 & 1.51E-11 \\
-  & 10 & 8w & 16w & 1.08 & 1.39E-05 \\
-  & 20 & 1w & 2w  & 1.97 & 1.51E-11 \\
-  & 20 & 2w & 4w  & 2.01 & 1.51E-11 \\
-  & 20 & 4w & 8w  & 1.99 & 1.51E-11 \\
-  & 20 & 8w & 16w & 1.13 & 4.24E-09 \\
-  &    &    &     &      &          \\
- 20 & 10 & 1w & 2w  & 1.96 & 1.51E-11 \\
-  & 10 & 2w & 4w  & 2.07 & 1.51E-11 \\
-  & 10 & 4w & 8w  & 2.05 & 1.51E-11 \\
-  & 10 & 8w & 16w & 1.75 & 1.51E-11 \\
-  & 20 & 1w & 2w  & 2.00 & 1.51E-11 \\
-  & 20 & 2w & 4w  & 2.04 & 1.51E-11 \\
-  & 20 & 4w & 8w  & 2.00 & 1.51E-11 \\
-  & 20 & 8w & 16w & 1.85 & 1.51E-11 \\
- \end{tabular}
-  \end{table}
-%
-Table~\ref{tab:speedup-table} shows the speedup obtained against the baseline of
-one worker. When using eight workers, we achieved the maximum speed up for five
-and ten populations, but interestingly, it was in dimension 40 and dimension 2 
-(these values are shown in bold in the table). 
-
-Table~\ref{tab:speedup:test} shows the speedup obtained taking as the baseline
-the previous configuration, for example, when increasing from four to eight
-workers, and the p-value for the left-tailed Wilcoxon test. There was an
-increment in all cases, but again, for smaller dimensions, five populations with
-fewer workers is a better option (see values underlined in the table) with the
-best speedup, achieved for 40 dimensions, shown in bold. The worst speed was
-going from four to eight workers at higher dimensions (underlined in the table).
-For ten populations, adding more workers resulted in a linear speedup, but the
-best speedup is obtained when increasing from four to eight workers at 40
-dimensions (shown in bold).
 
 
 \subsection{Performance of Heterogeneous Populations in the BBOB Benchmark}
