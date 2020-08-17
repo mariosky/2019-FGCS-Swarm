@@ -1504,13 +1504,11 @@ parameters for this. See Table \ref{tab:params:10} for the complete list.
   \label{fig:spworker:evalspersecond}
 \end{figure}
 
-% Introduction saying why we are measuring this, how it's related to the objectives of the paper - JJ
-% This is done on the parent section, I renamed the sections to clarify this - M
+
 To measure the speedup obtained by the addition of workers, we will use the
 number of evaluations per second, instead of the time required to finish an
 instance of a problem. The reason for this is that in some cases reaching the
 desired target can require less work, because we are using a stochastic search. 
-%% JJ, can you please check if this is clear or if it needs more explanation?
 We are going to measure the total increase of work done in a second by adding more workers.
 The baseline for the comparison will be the algorithm with a single worker, 
 and the minimum amount of work available will be five populations. 
@@ -1615,7 +1613,7 @@ underline and bold, respectively).
 %
 \begin{table}[tbp]
   \caption{The median of the time required to finish an instance of the function $f_4$, 30 runs
-  with different number of workers and populations} % time or rate? - JJ
+  with different number of workers and populations}
   \label{tab:time}
   \vspace{0.25cm}
     \centering
@@ -1663,21 +1661,19 @@ underline and bold, respectively).
 %presented framework reacted to it.
 % Commenting because we did not checked the communication over head - M
 
-Figure \ref{fig:spworker:time} shows the execution time achieved by a certain number of
-workers, for every problem dimension, which, besides, changes the
-population size.
+Figure \ref{fig:spworker:time} shows the median (30 runs) of the execution time achieved by 2, 4 , 8, and 16  
+workers, to finish an instance of the function $f_4$, for dimensions 10 and 20, with 5, 10, and 20
+population sizes.
 
 Each box-plot indicates the time required for the execution of 30 function
-instances, in seconds. Each row has a different scale on the y-axis, to
+instances, in seconds. Each row has a different log scale on the y-axis, to
 compensate for the dimension increments. It is important to notice that the
 execution time can also be affected by the algorithm finding a solution with an
 error smaller than the threshold, before completing all the FEs. 
 
-In Table~\ref{tab:time} we can see that as expected, and in most cases, 
-increasing the number of workers reduces the time
-required for the execution of an instance, 
-mainly when using the same parameters
-(number of populations and number of workers), that is, performance
+In Table~\ref{tab:time} we can see that as expected, and in all cases, 
+increasing the number of workers reduces the time required for the execution of an instance, 
+mainly when using the same parameters (number of populations and number of workers), that is, performance
 scales with the number of workers for a fixed problem and number of
 sub-populations used. 
 
