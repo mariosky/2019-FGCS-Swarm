@@ -402,23 +402,22 @@ patterns that, together, conform cloud-native application development
 
 However, in the field of evolutionary algorithms, this has been a slow
 realization, from the origins where Salza and Ferrucci
-\cite{salza2016approach,salza2016develop} proposed an architecture
-that carried evolutionary algorithms to the cloud, and which were
-developed further in their next paper \cite{de2017parallel}. These
-papers started to introduce cloud native aspects such as the use of
-messaging queues and CoreOS as an operating system designed from the
-ground up for container utilization in the area of evolutionary
-algorithms. The way these containers are managed, however, is rather
-classical in nature from the point of view of distributed EC: a
-master-worker approach, communicated using RabbitMQ (a messaging
-queue), where replicated workers perform the tasks in parallel. They
-called their approach AMQPGA, inspired by the protocol, AMQP, used by
-RabbitMQ, the messaging system. This classical approach has been also
-followed by other authors by using other EA ``classical'' topologies
-in the cloud: Dziurzanski et al. \cite{dziurzanski2020scalable} adapts an island model to
-a container architecture, in a system that is functionally equivalent
-to classical models, but with the added advantage of being easy to
-deploy and run.
+\cite{salza2016approach,salza2016develop} proposed an architecture that carried
+evolutionary algorithms to the cloud, and which were developed further in their
+next paper \cite{de2017parallel}. These papers started to introduce cloud native
+aspects such as the use of messaging queues and CoreOS as an operating system
+designed from the ground up for container utilization in the area of
+evolutionary algorithms. The way these containers are managed, however, is
+rather classical in nature from the point of view of distributed EC: a
+master-worker approach, communicated using RabbitMQ (a messaging queue), where
+replicated workers perform the tasks in parallel. They called their approach
+AMQPGA, inspired by the protocol, AMQP, used by RabbitMQ, the messaging system.
+Other authors have also followed this classical approach by using other EA
+``classical'' topologies in the cloud: Dziurzanski et al.
+\cite{dziurzanski2020scalable} adapts an island model to a container
+architecture, in a system that is functionally equivalent to classical models,
+with the advantage of the auto-scaling of islands, and being easy to deploy and
+run.
 
 Later approaches use microservices \cite{khalloof2018generic}, or were
 systematized \cite{salza2019speed} achieving speed-up through the
@@ -1065,18 +1064,24 @@ and portable way. The term cloud-native describes these container-based
 environments because we can deploy them on an infrastructure that abstracts the
 underlying compute, storage, and networking primitives. This infrastructure does
 not need to be a cloud provider; it could be a developer's laptop, a single
-server, or a production environment. In this section, we give specific details 
-about how we deployed  EvoSwarm in a cloud-setting for running the experiments 
-within this paper.
+server, or a production environment. In this section, we give specific details
+about how we deployed EvoSwarm in a cloud-setting for running the experiments
+within this paper. Running the cloud-native application in the cloud has the
+benefit of a multi-instance deployment, where we can run containers in several
+instances executing at the same time, not only in a single machine.
 
 When we deploy a cloud-native application to a cloud provider, we have two
 options to choose:
 
 \begin{description}
   
-  \item[A Kubernetes cluster] provides auto-scaling and management of containerized
-  applications, but it needs additional configuration for provisioning. All major
-  cloud-providers have Kubernetes services.
+  \item[A Kubernetes cluster] provides auto-scaling and management of
+  containerized applications, but it needs additional configuration for
+  provisioning. All major cloud-providers have Kubernetes services. This option
+  was used by S. Zhao et al. \cite{zhao2019cloud} to run a multi-island
+  algorithm, and Dziurzanski et al. \cite{dziurzanski2020scalable} later refined
+  it.
+
 
   \item[A container orchestration service] these services are compatible with {\tt docker-compose}
     files for configuration and provide transparent provisioning. Examples of these
@@ -1128,6 +1133,14 @@ that reference the container images we have published in Docker hub
 \url{https://hub.docker.com/u/mariosky}, open {\texttt ports}, a {\texttt command} to be executed at
 startup, configuration for the AWS {\texttt logging} service, and finally {\texttt environment}
 variables used by code running inside containers.
+
+\begin{figure}[h!tbp]
+  \centering
+  \includegraphics[width=\textwidth]{aws_ec2}
+  \caption{AWS EC2 configuration for the deployment of EvoSwarm containers.
+   }
+  \label{fig:aws-configuration}
+\end{figure}
 
 Figure \ref{fig:aws-configuration} shows the basic EC2 configuration used for the deployment
 of experiments. We selected three types of EC2 instances according to our needs, the  
@@ -1225,13 +1238,7 @@ and their cost at the time of writing are shown in Table \ref{tab:ec2}.
 
 
 
-\begin{figure}[h!tbp]
-  \centering
-  \includegraphics[width=\textwidth]{aws_ec2}
-  \caption{AWS EC2 configuration for the deployment of EvoSwarm containers.
-   }
-  \label{fig:aws-configuration}
-\end{figure}
+
 %
 
 
@@ -1419,27 +1426,6 @@ in Python, the plots were produced with version 2.3.2.
 \label{sec:exp1}
 % Experiment 1
 
-As we mentioned before in Section~\ref{method}, reactive systems can scale by adding additional copies
-of serverless functions. In our case, we can start additional worker containers
-to have the same effect. Other authors, like Salza et al. \cite{salza2019speed},
-have used a similar architecture, which implies that worker nodes need to have at least a certain level
-of complexity, in terms of execution time,  to effectively scale on multiple
-nodes, tending to linear scalability. In that paper, Salza et al. tested scalability
-by simulating the work of nodes by using a sleep function and messages of different sizes.
-In a population-based algorithm like EvoSwarm, several parameters can increase or 
-decrease the workload of workers:
-
-\begin{itemize}
-    \item The number of populations: if there are more workers than populations, workers
-    must wait for work to arrive. If there are too many populations, they could be
-    standing in the queue for more time.
-    \item The size of populations and the number of generations:
-    These parameters naturally increase the execution time, because they mean more FEs.
-    \item The complexity of the algorithm: For instance, in our case,
-    the PSO implementation has a lower execution time than the GA.
-\end{itemize}
-
-
 \begin{table}[h!tbp]
   \small
   \caption{Parameters used in the experiments.
@@ -1462,6 +1448,29 @@ decrease the workload of workers:
   
   \end{tabular}
 \end{table}
+
+As we mentioned before in Section~\ref{method}, reactive systems can scale by adding additional copies
+of serverless functions. In our case, we can start additional worker containers
+to have the same effect. Other authors, like Salza et al. \cite{salza2019speed},
+have used a similar architecture, which implies that worker nodes need to have at least a certain level
+of complexity, in terms of execution time,  to effectively scale on multiple
+nodes, tending to linear scalability. In that paper, Salza et al. tested scalability
+by simulating the work of nodes by using a sleep function and messages of different sizes.
+In a population-based algorithm like EvoSwarm, several parameters can increase or 
+decrease the workload of workers:
+
+\begin{itemize}
+    \item The number of populations: if there are more workers than populations, workers
+    must wait for work to arrive. If there are too many populations, they could be
+    standing in the queue for more time.
+    \item The size of populations and the number of generations:
+    These parameters naturally increase the execution time, because they mean more FEs.
+    \item The complexity of the algorithm: For instance, in our case,
+    the PSO implementation has a lower execution time than the GA.
+\end{itemize}
+
+
+
 
 From this description it can be deduced that we give more importance in this
 paper to the number of populations, since they are the basic unit of work that
@@ -1505,20 +1514,15 @@ parameters for this. See Table \ref{tab:params:10} for the complete list.
   \label{fig:spworker:evalspersecond}
 \end{figure}
 
+When comparing the results in this section, we performed the Wilcoxon Signed-Rank test, with a
+significance level of 5\%. We indicate with an asterisk those results that are
+not significant.
 
 To measure the speedup obtained by the addition of workers, we will use the
 number of evaluations per second, instead of the time required to finish an
 instance of a problem. The reason for this is that in some cases reaching the
 desired target can require less work, because we are using a stochastic search. 
 We are going to measure the total increase of work done in a second by adding more workers.
-The baseline for the comparison will be the algorithm with a single worker, 
-and the minimum amount of work available will be five populations. 
-This number is selected because the controller needs at least
-three populations to migrate individuals between them, and we add two more to
-keep even a single worker busy all the time. Figure \ref{fig:spworker:evalspersecond} 
-shows the number of function evaluations per second, achieved by a certain number of
-workers, for ten and twenty dimensions of $f_4$.  
-
 
 \begin{table}[h!tbp]
   \caption{Speedup by worker and dimension, taking one worker as the baseline.}
@@ -1540,6 +1544,16 @@ workers, for ten and twenty dimensions of $f_4$.
   \multicolumn{1}{|c|}{20}        & 2.00           & \textbf{4.09} & \textbf{8.18} & \textbf{15.16}     \\ \hline
   \end{tabular}
 \end{table}
+
+The baseline for the comparison will be the algorithm with a single worker, 
+and the minimum amount of work available will be five populations. 
+This number is selected because the controller needs at least
+three populations to migrate individuals between them, and we add two more to
+keep even a single worker busy all the time. Figure \ref{fig:spworker:evalspersecond} 
+shows the number of function evaluations per second, achieved by a certain number of
+workers, for ten and twenty dimensions of $f_4$.  
+
+
 %
 As expected, within the same number of populations, there is a linear speedup
 when we add more workers. The speedup is marginal in those cases where there 
@@ -1598,12 +1612,15 @@ shown in bold in the table.
 
 Table~\ref{tab:speedup:test} shows the speedup obtained taking as the baseline
 the previous configuration, for example, when increasing from four to eight
-workers, and the p-value for the left-tailed Wilcoxon test. There was an
+workers, and the p-value for the Wilcoxon Signed-Rank test. There was an
 increment in all cases. Again, the best effect is achieved when the number of
 populations is higher than the number of workers. Configurations following this
 basic rule doubled the speed or where near it. Using five populations, we
 obtained the best and worst speedup depending on the number of workers (shown in
 underline and bold, respectively).
+
+
+
 
 \begin{figure}[h!tbp]
   \centering
@@ -1611,6 +1628,32 @@ underline and bold, respectively).
   \caption{Boxplot of the number of function evaluations required to reach the target, for 30 instances of function $f_4$, with different number of workers and populations sizes}
   \label{fig:evals_instance}
 \end{figure}
+
+
+
+
+%\subsubsection{Experimental Results} 
+%\label{results}
+
+% Added some explanation % here - JJ
+
+%We report the comparison regarding the execution time in Section~\ref{sec:exec-time}
+%and the summary of the speedup in section Section~ref{sec:speedup}.
+% Move this to parent - M
+
+\subsubsection{Results Regarding Execution Time}
+\label{sec:exec-time}
+
+In the previous section, we have shown that as we increase the number of
+populations and workers, we increase the ratio of the number of evaluations per
+second in the same proportion. However, it is vital to notice that we can also
+affect the number of evaluations we need to execute to find a solution. This
+reduction means that the multi-population based algorithm can perform better
+when we increase the number of populations, or in some cases, even workers, as the experiments
+show. If we increase the evaluations per second and, at the same time, decrease
+the number of evaluations needed, we can have a superlinear speedup of the
+algorithm, if we measure the time required to complete an instance.  
+
 
 
 \begin{table}[tbp]
@@ -1641,15 +1684,49 @@ underline and bold, respectively).
   \end{tabular}
   \end{table}
 
+
+First, we will see how the configuration we selected can reduce the number of
+evaluations needed in an experiment. Figure \ref{fig:evals_instance} shows the
+median (30 runs) of the number of evaluations needed to complete an instance of
+the function $f_4$. For every selection in the number of populations, we could
+expect to have about the same number of FEs needed regardless of the number of
+workers. However, we can see that for some configurations, i.e., 10D and ten
+populations, eight workers will need less FEs then one (p = 0.012). Also, for
+20D and twenty populations, there are differences between one and four workers
+(p = 0.08) and between four and sixteen (p = 0.01). These results indicate that
+there are benefits in the potential change of order in the message queue
+resulting from the parallelization of work.
+
+In Table \ref{tab:evals_instance} we can see some additional insights in more
+detail. When we increase the number of populations from five to ten, or twenty,
+the algorithm needs fewer FEs in both cases. The reduction is more pronounced
+when using ten populations, needing fewer FEs in all but a single case (shown in
+boldface). In some cases, marked with an asterisk, there is no statistical
+difference between the number of evaluations; this happens when using only one
+or two workers. The configurations that required less FEs have an underline in
+the table.
+
 %
 \begin{figure}[h!tbp]
   \centering
   \includegraphics[width=\textwidth]{secs_per_instance}
   \caption{Boxplot of the median time required for the execution of 30 
-  instances of function $f_4$, in seconds, different number of workers and populations sizes. The y-axis is shown in log scale.  }
+  instances of function $f_4$, in seconds, different number of workers and 
+  populations sizes. The y-axis is shown in log scale.}
   \label{fig:spworker:time}
 \end{figure}
 %
+
+The reduction in the number of FEs has an impact when we measure the speed up
+concerning the time needed to complete an experiment. In this case, we have
+measured the median of the seconds needed to complete an instance of the
+problem. Figure \ref{fig:spworker:time} shows in each box-plot the median (30
+runs) of the execution time achieved by 2, 4, 8, and 16 workers, to finish an
+instance of the function $f_4$, for dimensions 10 and 20, when using 5, 10, and
+20 population sizes. We present each dimension in a row having a log scale on
+the y-axis, to compensate for the dimension increments and scalability.  
+ 
+
 \begin{table}[tbp]
   \caption{The median of the time required to finish an instance of the function $f_4$, 30 runs
   with different number of workers and populations}
@@ -1677,102 +1754,13 @@ underline and bold, respectively).
   \end{tabular}
 \end{table}
 
-
-%\subsubsection{Experimental Results} 
-%\label{results}
-
-% Added some explanation % here - JJ
-
-%We report the comparison regarding the execution time in Section~\ref{sec:exec-time}
-%and the summary of the speedup in section Section~ref{sec:speedup}.
-% Move this to parent - M
-
-\subsubsection{Results Regarding Execution Time}
-\label{sec:exec-time}
-
-In the previous section, we have shown that as we increase the number of
-populations and workers, we increase the ratio of the number of evaluations per
-second in the same proportion. However, it is vital to notice that we can also
-affect the number of evaluations we need to execute to find a solution. This
-reduction means that the multi-population based algorithm can perform better
-when we increase the number of populations, or in some cases, even workers, as the experiments
-show. If we increase the evaluations per second and, at the same time, decrease
-the number of evaluations needed, we can have a superlinear speedup of the
-algorithm, if we measure the time required to complete an instance.  
-
-
-First, we will see how the configuration we selected can reduce the number of
-evaluations needed in an experiment. Figure \ref{fig:evals_instance} shows the
-median (30 runs) of the number of evaluations needed to complete an instance of
-the function $f_4$. For every selection in the number of populations, we could
-expect to have about the same number of FEs needed regardless of the number of
-workers. However, we can see that for some configurations, i.e., 10D and ten
-populations, eight workers will need less FEs then one (p = 0.012). Also, for
-20D and twenty populations, there are differences between one and four workers
-(p = 0.08) and between four and sixteen (p = 0.01). These results indicate that
-there are benefits in the potential change of order in the message queue
-resulting from the parallelization of work.
-
-In Table \ref{tab:evals_instance} we can see some additional insights in more
-detail. When we increase the number of populations from five to ten, or twenty,
-the algorithm needs fewer FEs in both cases. The reduction is more pronounced
-when using ten populations, needing fewer FEs in all but a single case (shown in
-boldface). In some cases, marked with an asterisk, there is no statistical
-difference between the number of evaluations; this happens when using only one
-or two workers. The configurations that required less FEs have an underline in
-the table.
-
-
-The reduction in the number of FEs has an impact when we measure the speed up
-concerning the time needed to complete an experiment. In this case, we have
-measured the median of the seconds needed to complete an instance of the
-problem. Figure \ref{fig:spworker:time} shows in each box-plot the median (30
-runs) of the execution time achieved by 2, 4, 8, and 16 workers, to finish an
-instance of the function $f_4$, for dimensions 10 and 20, when using 5, 10, and
-20 population sizes. We present each dimension in a row having a log scale on
-the y-axis, to compensate for the dimension increments and scalability.  
- 
-
-In Table~\ref{tab:time} we can see that as expected, and in all cases, 
-increasing the number of workers reduces the time required for the execution of an instance, 
-mainly when using the same parameters (number of populations and number of workers), that is, performance
-scales with the number of workers for a fixed problem and number of
-sub-populations used. 
-
-
-
-
-% However, when we compare the two options, we find some subtle differences: When
-% using one or two workers, using 5 populations takes less time in most cases. In
-% Table~\ref{tab:time} results with p-value of the two-tailed Wilcoxon
-% signed-ranks test was grater than the level of significance of 0.05 (i.e.,
-% accepting the null hypothesis of inequality) are marked in boldface. A reason
-% for this could be that when having more populations, the migration of
-% individuals takes more time from the bdyeginning to reach to all of them. For
-% instance, when a single worker has 10 populations, only after processing every
-% one of them, it will start receiving mixed populations. Although, in all cases,
-% and even with a single worker, populations are heterogeneous, individuals
-% resulting from the mixing of populations take more time to propagate. With four
-% workers, almost the same results can be achieved regardless of our selection
-% between five or ten populations. Also, there is not much difference between 4
-% and 8 workers, when using five populations, which might indicate that some
-% workers are idling while populations are being processed by other workers. In
-% general, we can observe that keeping a ratio between the number of workers and
-% populations a bit over 1:1 exploits better the computing resources available.
-% This also decreases the relation between the overhead needed to migrate and
-% process incoming and outgoing population and the total computing time: more
-% populations will need more time to do that.
-
-%
-%
-
-
-
-%
-
-
-
-
+In Table~\ref{tab:time} we can see that in some cases we have a supralinear
+speedup, we highlighted these in boldface and indicated the speedup value in
+parenthesis. The best overall times are underlined. As expected, increasing the
+number of workers for a fixed dimension and populations reduced the time
+required to find a solution, as long as the population number was higher than
+the number of workers. The values that had no statistical difference (in the
+Wilcoxon test) when increasing the number of workers have an asterisk.
 
 
 
@@ -1944,48 +1932,16 @@ hybrid method using both algorithms
 achieved better results and, in most cases, needed fewer evaluations.
 
 
-% In this paper, we have presented the EvoSwarm framework that implements
-% an event-based, cloud-native architecture suitable for hosting 
-% multi-population optimization algorithms. The framework is
-% based in industry-standard development tools such as Docker and Docker
-% Compose, making it easy to develop and deploy multi-algorithm distributed
-% experiments.
-
-% The set up of this kind of algorithms will have a big influence on the
-% results, since diversity is important for this kind of algorithms and
-% its creation and destruction play a big part of the algorithm's
-% performance. One of the main levers to control it in EvoSwarm is via
-% the number of workers that will be allocated from the beginning, which
-% is why we have performed an experiment mainly intended as a proof of
-% concept, but also devoted to show how two parameters in the framework,
-% number of workers and number of populations used to initially seed the
-% system, interact with each other. The conclusion of this experiment is
-% that there is an interesting interplay, with the most benefit being
-% obtained with a number of populations equal to the number of workers
-% or slightly inferior or superior, which brings algorithmic benefit
-% (experiment taking less time because it needs less evaluations) and
-% also performance benefits (experiment taking less time because
-% evaluations are being split between different workers.
-
-% % this is not a conclusion. The conclusion is an answer to the
-% % research question. This works, and works precisely for the reasons
-% % we say it works. - JJ
-% % Again, revise search questions and explain answers - JJ
-% As a conclusion, EvoSwarm is a framework designed and tested according
-% to industry standards which is able to bring many benefits to the
-% bioinspired algorithm community, by showing the possibility of
-% creating new, high performance, mixed algorithms, which can also be
-% easily deployed to the cloud, or locally to systems that simply need
-% to have Docker and {\tt docker-compose} installed.
-
-This work also opens new possibilities. From the design point of view, it
-would be interesting to try and use automatic scaling, instead of
-setting the number of workers by hand. This would need a certain
-amount of redesign, the most important of which would be using
-container orchestration systems such as Kubernetes or Docker
-Swarm. Instead of setting a fixed number of workers, only the maximum
-amount would need to be established, which could be done directly or
-by setting an evaluation budget.
+This work also opens new possibilities. From the design point of view, it would
+be interesting to use automatic scaling, instead of setting the number of
+workers by hand. This would need a certain amount of configuration, as we would
+be using container orchestration with auto-scaling capabilities such as
+Kubernetes or Docker Swarm. The current orchestration (Amazon ECS) also has
+auto-scaling capabilities, but additional configuration is needed; also, we need
+to establish the auto-scaling of both containers and Amazons EC2 instances.
+Instead of setting a fixed number of workers, only the maximum amount would need
+to be established, which could be done directly or by setting an evaluation
+budget.
 
 From the algorithmic point of view, there are many possible lines of
 research. Mixing population-based algorithms with other algorithms
@@ -2002,7 +1958,7 @@ lines of work.
 This paper has been supported in part by projects TecNM-5654.19-P and DeepBio
 (TIN2017-85727-C4-2-P).
 
-\section*{References}
+%\section*{References}
 
 \bibliographystyle{elsarticle-num}
 \bibliography{multipopulation}
