@@ -1700,8 +1700,8 @@ populations, eight workers will need less FEs then one (p = 0.012). Also, for
 there are benefits in the potential change of order in the message queue
 resulting from the parallelization of work.
 
-In Table \ref{tab:evals_instance} we can see some additional insights in more
-detail. When we increase the number of populations from five to ten, or twenty,
+In Table \ref{tab:evals_instance} we try to acquire more insights on
+how this works. When we increase the number of populations from five to ten, or twenty,
 the algorithm needs fewer FEs in both cases. The reduction is more pronounced
 when using ten populations, needing fewer FEs in all but a single case (shown in
 boldface). In some cases, marked with an asterisk, there is no statistical
@@ -1936,7 +1936,8 @@ their results since diversity is essential for their performance. The
 hybrid method using both algorithms 
 achieved better results and, in most cases, needed fewer evaluations. % Clarify if they actually achieve that way superlinear improvements - JJ
 
-% Probably a final conclusion should be added here - JJ<
+% Probably a final conclusion should be added here, including BBOB
+% benchmark and the overall performance - JJ
 
 This work also opens new possibilities. From the design point of view, it would
 be interesting to use automatic scaling, instead of setting the number of
