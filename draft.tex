@@ -1654,13 +1654,14 @@ reduction means that the multi-population based algorithm can perform better
 when we increase the number of populations, or in some cases, even workers, as the experiments
 show. If we increase the evaluations per second and, at the same time, decrease
 the number of evaluations needed, we can have a superlinear speedup of the
-algorithm, if we measure the time required to complete an instance.  
+algorithm, if we measure the time required to complete an instance.
 
 
 
 \begin{table}[tbp]
   \caption{Median of the number of evaluations required to finish an instance of the function $f_4$ in 30 runs
-  with different number of workers and populations}
+    with different number of workers and populations}
+  % But this is total evaluation for all workers, right? - JJ
   \label{tab:evals_instance}
   \vspace{0.25cm}
   \centering
