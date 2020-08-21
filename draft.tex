@@ -1515,8 +1515,8 @@ parameters for this. See Table \ref{tab:params:10} for the complete list.
 
 When comparing the results in this section, we performed the Wilcoxon Signed-Rank test, with a
 significance level of 5\%. We indicate with an asterisk those results that are
-not significant. % Where? - JJ
-
+not significant throughout the tables of this section.  % Where? - JJ
+% Answered - Mario
 To measure the speedup obtained by the addition of workers, we will use the
 number of evaluations per second, instead of the time required to finish an
 instance of a problem. The reason for this is that in some cases reaching the
@@ -1525,9 +1525,11 @@ We are going to measure the total increase of work done in a second by adding mo
 
 \begin{table}[h!tbp]
   \caption{Speedup by worker and dimension, taking one worker as the
-    baseline.}
+    baseline. Speedup is obtained by dividing the evaluation ratio of the baseline by the 
+    ratio of the increased number of workers.}
 % Clarify here what you are measuring. Number of evaluations for
 % whatever divided by whatever - JJ
+% Done - Mario
   \label{tab:speedup-table}
   \vspace{0.25cm}
   \centering
