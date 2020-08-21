@@ -6,6 +6,7 @@
 \usepackage{hyperref}
 \usepackage{listings}
 \usepackage{xcolor}
+\usepackage{multirow}
 \usepackage[normalem]{ulem}
 \useunder{\uline}{\ul}{}
 
@@ -1593,6 +1594,8 @@ twenty populations. On the other hand, the maximum speedup when we consider the
 cost it was with eight workers. The best speedups for each number of workers are
 shown in bold in the table.  
 
+
+
 Table~\ref{tab:speedup:test} shows the speedup obtained taking as the baseline
 the previous configuration, for example, when increasing from four to eight
 workers, and the p-value for the left-tailed Wilcoxon test. There was an
@@ -1601,6 +1604,42 @@ populations is higher than the number of workers. Configurations following this
 basic rule doubled the speed or where near it. Using five populations, we
 obtained the best and worst speedup depending on the number of workers (shown in
 underline and bold, respectively).
+
+\begin{figure}[h!tbp]
+  \centering
+  \includegraphics[width=\textwidth]{evals_per_instance}
+  \caption{Boxplot of the number of function evaluations required to reach the target, for 30 instances of function $f_4$, with different number of workers and populations sizes}
+  \label{fig:evals_instance}
+\end{figure}
+
+
+\begin{table}[tbp]
+  \caption{The median of the number of evaluations required to finish an instance of the function $f_4$, 30 runs
+  with different number of workers and populations}
+  \label{tab:evals_instance}
+  \vspace{0.25cm}
+  \centering
+
+  \begin{tabular}{|c|c|r|r|r|}
+  \hline
+  \multicolumn{1}{|c}{} &   \multicolumn{1}{c}{}  & \multicolumn{3}{|c|}{Number of Populations} \\
+  \hline
+  Dimension           & Workers & \multicolumn{1}{c|}{5}       & \multicolumn{1}{c|}{10}      & \multicolumn{1}{c|}{20}          \\
+  \hline
+  \multirow{5}{*}{10} & 1w      & 159,625      & \textbf{142,368*}      & 151,680*     \\
+                      & 2w      & 160,258      & \textbf{137,385}      & 150,445*     \\
+                      & 4w      & 161,144      & \textbf{129,031}      & 144,354     \\
+                      & 8w      & 159,893      & \textbf{{\ul 127,987}}      & 141,896     \\
+                      & 16w     & 167,678      & \textbf{137,446}      & 138,852     \\
+                      \hline
+  \multirow{5}{*}{20} & 1w      & 462,069      & \textbf{396,841}      & 421,249*     \\
+                      & 2w      & 437,952      & \textbf{395,814}      & 407,984     \\
+                      & 4w      & 437,563      & \textbf{396,587}      & 408,461     \\
+                      & 8w      & 440,130      & \textbf{370,264}      & 372,265     \\
+                      & 16w     & 443,108      &         386,272       & \textbf{{\ul 355,999}}\\
+                      \hline  
+  \end{tabular}
+  \end{table}
 
 %
 \begin{figure}[h!tbp]
@@ -1620,20 +1659,20 @@ underline and bold, respectively).
     \begin{tabular}{ccrrr}
     \hline
               &         & 5 Populations    & 10 Populations & 20 Populations \\
-     Dimension& Workers & Median of rate & Median of rate & Median of rate  \\
+     Dimension& Workers & Median of Time   & Median of Time & Median of Time  \\
     \hline
           10  & 1w      & 22.24  & 20.48           & 24.55  \\
-              & 2w      & 10.31  & 10.00           & 12.79 \\
-              & 4w      &  6.23  & 4.75            &  5.70 \\
-              & 8w      &  5.86  &  2.33           & 2.74 \\
-              & 16w     &  5.96  &  2.33           & \textbf{1.59}\\
+              & 2w      & 10.31  & \textbf{10.00} (2.05)    & 12.79 \\
+              & 4w      &  6.23  & \textbf{4.75} (2.10)     &  5.70 \\
+              & 8w      &  5.86  &  \textbf{2.33} (2.03)           & 2.74 \\
+              & 16w     &  5.96*  &  2.33*           & {\ul 1.59} \\
     
     \hline
-          20  & 1w   & 18.36   & 65.18  & 80.31 \\
-              & 2w   & 34.18   & 33.46  & 38.87 \\
-              & 4w   & 19.55   & 16.58  & 18.69 \\
-              & 8w   & 18.38   & 7.77   & 8.66 \\
-              & 16w  & 18.36   & 7.27   & \textbf{4.57} \\
+          20  & 1w   & 73.87   & 65.18                 & 80.31 \\
+              & 2w   & 34.18   & 33.46                 & 38.87 \\
+              & 4w   & 19.55   & \textbf{16.58} (2.02) & 18.69 \\
+              & 8w   & 18.38   & \textbf{7.77} (2.15)  & 8.66 \\
+              & 16w  & 18.36*  & 7.27                  & {\ul 4.57} \\
     \hline
   \end{tabular}
 \end{table}
@@ -1651,25 +1690,48 @@ underline and bold, respectively).
 \subsubsection{Results Regarding Execution Time}
 \label{sec:exec-time}
 
-% I think this is now a bit redundant or we need to move it to the parent section - M
-% But is a good intro to the results.
-% OK - JJ
+In the previous section, we have shown that as we increase the number of
+populations and workers, we increase the ratio of the number of evaluations per
+second in the same proportion. However, it is vital to notice that we can also
+affect the number of evaluations we need to execute to find a solution. This
+reduction means that the multi-population based algorithm can perform better
+when we increase the number of populations, or in some cases, even workers, as the experiments
+show. If we increase the evaluations per second and, at the same time, decrease
+the number of evaluations needed, we can have a superlinear speedup of the
+algorithm, if we measure the time required to complete an instance.  
 
-%In principle, the main issue is how to find the right number
-%of workers for a particular problem, but in general, we wanted to check the
-%communication overhead when the size of the problem increases and how the
-%presented framework reacted to it.
-% Commenting because we did not checked the communication over head - M
 
-Figure \ref{fig:spworker:time} shows the median (30 runs) of the execution time achieved by 2, 4 , 8, and 16  
-workers, to finish an instance of the function $f_4$, for dimensions 10 and 20, with 5, 10, and 20
-population sizes.
+First, we will see how the configuration we selected can reduce the number of
+evaluations needed in an experiment. Figure \ref{fig:evals_instance} shows the
+median (30 runs) of the number of evaluations needed to complete an instance of
+the function $f_4$. For every selection in the number of populations, we could
+expect to have about the same number of FEs needed regardless of the number of
+workers. However, we can see that for some configurations, i.e., 10D and ten
+populations, eight workers will need less FEs then one (p = 0.012). Also, for
+20D and twenty populations, there are differences between one and four workers
+(p = 0.08) and between four and sixteen (p = 0.01). These results indicate that
+there are benefits in the potential change of order in the message queue
+resulting from the parallelization of work.
 
-Each box-plot indicates the time required for the execution of 30 function
-instances, in seconds. Each row has a different log scale on the y-axis, to
-compensate for the dimension increments. It is important to notice that the
-execution time can also be affected by the algorithm finding a solution with an
-error smaller than the threshold, before completing all the FEs. 
+In Table \ref{tab:evals_instance} we can see some additional insights in more
+detail. When we increase the number of populations from five to ten, or twenty,
+the algorithm needs fewer FEs in both cases. The reduction is more pronounced
+when using ten populations, needing fewer FEs in all but a single case (shown in
+boldface). In some cases, marked with an asterisk, there is no statistical
+difference between the number of evaluations; this happens when using only one
+or two workers. The configurations that required less FEs have an underline in
+the table.
+
+
+The reduction in the number of FEs has an impact when we measure the speed up
+concerning the time needed to complete an experiment. In this case, we have
+measured the median of the seconds needed to complete an instance of the
+problem. Figure \ref{fig:spworker:time} shows in each box-plot the median (30
+runs) of the execution time achieved by 2, 4, 8, and 16 workers, to finish an
+instance of the function $f_4$, for dimensions 10 and 20, when using 5, 10, and
+20 population sizes. We present each dimension in a row having a log scale on
+the y-axis, to compensate for the dimension increments and scalability.  
+ 
 
 In Table~\ref{tab:time} we can see that as expected, and in all cases, 
 increasing the number of workers reduces the time required for the execution of an instance, 
@@ -1677,13 +1739,16 @@ mainly when using the same parameters (number of populations and number of worke
 scales with the number of workers for a fixed problem and number of
 sub-populations used. 
 
+
+
+
 However, when we compare the two options, we find some subtle differences: When
 using one or two workers, using 5 populations takes less time in most cases. In
 Table~\ref{tab:time} results with p-value of the two-tailed Wilcoxon
 signed-ranks test was grater than the level of significance of 0.05 (i.e.,
 accepting the null hypothesis of inequality) are marked in boldface. A reason
 for this could be that when having more populations, the migration of
-individuals takes more time from the beginning to reach to all of them. For
+individuals takes more time from the bdyeginning to reach to all of them. For
 instance, when a single worker has 10 populations, only after processing every
 one of them, it will start receiving mixed populations. Although, in all cases,
 and even with a single worker, populations are heterogeneous, individuals
@@ -1702,13 +1767,6 @@ populations will need more time to do that.
 %
 
 
-
-\begin{figure}[h!tbp]
-  \centering
-  \includegraphics[width=\textwidth]{evals_per_instance}
-  \caption{Boxplot of the number of function evaluations required to reach the target, for 30 instances of function $f_4$, with different number of workers and populations sizes}
-  \label{fig:spworker:evals}
-\end{figure}
 
 %
 
