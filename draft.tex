@@ -1928,7 +1928,7 @@ populations slightly above the number of workers, which brings performance gains
 in terms of execution speed; these experiments take less time since
 evaluations are performed, as part of its corresponding algorithm, simultaneously by different workers.
 Also, we found that for lower dimensions, there is an advantage in using fewer
-populations. % Specify that.
+populations. 
 
 A second experiment centered on evaluating the algorithmic benefits (experiments
 taking less time because they need fewer evaluations) of distributed
@@ -1945,7 +1945,15 @@ achieved better results and, in most cases, needed fewer evaluations.
 % Clarify if they actually achieve that way superlinear improvements - JJ
 % They should, in this experiment we only tested the #FEs, but they imply 
 % a superlinear improvements as we established in the previous section - Mario 
- 
+
+We conclude that superlinear improvements are achievable by selecting an
+appropriate configuration consisting of the number of populations, worker
+containers, and algorithm selection. Further research should focus on learning
+more about how these parameters interact with each other. The BBOB benchmark
+results show that the selection and mixing of algorithms can lower the number of
+FEs needed to find a solution or find solutions that single algorithms could not
+find.
+
 
 % Probably a final conclusion should be added here, including BBOB
 % benchmark and the overall performance - JJ
