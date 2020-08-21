@@ -1470,7 +1470,8 @@ decrease the workload of workers:
 
 
 From this description it can be deduced that we give more importance in this
-paper to the number of populations, since they are the basic unit of work that
+paper to the number of populations, since they are the basic unit of
+work, the message, that
 can be executed in parallel. Together with the size of each population and the
 number of generations, this parameter determines the maximum number of function
 evaluations for a single iteration. We do not have control over each algorithm's
@@ -1478,7 +1479,7 @@ complexity, but future analyses could focus on balancing populations and number
 of worker nodes according to this.
 
 In this experiment, we evaluate how the number of populations and the number of
-workers in the system are related to the scalability of the system. 
+workers in the system are related to the scalability of the system.
 In the next section, we describe the experimental setup, and a discussion of the results
 follows, with respect to the speedup in terms of evaluations per second (Section~\ref{sec:speedup}), and 
 execution time (Section~\ref{sec:exec-time}).
@@ -1488,7 +1489,8 @@ execution time (Section~\ref{sec:exec-time}).
 
 To answer the first research question, we need to evaluate the effect of the
 number of populations and the number of workers on the scalability of the
-system, we propose an experiment in which we selected $f_4$ (Skew
+system, and in order to achieve this we propose an experiment for
+which we have selected $f_4$ (Skew
 Rastrigin-Bueche separable) from the BBOB testbed, over 10 and 20 dimensions. This function has been used
 because it is computationally demanding, and in higher dimensions has been
 difficult for PSO \cite{el2009black} and GAs \cite{nicolau2009application} to
@@ -1507,7 +1509,7 @@ parameters for this. See Table \ref{tab:params:10} for the complete list.
   \centering
   \includegraphics[width=\textwidth]{eval_ratio}
   \caption{Boxplot of the number of evaluations per second, for 30 instances of function $f_4$,
-          with different number of workers and number of populations. The 7 axis is in log scale.}
+          with different number of workers and number of populations. The $y$ axis is in log scale.}
   \label{fig:spworker:evalspersecond}
 \end{figure}
 
