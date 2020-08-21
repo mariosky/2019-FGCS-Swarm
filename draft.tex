@@ -1154,8 +1154,7 @@ four vCPUs and 4096 CPU shares, with this configuration each worker gets a pair 
 We scaled the number if instances as needed, using one instance for every two {\texttt worker} containers. 
 
 Because all these instances run in a private subnet, we also
-run a Bastion instance in a public subnet, from where we send the
-% what is a Bastion instance? - JJ
+run a Bastion instance, that is, a specially protected network node, in a public subnet, from where we send the
 commands to execute the experiments
 and later collected the results. We connected to this instance through a {\texttt ssh} session from 
 our personal workstation. This is a {\texttt R5AD Large} instance, selected with 75GiB of storage, needed for
@@ -1256,16 +1255,12 @@ infrastructure.
 \label{setup} % To be renamed 
 
 
-In the prior section, we describe an option for an EvoSwarm deployment that can be used by 
-the public to create reproductive research in the cloud, in this section we are
+In the previous section, we have described an option for an EvoSwarm deployment that can be used by 
+the public to create reproductive research in the cloud; in this section we are
 using the same framework to learn if the proposed solution can efficiently
 improve the scalability and performance of population-based optimization
-algorithms. % If you want to prove it *improves*, you need to provide a baseline. 
-            %What will be your baseline? You need to specify anyway 
-            %in which way it really improves - JJ
-            % The baseline is a single population GA or PSO? - M
-% For instance. But I was actually looking for another word that does not imply a comparison - JJ
-Hence, in the following sections, we verify the following questions:
+algorithms. 
+Hence, in the following sections, we provide answers to the following questions:
 
 \begin{itemize}
 \item Can we improve the execution time of the algorithm by adding populations
@@ -1282,7 +1277,8 @@ search by needing fewer function evaluations than a homogeneous setting?
 \end{itemize}
 
 Section~\ref{sec:exp1} is devoted to answering the first question, and Section~\ref{sec:exp2} to the second.
-Next, we describe the general experimental setup to both experiments.
+Next, we describe the general experimental setup designed to answer
+both questions.
 
 \subsection{General Experimental Setup} 
 \label{sec:general-setup} 
@@ -1355,8 +1351,8 @@ with five dimensions. After about fifteen experiments, the most challenging
 targets were achieved for this particular function. We tested again with
 functions one to three, and after obtaining favorable results, the PSO and GA
 algorithm parameters were set. In the GA, we randomly set the mutation and
-crossover probabilities to have more heterogeneous workers; 
-in these parameters, the range of values is specified. We did not change these parameters during the 
+crossover probabilities to have more heterogeneous workers;
+for these parameters, the range of values is specified. We did not change these parameters during the 
 experiments, and only the number of populations, population size and number of generations were
 provided as parameters. This strategy has been applied successfully for increasing 
 the performance of multi-population algorithms without requiring the setting 
