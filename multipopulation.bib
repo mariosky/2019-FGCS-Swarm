@@ -56,7 +56,7 @@
 @misc{boner2014reactive,
   title={The reactive manifesto},
   author={Bon{\'e}r, Jonas and Farley, Dave and Kuhn, Roland and Thompson, Martin},
-  yrk={http://www.reactivemanifesto.org/},
+  url={http://www.reactivemanifesto.org/},
   year={2014}
 }
 @inproceedings{picek2013recombination,
@@ -232,15 +232,15 @@ year = {2019}
   organization={ACM}
 }
 
-@article{Roberts2016,
+@misc{Roberts2016,
 abstract = {Serverless architectures refer to applications that significantly depend on third-party services (knows as Backend as a Service or "BaaS") or on custom code that's run in ephemeral containers (Function as a Service or "FaaS"), the best known vendor host of which currently is AWS Lambda. By using these ideas, and by moving much behavior to the front end, such architectures remove the need for the traditional 'always on' server system sitting behind an application. Depending on the circumstances, such systems can significantly reduce operational cost and complexity at a cost of vendor dependencies and (at the moment) immaturity of supporting services.},
 author = {Roberts, Mike},
 booktitle = {Martin Fowler's Blog},
+url={https://martinfowler.com/articles/serverless.html},
 mendeley-groups = {Tesis/proyecto},
 title = {{Serverless Architectures}},
-year = {2016},
-pages = {1--36},
-publisher = {Springer US}
+year = {2018},
+pages = {36pp},
 }
 @article{Rivadera2008,
 abstract = {Resumen El presente art{\'{i}}culo pretende introducir al lector en el paradigma de la programaci{\'{o}}n funcional, utilizando el lenguaje Haskell, un lenguaje funcional puro, de prop{\'{o}}sito general, que incluye muchas de las {\'{u}}ltimas innovaciones en el desarrollo de los lenguajes de programaci{\'{o}}n funcionales. Palabras Claves: programaci{\'{o}}n funcional, paradigma funcional, abstracci{\'{o}}n de datos, funciones de orden superior, evaluaci{\'{o}}n perezosa, transparencia referencial, tipos de datos 1. Introducci{\'{o}}n Hace ya bastante tiempo, cuando cursaba mis {\'{u}}ltimos a{\~{n}}os en la Universidad, form{\'{e}} parte de un proyecto de investigaci{\'{o}}n en arquitecturas de computadoras. En este proyecto analiz{\'{a}}bamos y clasific{\'{a}}bamos todas los posibles tipos de arquitecturas existentes, desde las comunes y ubicuas PC a las lejanas (para nosotros) supercomputadoras paralelas. En ese proyecto, a la par de descubrir que no todas las computadoras eran PC, y que no todas ten{\'{i}}an un solo procesador y del mismo tipo, me di cuenta asimismo que los lenguajes de programaci{\'{o}}n que utilizaban tampoco eran similares. Claro que ya hab{\'{i}}a aprendido el omnipresente Pascal, algo de C, C++, y la nueva ola de los lenguajes orientados y basados en objetos, pero lo que me llam{\'{o}} la atenci{\'{o}}n, no fueron las variaciones sobre estos {\'{u}}ltimos lenguajes, Rivadera: La Programaci{\'{o}}n Funcional 64 sino otros radicalmente distintos, dise{\~{n}}ados muchas veces en forma especial para m{\'{a}}quinas espec{\'{i}}ficas. Para comenzar, estos lenguajes no ordenaban sus computaciones (instrucciones) en forma secuencial, sino que el orden estaba dado por, en el caso particular de los funcionales, la aplicaci{\'{o}}n de funciones a otras funciones, resultando por tanto, innecesaria la existencia de variables. Finalmente, este proyecto me llev{\'{o}} a investigar sobre los diferentes paradigmas de programaci{\'{o}}n. Un paradigma de programaci{\'{o}}n es una forma espec{\'{i}}fica de realizar las computaciones. Un lenguaje de programaci{\'{o}}n siempre sigue un paradigma o una mezcla de varios; por ejemplo el paradigma procedimental es seguido por la mayor{\'{i}}a de los lenguajes actuales, tales como JAVA, Pascal y C++. Tambi{\'{e}}n podemos encontrar lenguajes con la influencia de dos paradigmas, por ejemplo el antes mencionado C++, que tiene su origen procedimental y al cual se le ha agregado el paradigma orientado a objetos.},
@@ -857,12 +857,19 @@ abstract = "One of the main reasons for using parallel evolutionary algorithms (
 }
 
 @article{malawski2017serverless,
-  title={Serverless execution of scientific workflows: Experiments with HyperFlow, AWS Lambda and Google Cloud Functions},
-  author={Malawski, Maciej and Gajek, Adam and Zima, Adam and Balis, Bartosz and Figiela, Kamil},
-  journal={Future Generation Computer Systems},
-  year={2017},
-  publisher={Elsevier}
+title = "Serverless execution of scientific workflows: Experiments with HyperFlow, AWS Lambda and Google Cloud Functions",
+journal = "Future Generation Computer Systems",
+volume = "110",
+pages = "502 - 514",
+year = "2020",
+issn = "0167-739X",
+doi = "https://doi.org/10.1016/j.future.2017.10.029",
+url = "http://www.sciencedirect.com/science/article/pii/S0167739X1730047X",
+author = "Maciej Malawski and Adam Gajek and Adam Zima and Bartosz Balis and Kamil Figiela",
+keywords = "Scientific workflows, Cloud functions, Serverless architectures, FaaS",
+abstract = "Scientific workflows consisting of a high number of interdependent tasks represent an important class of complex scientific applications. Recently, a new type of serverless infrastructures has emerged, represented by such services as Google Cloud Functions and AWS Lambda, also referred to as the Function-as-a-Service model. In this paper we take a look at such serverless infrastructures, which are designed mainly for processing background tasks of Web and Internet of Things applications, or event-driven stream processing. We evaluate their applicability to more compute- and data-intensive scientific workflows and discuss possible ways to repurpose serverless architectures for execution of scientific workflows. We have developed prototype workflow executor functions using AWS Lambda and Google Cloud Functions, coupled with the HyperFlow workflow engine. These functions can run workflow tasks in AWS and Google infrastructures, and feature such capabilities as data staging to/from S3 or Google Cloud Storage and execution of custom application binaries. We have successfully deployed and executed the Montage astronomy workflow, often used as a benchmark, and we report on initial results of its performance evaluation. Our findings indicate that the simple mode of operation makes this approach easy to use, although there are costs involved in preparing portable application binaries for execution in a remote environment. While our solution is an early prototype, we find the presented approach highly promising. We also discuss possible future steps related to execution of scientific workflows in serverless infrastructures. Finally, we perform a cost analysis and discuss implications with regard to resource management for scientific applications in general."
 }
+
 
 @inproceedings{merelo2019scaling,
   title={Scaling in Concurrent Evolutionary Algorithms},
