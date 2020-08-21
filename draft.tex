@@ -1151,14 +1151,14 @@ single {\texttt C5  High-CPU large} instance. With the available 2048 CPU shares
 the {\texttt redis} container gets a dedicated vCPU, needed because it is the most demanding 
 task of the three. We assigned 2048 units to each {\texttt worker} container, and using a more 
 capable {\texttt C5 High-CPU XLarge} instance,  with 
-four vCPUs and 4096 cpu shares, with this configuration each worker gets a pair of vCPUs.  
+four vCPUs and 4096 CPU shares, with this configuration each worker gets a pair of vCPUs.  
 We scaled the number if instances as needed, using one instance for every two {\texttt worker} containers. 
 
 Because all these instances run in a private subnet, we also
 run a Bastion instance in a public subnet, from where we send the commands to execute the experiments 
-and later collected the results. We conected to this instance through a {\texttt ssh} session from 
+and later collected the results. We connected to this instance through a {\texttt ssh} session from 
 our personal workstation. This is a {\texttt R5AD Large} instance, selected with 75GiB of storage, needed for
-keeping the logs, and more memory (16GiB) for processing the logs in memory. The details these EC2 instabces 
+keeping the logs, and more memory (16GiB) for processing the logs in memory. The details these EC2 instances 
 and their cost at the time of writing are shown in Table \ref{tab:ec2}.       
 
 
@@ -1933,6 +1933,7 @@ their results since diversity is essential for their performance. The
 hybrid method using both algorithms 
 achieved better results and, in most cases, needed fewer evaluations. % Clarify if they actually achieve that way superlinear improvements - JJ
 
+% Probably a final conclusion should be added here - JJ<
 
 This work also opens new possibilities. From the design point of view, it would
 be interesting to use automatic scaling, instead of setting the number of
