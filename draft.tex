@@ -1515,7 +1515,7 @@ parameters for this. See Table \ref{tab:params:10} for the complete list.
 
 When comparing the results in this section, we performed the Wilcoxon Signed-Rank test, with a
 significance level of 5\%. We indicate with an asterisk those results that are
-not significant.
+not significant. % Where? - JJ
 
 To measure the speedup obtained by the addition of workers, we will use the
 number of evaluations per second, instead of the time required to finish an
@@ -1524,7 +1524,10 @@ desired target can require less work, because we are using a stochastic search.
 We are going to measure the total increase of work done in a second by adding more workers.
 
 \begin{table}[h!tbp]
-  \caption{Speedup by worker and dimension, taking one worker as the baseline.}
+  \caption{Speedup by worker and dimension, taking one worker as the
+    baseline.}
+% Clarify here what you are measuring. Number of evaluations for
+% whatever divided by whatever - JJ
   \label{tab:speedup-table}
   \vspace{0.25cm}
   \centering
