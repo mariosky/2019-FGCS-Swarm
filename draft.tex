@@ -1742,26 +1742,26 @@ sub-populations used.
 
 
 
-However, when we compare the two options, we find some subtle differences: When
-using one or two workers, using 5 populations takes less time in most cases. In
-Table~\ref{tab:time} results with p-value of the two-tailed Wilcoxon
-signed-ranks test was grater than the level of significance of 0.05 (i.e.,
-accepting the null hypothesis of inequality) are marked in boldface. A reason
-for this could be that when having more populations, the migration of
-individuals takes more time from the bdyeginning to reach to all of them. For
-instance, when a single worker has 10 populations, only after processing every
-one of them, it will start receiving mixed populations. Although, in all cases,
-and even with a single worker, populations are heterogeneous, individuals
-resulting from the mixing of populations take more time to propagate. With four
-workers, almost the same results can be achieved regardless of our selection
-between five or ten populations. Also, there is not much difference between 4
-and 8 workers, when using five populations, which might indicate that some
-workers are idling while populations are being processed by other workers. In
-general, we can observe that keeping a ratio between the number of workers and
-populations a bit over 1:1 exploits better the computing resources available.
-This also decreases the relation between the overhead needed to migrate and
-process incoming and outgoing population and the total computing time: more
-populations will need more time to do that.
+% However, when we compare the two options, we find some subtle differences: When
+% using one or two workers, using 5 populations takes less time in most cases. In
+% Table~\ref{tab:time} results with p-value of the two-tailed Wilcoxon
+% signed-ranks test was grater than the level of significance of 0.05 (i.e.,
+% accepting the null hypothesis of inequality) are marked in boldface. A reason
+% for this could be that when having more populations, the migration of
+% individuals takes more time from the bdyeginning to reach to all of them. For
+% instance, when a single worker has 10 populations, only after processing every
+% one of them, it will start receiving mixed populations. Although, in all cases,
+% and even with a single worker, populations are heterogeneous, individuals
+% resulting from the mixing of populations take more time to propagate. With four
+% workers, almost the same results can be achieved regardless of our selection
+% between five or ten populations. Also, there is not much difference between 4
+% and 8 workers, when using five populations, which might indicate that some
+% workers are idling while populations are being processed by other workers. In
+% general, we can observe that keeping a ratio between the number of workers and
+% populations a bit over 1:1 exploits better the computing resources available.
+% This also decreases the relation between the overhead needed to migrate and
+% process incoming and outgoing population and the total computing time: more
+% populations will need more time to do that.
 
 %
 %
