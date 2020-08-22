@@ -571,13 +571,15 @@ execution.
     \label{fig:population_message}
 \end{figure}
 
-On the other hand, there are several caveats as well:
-It is more costly to move entire populations as messages than only passing certain individuals 
-from a process to another. Designers must consider this cost when working with large
-individuals, and if possible send populations using several messages, use compression or 
-adjust the size of populations. Pool-based algorithms also suffer from this drawback, but 
-web based implementations have been working with continuous optimization problems of 1000 dimensions.
-But, in other cases this is not a viable approach. 
+On the other hand, there are several caveats as well: It is more
+costly to move entire populations as messages than only passing
+certain individuals from a process to another. Designers must consider
+this cost when working with large individuals, and if possible send
+populations using several messages, use compression or adjust the size
+of populations. Pool-based algorithms also suffer from this drawback,
+but web based implementations have been working with continuous
+optimization problems with 1000 dimensions.  However, in other cases
+this is not a viable approach.
 
 \begin{figure}[ht]
     \centering
@@ -1878,7 +1880,7 @@ runtime than the multi-strategy configuration. It is not able to reach the
 $10^{-8}$ target on the higher dimensions of $f_3$ and $f_4$. Moreover, the PSO
 multi-population has the best runtime for the lower dimensions of $f_5$.
 
-Finally, the proposed PSO\&GA mixed algorithm has reached the $10^{-8}$ target
+Finally, the proposed PSO\&GA hybrid algorithm has reached the $10^{-8}$ target
 value on all functions ($f_1-f_5$) and scales well to higher dimensions, even on
 $f_3$ and $f_4$ (charts on the lower rows), which are usually considered
 difficult functions. This experiment also exemplifies the type of analyses that
