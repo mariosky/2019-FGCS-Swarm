@@ -1068,7 +1068,8 @@ server, or a production environment. In this section, we give specific details
 about how we deployed EvoSwarm in a cloud-setting for running the experiments
 within this paper. Running the cloud-native application in the cloud has the obvious
 benefit of a multi-instance deployment, where we can run containers in several
-instances executing at the same time, not only in a single machine.
+instances executing at the same time, not only in a single machine, not only 
+in a single machine as it is the case when using docker-compose. 
 
 When we deploy a cloud-native application to a cloud provider, there
 are, among others, two options to choose from:
@@ -1076,18 +1077,18 @@ are, among others, two options to choose from:
 \begin{description}
   
   \item[A Kubernetes cluster] provides auto-scaling and management of
-  containerized applications, but it needs additional configuration for
-  provisioning and its cost might be higher. All major cloud-providers have Kubernetes services. This option
+  containerized applications, and it supports other container technologies 
+  but it needs additional configuration for provisioning, 
+  and its cost might be higher. All major cloud-providers have Kubernetes services. This option
   was used by S. Zhao et al. \cite{zhao2019cloud} to run a multi-island
   algorithm, and Dziurzanski et al. \cite{dziurzanski2020scalable} later refined
   it.
 
-
   \item[A container orchestration service] these services are compatible with {\tt docker-compose}
     files for configuration and provide transparent provisioning. Examples of these
     services are Amazon Elastic Container Service,  Red Hat Openshift
-    (which is also open source), and Marantis Docker Enterprise.
-    Salza et al. \cite{salza2019speed} tested this option by using CoreOs cluster. 
+    (which is also open source), and Marantis Docker Enterprise using Docker Swarm.
+    Salza et al. \cite{salza2019speed} tested a variant of this option by using a CoreOs cluster. 
 
 \end{description}
 
