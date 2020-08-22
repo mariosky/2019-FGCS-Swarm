@@ -1925,39 +1925,31 @@ population-based optimization algorithms.
 First, we focused on knowing how scaling is related to the number of populations
 and workers in the system. This experiment concludes that there is an
 interesting interplay between them, with the most benefit obtained with a number of
-populations slightly above the number of workers, which brings performance gains 
+populations slightly above the number of workers, which brings performance gains
 in terms of execution speed; these experiments take less time since
 evaluations are performed, as part of its corresponding algorithm, simultaneously by different workers.
 Also, we found that for lower dimensions, there is an advantage in using fewer
-populations. 
+populations.
 
-A second experiment centered on evaluating the algorithmic benefits (experiments
-taking less time because they need fewer evaluations) of distributed
-multi-algorithm algorithms such as the ones implemented in this kind of framework.
-We compared the homogeneous and an ensemble of
-multi-populations, using Genetic Algorithms (GAs) and Particle Swarm
-Optimization (PSO) using the COCO benchmark framework 
-for visualization and definition of the optimization problems.
-We found that the set-up of these algorithms has a significant influence on
+A second experiment centered on evaluating the algorithmic benefits
+(experiments taking less time because they need fewer evaluations) of
+distributed multi-algorithm algorithms such as the ones implemented in
+this kind of framework.  We compared the homogeneous and an ensemble
+of multi-populations, using Genetic Algorithms (GAs) and Particle
+Swarm Optimization (PSO) using the COCO benchmark framework for
+visualization and definition of the optimization problems.  We found
+that the set-up of these algorithms has a significant influence on
 their results since diversity is essential for their performance. The
-hybrid method using both algorithms 
-achieved better results and, in most cases, needed fewer evaluations. 
-
-% Clarify if they actually achieve that way superlinear improvements - JJ
-% They should, in this experiment we only tested the #FEs, but they imply 
-% a superlinear improvements as we established in the previous section - Mario 
+hybrid method using both algorithms achieved better results and, in
+most cases, needed fewer evaluations.
 
 We conclude that superlinear improvements are achievable by selecting an
 appropriate configuration consisting of the number of populations, worker
-containers, and algorithm selection. Further research should focus on learning
+containers, and algorithm combination. Further research should focus on learning
 more about how these parameters interact with each other. The BBOB benchmark
 results show that the selection and mixing of algorithms can lower the number of
 FEs needed to find a solution or find solutions that single algorithms could not
 find.
-
-
-% Probably a final conclusion should be added here, including BBOB
-% benchmark and the overall performance - JJ
 
 This work also opens new possibilities. From the design point of view, it would
 be interesting to use automatic scaling, instead of setting the number of
