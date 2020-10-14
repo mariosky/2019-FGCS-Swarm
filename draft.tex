@@ -170,9 +170,8 @@ properties of a reactive system \cite{boner2014reactive} and they are commonly
 more flexible, fault-tolerant, and scalable. % Some properties and reference - Mario  
 % Again, you have to justify the need for a reactive architecture and define it before this paragraph - JJ
 
-Researchers 
-and algorithm designers willing to  adapt to the cloud their
-multi-population solutions face the additional challenges:
+Researchers  and algorithm designers willing to adapt to the cloud; however, their
+multi-population solutions face additional challenges:
 \begin{itemize}
     \item They need to change their current solutions to a reactive architecture in which processes
     communicate with each other by exchanging messages asynchronously and react
@@ -365,8 +364,8 @@ this is a valid solution to this problem \cite{garcia2014randomized}. % This sho
 
 %%%%%% -------------------- This too. Should go up, to intro, or down,
 %%%%%% to method - JJ
-Some parameters, specially the population size, are
-kept fixed in order to control more easily the execution of the algorithm. For
+Some parameters, especially the population size, are
+kept fixed in order to control the execution of the algorithm more easily. For
 instance, by having the size of populations fixed, it is easier to control
 the number of evaluations and the communication costs, when the algorithm is in
 operation. % And to keep them more or less synchronized, which can be
@@ -474,7 +473,7 @@ same time, because no side effects, including unwanted resource
 locking problems,  are going to result from this concurrency.
 % This is important and we should probably mention that in the
 % introduction - JJ 
-Based on these general principles we define next the proposed model.
+Based on these general principles, we next define the proposed model.
 
 
 \begin{sidewaysfigure}
@@ -1071,8 +1070,7 @@ server, or a production environment. In this section, we give specific details
 about how we deployed EvoSwarm in a cloud-setting for running the experiments
 within this paper. Running the cloud-native application in the cloud has the obvious
 benefit of a multi-instance deployment, where we can run containers in several
-instances executing at the same time, not only in a single machine, not only 
-in a single machine as it is the case when using docker-compose. 
+instances executing at the same time, not only in a single machine as it is the case when using docker-compose. 
 
 When we deploy a cloud-native application to a cloud provider, there
 are, among others, two options to choose from:
@@ -1149,12 +1147,12 @@ of experiments. We selected three types of EC2 instances according to our needs;
 {\texttt setup}, {\texttt controller}, and {\texttt redis} containers do not demand many resources
 and we do not need to scale them as the amount of parallel workers are increased. They run in a
 single {\texttt C5  High-CPU large} instance. With the available 2048 CPU shares divided as follows:
-{\texttt setup} (128),  {\texttt controller} (896),{\texttt redis} (1024). With this assignment 
+{\texttt setup} (128),  {\texttt controller} (896), {\texttt redis} (1024). With this assignment 
 the {\texttt redis} container gets a dedicated vCPU, needed because it is the most demanding 
 task of the three. We assigned 2048 units to each {\texttt worker} container, and using a more 
 capable {\texttt C5 High-CPU XLarge} instance,  with 
 four vCPUs and 4096 CPU shares, with this configuration each worker gets a pair of vCPUs.  
-We scaled the number if instances as needed, using one instance for every two {\texttt worker} containers. 
+We scaled the number of instances as needed, using one instance for every two {\texttt worker} containers. 
 
 Because all these instances run in a private subnet, we also
 run a Bastion instance, that is, a specially protected network node, in a public subnet, from where we send the
