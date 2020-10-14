@@ -203,7 +203,8 @@ Taking these factors into account, in this work, we present EvoSwarm,
 a container-based application that reactively processes
 isolated and
 heterogeneous populations. The platform uses the {\tt docker-compose} tool for
-defining and running experiments as multi-container applications. EvoSwarm is also released with a free licence in \url{https://github.com/mariosky/EvoSwarm}.
+defining and running experiments as multi-container applications. EvoSwarm is also released with a free licence in
+\footnote{\url{https://github.com/mariosky/EvoSwarm}}.
 We preferred the use of a container-based application for this prototype because
 it is more suitable for development and replication without the need for
 additional components. Nevertheless, the application is compatible with other
@@ -718,7 +719,7 @@ experiments can remain in the queues because of the asynchronous nature of the
 system.  We chose to implement the controller in Python but using an API
 specialized in asynchronous event-driven programming over data streams.  
 The open-source library is called Reactive Extensions (ReactiveX) for Python 
-\url{https://github.com/ReactiveX/RxPY} an it is based on the Observer 
+\footnote{\url{https://github.com/ReactiveX/RxPY}} an it is based on the Observer 
 pattern \cite{gamma1995design} and functional programming.
 
 \begin{figure}[ht]
@@ -1131,7 +1132,7 @@ containers we used the file in Listing ~\ref{code:compose}.
 
 Each container is defined as a {\texttt service} ({\em task} in AWS terms), with the following attributes: {\texttt image},
 that reference the container images we have published in Docker hub
-\url{https://hub.docker.com/u/mariosky}, open {\texttt ports}, a {\texttt command} to be executed at
+\footnote{\url{https://hub.docker.com/u/mariosky}}, open {\texttt ports}, a {\texttt command} to be executed at
 startup, configuration for the AWS {\texttt logging} service, and finally {\texttt environment}
 variables used by code running inside containers.
 
