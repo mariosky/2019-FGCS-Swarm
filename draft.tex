@@ -652,23 +652,23 @@ possibility of implementing the system using serverless functions.
 \section{Experimental Design of a Container-based Application} 
 \label{docker}
 
-We have mentioned several advantages of a cloud-native application for running
-multi-population based algorithms, but there are in our experience, several
-issues that make this approach more practical. % several issues that make it practical or useful instead? - JJ 
-In general, cloud platforms have free-tiers    
-for their services, and many offer academic discounts to students. But once we
-pass to the pay-as-you-go tier, computing resources need to be
-managed, and, where possible, its cost minimized.  First,
-in many cases,  a credit-card is needed to guarantee the payment of the
-resources consumed and someone responsible for assigning quotas and, more
-importantly, special keys for using the cloud's API.  If these keys are
-compromised or shared by their holders,  additional costs or administrative
-procedures are in order. For those cases when a prototype platform is needed,
-for instance, students developing a new algorithm variant or experimenting with
-a published work, a container-based platform can be more practical. Container
-technology enables researchers the local deployment of all the infrastructure
-needed to run the experiments. Later, if needed, the same system could be
-deployed to the cloud.
+% We have mentioned several advantages of a cloud-native application for running
+% multi-population based algorithms, but there are in our experience, several
+% issues that make this approach more practical. % several issues that make it practical or useful instead? - JJ 
+% In general, cloud platforms have free-tiers    
+% for their services, and many offer academic discounts to students. But once we
+% pass to the pay-as-you-go tier, computing resources need to be
+% managed, and, where possible, its cost minimized.  First,
+% in many cases,  a credit-card is needed to guarantee the payment of the
+% resources consumed and someone responsible for assigning quotas and, more
+% importantly, special keys for using the cloud's API.  If these keys are
+% compromised or shared by their holders,  additional costs or administrative
+% procedures are in order. For those cases when a prototype platform is needed,
+% for instance, students developing a new algorithm variant or experimenting with
+% a published work, a container-based platform can be more practical. Container
+% technology enables researchers the local deployment of all the infrastructure
+% needed to run the experiments. Later, if needed, the same system could be
+% deployed to the cloud.
 
 There are many advantages of container-based architectures over one
 based on virtual machines. The main ones are architectural: it makes
