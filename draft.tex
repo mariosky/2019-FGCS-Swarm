@@ -96,24 +96,22 @@ Genetic Programming (GP) \cite{back1996evolutionary}, Grey Wolf Optimization
 while examples of (SI) \cite{kennedy2006swarm} are particle swarm
 optimization (PSO) \cite{clerc2010particle} and ant colony algorithms (ACO) \cite{dorigo1999ant}.
 
-Besides being all population-based, they also share the common characteristic
-of creating an initial set of random candidate solutions that are later used to
-generate a new set of candidates, using a nature-inspired heuristic.
-Population-based algorithms are intrinsically parallel, and can be implemented to run asynchronously.
+Besides being all population-based, they also share the common characteristic of 
+creating an initial set of random candidate solutions later used by a 
+nature-inspired heuristic to generate a new set of candidates. 
+Population-based algorithms are intrinsically parallel.
 The fitness of each individual can be (in general) evaluated independently of 
 others, and similarly, each population could evolve in isolation. Researchers use the term
-multi-population based methods when generally referring to techniques using
+multi-population based methods when referring to techniques using
 many populations as part of their optimization strategy. 
-Since 
-earlier works, researchers have been proposing some form of parallelization
-\cite{muhlenbein1988evolution} to increase the scalability of these
-algorithms that adds to this simple parallel execution some form of
-interaction between the independently running populations.
+Since earlier works, researchers have been proposing some form of parallelization
+\cite{muhlenbein1988evolution} to increase these algorithms' scalability
+by adding some form of interaction between populations running in isolation.
 The island model was one of the first techniques proposed for parallelization,
-which led to an early proof of speedup   \cite{gorges1990explicit,grosso1985computer}. 
+which led to early proofs of speed-up \cite{gorges1990explicit,grosso1985computer}. 
 The concept was to divide a large population into communicated subpopulations. 
-Since then, other population-based algorithms have adopted the concept, 
-and researchers have found additional benefits
+Since then, other population-based algorithms have adopted the idea. 
+Researchers have found additional benefits
 besides the execution speed; these include avoiding a premature convergence and
 maintaining the diversity of the global population \cite{li2015multi}. 
 
@@ -122,51 +120,56 @@ maintaining the diversity of the global population \cite{li2015multi}.
 % the underlying algorithm, while synchronous might not need it - JJ 
 % TO DO - Mario 
 Moreover, parallel implementations can run in two different ways: synchronous and
-asynchronous. When operations run in parallel but every node must maintain synchrony with
-the other operations,  all operations need to finish to continue to the next
-step. For instance, in a  master/worker model, the master needs to wait for all
-workers to finish their operations before moving to the next iteration.  In
+asynchronous. When operations run in parallel, but every node must maintain synchrony with
+the other operations, they all need to finish before moving to the next
+step. For instance, in a  master/worker model, masters need to wait for all
+workers to complete their operations before moving to the next iteration.  In
 contrast, in an asynchronous execution,  operations are not synchronized with
 each other, so there's no time lost waiting for other populations to
-arrive to the synchronization point; results arriving from other workers are 
+arrive at the synchronization point; results coming from other workers are 
 incorporated as soon as they are received. Following the previous example, now the master operation can
-continue to the next iteration, even if a worker has not finished its work.  In
-the literature, we can find many asynchronous algorithms
-\cite{coleman89,baugh2003asynchronous}, reporting benefits in execution time,
+continue to the next iteration, even if a worker has not finished its work.  We can find many asynchronous algorithms
+\cite{coleman89,baugh2003asynchronous}, reporting benefits in execution time
 and scalability. In the particular case of asynchronous and cloud-native
 multi-population algorithms, recent works propose an asynchronous communication
 through a central repository \cite{sofea:cec2012, JSON} or message queues
-\cite{salza2019speed, guervos2018introducing}, in this work we follow this
+\cite{salza2019speed, guervos2018introducing}. In this work, we follow this
 practice.
 
 The trend concerning the parallel execution multi-population algorithms goes from
 earlier hardware-based implementations using transputers
 \cite{gorges1990explicit} through 
 multi-core systems \cite{Serrano2008,lai2019adaptive} to multi-threaded \cite{merelo2019scaling} ones.
-And recently the focus has been on exploiting a higher number of processing
+Moreover, recently, the focus has been on exploiting a higher number of processing
 units by using GPUs \cite{tan2015survey,li2007efficient}, or distributed
 systems, including web-based \cite{JSON} systems,
 map-reduce \cite{fazenda2012} implementations,  grids \cite{munawar2010design,Gonzalez09},
 voluntary computing systems \cite{MilkyWay,merelo2016nodio}, 
 and, more importantly, cloud computing
-\cite{GValdez2015,salza2019speed,valenzuela2015implementing,FlexGP}. Cloud computing has become the standard way of running
-enterprise applications, not only because of the convenience of the
+\cite{GValdez2015,salza2019speed,valenzuela2015implementing,FlexGP}.
+
+%% JJ Can you improve the redability of the paragraph below? 
+%% Grammarly suggests that is hard to read, verly long sentences.
+Cloud computing has become the standard way of running
+enterprise applications.  not only because of the convenience of the
 pay-as-you-go model or the non-existent sunk cost of physical facilities, but also because
 it offers a way of describing the infrastructure as part of the code, so that it
 is much easier to reproduce results and this has been a boon for scientific
 computing.  However,  cloud computing has also been evolving, going from simply
 putting on virtual machines elsewhere than on premises old-style monolithic applications, that is, applications
 built on a single stack of services that communicate by layers, to microservices
-\cite{microservices} and serverless architectures \cite{varghese2018next,Varghese2018849} that favor the parallel and asynchronous communication of
-heterogeneous resources; in the process, a new methodology for designing {\em cloud
-native applications} has been created, with brand new methods and
-techniques \cite{Baldini2016287}. In these architectures, services or even
+\cite{microservices} and serverless architectures \cite{varghese2018next,Varghese2018849} 
+that favor the parallel and asynchronous communication of
+heterogeneous resources; in the process, a new methodology for designing 
+{\em cloud-native applications} has been created, with brand new methods and
+techniques \cite{Baldini2016287}. 
+In these architectures, services or even
 functions are seen as independent processing nodes, departing from the monolithic
 and even distributed paradigms, and becoming a loosely coupled collection of {\em
 stateless functions} \cite{malawski2017serverless}, that react to events and
 only come into existence while they are doing some processing.
 Systems developed with the patterns outlined above have the
-properties of a reactive system \cite{boner2014reactive} and they are commonly
+properties of a reactive system \cite{boner2014reactive}, and they are commonly
 more flexible, fault-tolerant, and scalable. % Some properties and reference - Mario  
 % Again, you have to justify the need for a reactive architecture and define it before this paragraph - JJ
 
@@ -195,51 +198,57 @@ multi-population solutions face additional challenges:
 Beyond the choice of design methodology and implementation, researchers need to
 consider additional issues \cite{Ma2019} when designing efficient multi-population algorithms. These include the number and size of populations,
 the interaction between them, the search area of each population, and the search
-strategy and parametrization of each population. We must take into account
+strategy and parametrization for each population. We must take into account
 these high-level issues when designing a parallel architecture.
 
-Taking these factors into account, in this work, we present EvoSwarm, 
+Considering these factors, in this work, we present EvoSwarm, 
 a container-based application that reactively processes
-isolated and
-heterogeneous populations. The platform uses the {\tt docker-compose} tool for
-defining and running experiments as multi-container applications. EvoSwarm is also released with a free licence in
+isolated and heterogeneous populations. The platform uses the {\tt docker-compose} tool for
+defining and running experiments as multi-container applications. EvoSwarm is also released with a free license
+and available in a public 
+GitHub repository
 \footnote{\url{https://github.com/mariosky/EvoSwarm}}.
-We preferred the use of a container-based application for this prototype because
-it is more suitable for development and replication without the need for
+We preferred the use of a container-based implementation for this prototype because
+it is more suitable for development and replication without needing
 additional components. Nevertheless, the application is compatible with other
 orchestration and deployment technologies if more scalability is needed. 
 With additional configuration settings, applications can be deployed 
-to a Docker Swarm or a Kubernetes system.  
+to a Docker Swarm or a Kubernetes system.
+%% Here we could talk about Cloud-based platform for executing the application
+%% and the cloud-lock risk - Mario
 
-Docker container images host the stateless functions responsible for 
-running a search strategy on populations they receive as messages. 
-A single container can pull many messages on its lifetime, processing one at a time. 
-% clarify "on several populations" Sequentially? At the same time? - JJ 
-% done - M
-These functions could also be ported
-directly to a Function as a Service (FaaS) \cite{Roberts2016} implementation.
-% Need to improve the next paragraph or maybe move it to another place - Mario
-Researchers then define the configuration of services used by
-a multi-population algorithm using a YAML file. Any researcher can deploy and
-start all the services from this configuration file with a single command. Once
-the services are up, multiple instances of an experiment can be sent to a queue
-for their execution. The platform includes containerized services that are
-compatible with other container orchestration technologies like Kubernetes and
-Docker Swarm. The services included are a Redis Server used for the Message
-Queue implementation and logging and an Experiment Controller implemented in
-Python. Developers of population processing functions have the freedom to
-implement new population-based algorithms or operators in the language they
-choose inside a container, as they only need to subscribe to a channel of the
-Message Queue and have the ability to read the population and parameters as JSON  
-file.
+
+%% This is explained later in detail, we do not needed here.
+%% JJ Please check this - Mario
+
+% Docker container images host the stateless functions responsible for 
+% running a search strategy on populations they receive as messages. 
+% A single container can pull many messages in its lifetime, processing one at a time. 
+% % clarify "on several populations" Sequentially? At the same time? - JJ 
+% % done - M
+% These functions could also be ported
+% directly to a Function as a Service (FaaS) \cite{Roberts2016} implementation.
+% % Need to improve the next paragraph or maybe move it to another place - Mario
+% Researchers then define the configuration of services used by
+% a multi-population algorithm using a YAML file. Any researcher can deploy and
+% start all the services from this configuration file with a single command. Once
+% the services are up, multiple instances of an experiment can be sent to a queue
+% for their execution. The platform includes containerized services that are
+% compatible with other container orchestration technologies like Kubernetes and
+% Docker Swarm. The services included are a Redis Server used for the Message
+% Queue implementation and logging and an Experiment Controller implemented in
+% Python. Developers of population processing functions have the freedom to
+% implement new population-based algorithms or operators in the language they
+% choose inside a container, as they only need to subscribe to a channel of the
+% Message Queue and have the ability to read the population and parameters as JSON  
+% file.
 
 This paper extends our earlier publication on the topic
 \cite{guervos2018introducing}, and we highlight the main contributions as
 follows:
-We have proved that cloud-native applications are
-able to easily accommodate multi-paradigm bioinspired algorithms
+We have proved that cloud-native applications can easily accommodate multi-paradigm bioinspired algorithms
 with little efforts of parametrization and
-that a combination of algorithms has better speedup and performance
+that a combination of algorithms has better speed-up and performance
 than any single one taken independently.
 
 We have proved this in the following steps:
@@ -278,19 +287,18 @@ We have proved this in the following steps:
                                 % stated that way. If not, it's also a
                                 % mean to achieve the contribution - JJ
     \item Third, the application is compatible with the COCO benchmark 
-    framework, allowing researchers to compare the performance of their 
-    algorithms with other works. % Not really a contribution, but an
+    framework, allowing researchers to compare their 
+    algorithms' performance against other works. % Not really a contribution, but an
                                 % implementation detail. Convenient,
                                 % but does not advance the state of
                                 % the art - JJ
-    \item Fourth, we present an empirical study to validate the 
-    applicability of our application,  measuring the execution time and  
-    speedup.
+    \item Fourth, we present an empirical study to validate 
+    our application's applicability, measuring the execution time and speed-up.
     
     \item Lastly, we present a comparison between homogeneous and an ensemble of 
     multi-populations, using Genetic Algorithms (GAs) and Particle 
-    Swarm Optimization (PSO) in a benchmark for the optimization of 
-    continuous functions. % "Validate the applicability" falls short
+    Swarm Optimization (PSO) using a benchmark for 
+    continuous function optimization. % "Validate the applicability" falls short
                           % of being also a contribution. It must
                           % advance the state of the art, in which way
                           % does it advance? Speed (needs to be
@@ -299,14 +307,14 @@ We have proved this in the following steps:
                           % also). - JJ 
 \end{itemize}
 
-The organization of the paper is as follows: First, in Section \ref{multi}, we present a
+We organized the paper as follows: First, in Section \ref{multi}, we present a
 background of the fundamental issues of integrating nature-inspired optimization
 and multi-population methods. Section \ref{soa} presents state of the art relevant to
 our work. In Section \ref{method}, we present the proposed method and the container-based
 application in Section \ref{docker} and the workflow for reproducible experiment design in Section \ref{experiment_flow}. % No reference to section 6.
 Section \ref{setup} describes the design of the empirical evaluation to assess the effectiveness
 of the method,  with respect to scalability and % This is a subsection, fix it. 
-the performance of heterogeneous populations.  % No references to sections 9 and 10
+the heterogeneous populations' performance.  % No references to sections 9 and 10
 Finally, we offer the conclusions of this paper and suggestions on future work in Section \ref{conclusions}.
 
 
@@ -423,7 +431,7 @@ Later approaches use microservices \cite{khalloof2018generic}, or were
 systematized \cite{salza2019speed} achieving speed-up through the
 creation of an abstraction layer over the evolutionary algorithm
 services, and also automation of the whole workflow. This research
-bumped into some problems, since speedup is limited, mainly due to the
+bumped into some problems, since speed-up is limited, mainly due to the
 non-automatic scaling of services and also the presence of a single
 master which is the one that runs the evolutionary
 algorithms. However, this master-worker architecture can be turned
@@ -1483,7 +1491,7 @@ of worker nodes according to this.
 In this experiment, we evaluate how the number of populations and the number of
 workers in the system are related to the scalability of the system.
 In the next section, we describe the experimental setup, and a discussion of the results
-follows, with respect to the speedup in terms of evaluations per second (Section~\ref{sec:speedup}), and 
+follows, with respect to the speed-up in terms of evaluations per second (Section~\ref{sec:speedup}), and 
 execution time (Section~\ref{sec:exec-time}).
 
 \subsubsection{Setup} % Again, this in the index with no context should say something. Please flesh it out.
@@ -1504,7 +1512,7 @@ initial populations, repeating each experiment 30 times using 1, 2, 4, 8, and 16
 workers. We kept the same maximum number of FEs, changing the relevant
 parameters for this. See Table \ref{tab:params:10} for the complete list.
 
-\subsubsection{Results Regarding Speedup}
+\subsubsection{Results Regarding Speed-up}
 \label{sec:speedup}
 
 \begin{figure}[h!tbp]
@@ -1519,15 +1527,15 @@ When comparing the results in this section, we performed the Wilcoxon Signed-Ran
 significance level of 5\%. We indicate with an asterisk those results that are
 not significant throughout the tables of this section.  % Where? - JJ
 % Answered - Mario
-To measure the speedup obtained by the addition of workers, we will use the
+To measure the speed-up obtained by the addition of workers, we will use the
 number of evaluations per second, instead of the time required to finish an
 instance of a problem. The reason for this is that in some cases reaching the
 desired target can require less work, because we are using a stochastic search. 
 We are going to measure the total increase of work done in a second by adding more workers.
 
 \begin{table}[h!tbp]
-  \caption{Speedup by worker and dimension, taking one worker as the
-    baseline. Speedup is obtained by dividing the evaluation ratio of the baseline by the 
+  \caption{Speed-up by worker and dimension, taking one worker as the
+    baseline. Speed-up is obtained by dividing the evaluation ratio of the baseline by the 
     ratio of the increased number of workers.}
 % Clarify here what you are measuring. Number of evaluations for
 % whatever divided by whatever - JJ
@@ -1561,15 +1569,15 @@ workers, for ten and twenty dimensions of $f_4$.
 
 
 %
-As expected, within the same number of populations, there is a linear speedup
-when we add more workers. The speedup is marginal in those cases where there 
+As expected, within the same number of populations, there is a linear speed-up
+when we add more workers. The speed-up is marginal in those cases where there 
 are fewer populations than workers.  The reason for this is that at any given time, 
 there are at least two populations in the message queue, leaving some of the workers 
 waiting for populations to be available in the queue.
 
 \begin{table}[h!tbp]
   \small
-  \caption{Speedup achieved with increasing the number of workers for
+  \caption{Speed-up achieved with increasing the number of workers for
     each dimension showing the p-value for the Wilcoxon test. 
     Best and Worst are highlighted (bold and underlined)}
   % Say what highlights mean - JJ
@@ -1577,7 +1585,7 @@ waiting for populations to be available in the queue.
   \vspace{0.25cm}
   \centering
   \begin{tabular}{llllll}
-  Populations & Dimension  & \multicolumn{2}{l}{Increment}  & Speedup            & p-value\\
+  Populations & Dimension  & \multicolumn{2}{l}{Increment}  & Speed-up            & p-value\\
   5  & 10 & 1w & 2w  & 2.15 & 1.51E-11 \\
   & 10 & 2w & 4w  & 1.68 & 1.51E-11 \\
   & 10 & 4w & 8w  & 1.04 & 0.004942 \\
@@ -1608,21 +1616,21 @@ waiting for populations to be available in the queue.
   \end{table}
 
 
-Table~\ref{tab:speedup-table} shows the speedup obtained against the baseline of
-one worker. We achieved the maximum speedup when using four workers or more with
-twenty populations. On the other hand, the maximum speedup when we consider the
-cost it was with eight workers. The best speedups for each number of workers are
+Table~\ref{tab:speedup-table} shows the speed-up obtained against the baseline of
+one worker. We achieved the maximum speed-up when using four workers or more with
+twenty populations. On the other hand, the maximum speed-up when we consider the
+cost it was with eight workers. The best speed-ups for each number of workers are
 shown in bold in the table.  
 
 
 
-Table~\ref{tab:speedup:test} shows the speedup obtained taking as the baseline
+Table~\ref{tab:speedup:test} shows the speed-up obtained taking as the baseline
 the previous configuration, for example, when increasing from four to eight
 workers, and the p-value for the Wilcoxon Signed-Rank test. There was an
 increment in all cases. Again, the best effect is achieved when the number of
 populations is higher than the number of workers. Configurations following this
 basic rule doubled the speed or where near it. Using five populations, we
-obtained the best and worst speedup depending on the number of workers (shown in
+obtained the best and worst speed-up depending on the number of workers (shown in
 underline and bold, respectively).
 
 
@@ -1657,7 +1665,7 @@ affect the number of evaluations we need to execute to find a solution. This
 reduction means that the multi-population based algorithm can perform better
 when we increase the number of populations, or in some cases, even workers, as the experiments
 show. If we increase the evaluations per second and, at the same time, decrease
-the number of evaluations needed, we can have a superlinear speedup of the
+the number of evaluations needed, we can have a superlinear speed-up of the
 algorithm, if we measure the time required to complete an instance.
 
 
@@ -1763,7 +1771,7 @@ the y-axis, to compensate for the dimension increments and scalability.
 \end{table}
 
 In Table~\ref{tab:time} we can see that in some cases we have a supralinear
-speedup, we highlighted these in boldface and indicated the speedup value in
+speed-up, we highlighted these in boldface and indicated the speed-up value in
 parenthesis. The best overall times are underlined. As expected, increasing the
 number of workers for a fixed dimension and populations reduced the time
 required to find a solution, as long as the population number was higher than
