@@ -564,20 +564,20 @@ messages.
 
 This reactive architecture has the following advantages:\begin{itemize}
 \item 
-An important aspect of proposal is the decoupling of the population and 
+An important aspect of the proposal is the decoupling of the population and 
 the population-based algorithm. It is common that in a classic island-based algorithm
-each island is executed in a separate processing node, i.e. in a virtual machine, CPU,
-or thread. In this case we can have just one processing node, or many nodes, each 
-running a different search strategy, or using its own parameters. 
+each island is executed in a separate processing node, i.e., in a virtual machine, CPU,
+or thread. In this case, we can have just one processing node or many nodes, each 
+running with a different search strategy or parameters. 
 \item 
 Also, the reactive controller gives designers more control over the multi-population algorithm.
 In this process, designers can dynamically change the number of populations, population parameters,
 and migration details on-the-fly.
 \item 
 Another advantage is that algorithm designers have many options for implementing this simple architecture. 
-The same basic components can be implemented as a single multi-threaded program, or 
+The same components can be implemented as a single multi-threaded program or 
 as a highly scalable serverless cloud application. Most modern languages include 
-constructs for asynchronous programming using queues or channels, for a multi-threaded
+constructs for asynchronous programming using queues or channels for multi-threaded
 execution.
 \end{itemize}
 
@@ -588,14 +588,14 @@ execution.
     \label{fig:population_message}
 \end{figure}
 
-On the other hand, there are several caveats as well: It is more
+On the other hand, there are several caveats: It is more
 costly to move entire populations as messages than only passing
-certain individuals from a process to another. Designers must consider
-this cost when working with large individuals, and if possible send
-populations using several messages, use compression or adjust the size
+specific individuals from a process to another. Designers must consider
+this cost when working with large individuals, and if possible, send
+populations using several messages, use compression, or adjust the size
 of populations. Pool-based algorithms also suffer from this drawback,
-but web based implementations have been working with continuous
-optimization problems with 1000 dimensions.  However, in other cases
+but web-based implementations have been working with continuous
+optimization problems with 1000 dimensions.  However, in other cases, % Reference that paper - Mario
 this is not a viable approach.
 
 \begin{figure}[ht]
@@ -611,7 +611,7 @@ this is not a viable approach.
 Next, we compare the message-driven architecture we presented against four other
 proposals for multi-population algorithms found in the literature. We center the
 comparison on the coupling and communication between the main components:
-populations, processing nodes, and algorithms.  In Figure \ref{fig:population_message} we show the
+populations, processing nodes, and algorithms.  In Figure \ref{fig:population_message}, we show the
 main components of a message-driven architecture. We can see that the algorithm
 and populations are separated, and the \texttt{Population queue} keeps the state
 of populations. While algorithms only need the populations as parameters
@@ -624,7 +624,7 @@ In contrast, in the classic island model shown in Figure
 node keeps both the algorithm process and the state of the population.  Other
 processing nodes follow the same configuration and form of execution, and they
 only pass specific individuals between them.  In this model, adding additional
-processing nodes, on-runtime, can be more difficult, because they need to have
+processing nodes, on-runtime, can be more difficult because they need to have
 an addressing mechanism or simply be aware of these new nodes. This is
 solved in part in Peer to Peer (P2P) evolutionary algorithms
 \cite{juanlu:europar}, but coupling still exists, meaning that every
