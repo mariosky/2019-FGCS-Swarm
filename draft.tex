@@ -638,10 +638,10 @@ its subpopulation.
     \label{fig:pool_island}
 \end{figure}
 
-A typical design pattern used to alleviate the above drawbacks is the use of a
-central repository or pool of individuals that is available to all processing
+A typical design pattern used to alleviate the above drawbacks is using a
+central repository or pool of individuals available to all processing
 nodes.  In Figure \ref{fig:pool_island} we show the main components of a pool-based
-multi-population algorithm. Although algorithms and population state remains
+multi-population algorithm. Although algorithms and population state remain
 coupled, now, processing nodes do not communicate directly with each other.
 Instead, they interchange individuals with the pool. Communication between nodes
 is not affected if the system adds or removes nodes because they do not know
@@ -655,7 +655,7 @@ isolated algorithms take random samples of the global population and use this
 temporal population as parameters. An advantage of this design is that the
 sampling provides a type of migration between isolated populations. A problem
 found is that when a processing node returns a population to the pool, the
-state of the population is lost. But having the algorithm decoupled opens the
+population's state is lost. Nevertheless, having the algorithm decoupled opens the
 possibility of implementing the system using serverless functions.
 
 \begin{figure}[ht]
@@ -687,23 +687,26 @@ possibility of implementing the system using serverless functions.
 % needed to run the experiments. Later, if needed, the same system could be
 % deployed to the cloud.
 
-There are many advantages of container-based architectures over one
-based on virtual machines. The main ones are architectural: it makes
-the design of an application gravitate towards a set of decoupled
-tasks, that use reactive, event based programming, to interact with
-the rest of the application; containers hold micro-services that are
-much easier to test, integrate and deploy. It also simplifies
-the interaction APIs. Of course, that makes them more economical in a
-pay-per-use cloud provider, but that is not the main reason why we
-have chosen them in this paper; reproducibility of experiments and a
-clear and idempotent description of the architecture through {\tt docker-compose} 
-are the main reasons. 
+% There are many advantages of container-based architectures over one
+% based on virtual machines. The main ones are architectural: it makes
+% the design of an application gravitate towards a set of decoupled
+% tasks, that use reactive, event based programming, to interact with
+% the rest of the application; containers hold micro-services that are
+% much easier to test, integrate and deploy. It also simplifies
+% the interaction APIs. Of course, that makes them more economical in a
+% pay-per-use cloud provider, but that is not the main reason why we
+% have chosen them in this paper; reproducibility of experiments and a
+% clear and idempotent description of the architecture through {\tt docker-compose} 
+% are the main reasons. 
 
-In this section, we propose a design of a reactive container-based application
-for executing multi-population based optimization experiments.  For the design,
-we followed the design patterns highlighted in the previous section, and again
+% Was mentioned before - M 
+
+This section proposes a design of a reactive container-based application 
+for executing multi-population-based optimization experiments. We followed the
+cloud-native design patterns highlighted in previous sections, and again
 we can go back to Figure \ref{fig:kafkEO} and use it as a guide for explaining
-the main components and their interactions. The containers used in this design will be explained next. 
+the main components and their interactions. 
+The containers used in this design will be explained next. 
 
 \subsection{Message Queue Container} 
 \label{message_container}
@@ -711,13 +714,13 @@ the main components and their interactions. The containers used in this design w
 In this work, we implemented all message
 queues in the Redis memory store. Early cloud architectures
 \cite{de2017parallel} used queues for communication, although in that
-case RabbitMQ was the chosen tool. Redis is faster, and also can act
-as a data store from where we can control the state of the application.
+case, RabbitMQ was the chosen tool. Redis is faster and can act as a 
+data store from where we can control the application's state. 
 Each queue is a Redis List object, and we use
-the \texttt{LPOP} (left pop), and \texttt{RPOP} (right pop) commands for a queue like behavior.
+the \texttt{LPOP} (left pop) and \texttt{RPOP} (right pop) commands for a queue like behavior.
 In those cases where we needed a blocking behavior, i.e., when a process needs
 to wait until a message is available, we used the blocking versions \texttt{BLPOP} and
-\texttt{BRPOP}. Redis in-memory operation are very fast, and all of the above 
+\texttt{BRPOP}. Redis in-memory operations are very fast, and all of the above 
 operations have a time complexity of $\mathcal{O}(1)$. We use the official 
 \texttt{redis:alpine} container image from DockerHub.  
 
@@ -735,7 +738,7 @@ experiments can remain in the queues because of the asynchronous nature of the
 system.  We chose to implement the controller in Python but using an API
 specialized in asynchronous event-driven programming over data streams.  
 The open-source library is called Reactive Extensions (ReactiveX) for Python 
-\footnote{\url{https://github.com/ReactiveX/RxPY}} an it is based on the Observer 
+\footnote{\url{https://github.com/ReactiveX/RxPY}} and it is based on the Observer 
 pattern \cite{gamma1995design} and functional programming.
 
 \begin{figure}[ht]
@@ -756,10 +759,10 @@ represent the timeline of an \texttt{Observable} as a horizontal arrow, which in
 that time flows from left to right. In the diagram, items are represented as
 marbles. The position of each marble indicates the point in time when they were
 emitted by the \texttt{Observable}. Reactive operators are represented as text boxes,
-showing the transformation to be applied. Normally, a transformation results in
-another \texttt{Observable}, again emitting new results.  For asynchronous programming, 
-this approach is more elegant than nested callbacks, that are more difficult 
-to code and debug. 
+showing the transformation to be applied. Typically, a transformation results in
+another \texttt{Observable}, again emitting new results. This approach is more 
+elegant for asynchronous programming than nested callbacks, which are more 
+difficult to code and debug. 
 
 Now we proceed to explain the reactive implementation of the controller.
 In Figure \ref{fig:marble_controller}, we  have the following composition of Observables:
@@ -768,22 +771,22 @@ In Figure \ref{fig:marble_controller}, we  have the following composition of Obs
 \item The controller continually pulls new messages from the \texttt{Output} 
 message queue. These messages are instantly emitted by the  \texttt{consumed\_messages}
 \texttt{Observable}. In this particular period, we can see that the stream receives 
-two populations from another experiment, and are shown as two red marbles.  
+two populations from another experiment and are shown as two red marbles.  
 The filter operator removes all messages that belong to a different experiment; 
 in this case, we are only interested in blue marbles. 
 
 \item The \texttt{max\_iterations} parameter indicates the number of populations that
 are going to be accepted. When this number of messages is reached, we must
 end the loop. In this example, \texttt{max\_iterations = 6},  the take operator 
-assures that only 6 messages are received. After the \texttt{Observable} emits 
+assures that only six messages are received. After the \texttt{Observable} emits 
 the sixth message, it triggers the completed event.
 
 \item Many observers can be subscribed to the \texttt{valid\_messages} \texttt{Observable} because it
-emits all the valid items. At the moment, there are to additional methods
+emits all the valid items. At the moment, there are two additional methods
 subscribed that we are not showing, one for logging and the other for monitoring
 the search.
 
-\item The   \texttt{buffer\_with\_count(3)} operator, waits until it receives 
+\item The \texttt{buffer\_with\_count(3)} operator waits until it receives 
 three valid messages to emit a single message that contains a list with
 the previous three. The \texttt{population\_mixer}  method requires that list to mix them. 
 In our previous work, we needed a local buffer for storing a certain 
@@ -821,9 +824,8 @@ the newly generated populations back to the \texttt{Input} message queue.
 \end{algorithm}
 
 
-
 In the next section, we follow the algorithm flow and describe the 
-implementation details of the \texttt{worker} containers. 
+\texttt{worker} containers' implementation details. 
 
 \begin{figure}[ht]
     \centering
@@ -841,11 +843,10 @@ Worker containers include a Python script called \texttt{main.py} running an
 infinite loop, continually trying to pull a new population to work on it. Once
 \texttt{main.py} receives a message containing configuration data, it creates a
 worker object responsible for initializing and running the specified stateless
-function (i.e., GA or PSO) with the population and configuration in the message.
+function (i.e., GA or PSO) with the population and configuration inside the message.
 Once the function returns the evolved population, the
 the main script pushes the results to the \texttt{Output} queue, and continues
-the execution to the infinite loop. This process is shown in Figure
-\ref{fig:worker}.
+to execute the infinite loop. This process is shown in Figure \ref{fig:worker}.
 
 \section{Workflow for Reproducible Experiment Design in EvoSwarm} 
 \label{experiment_flow}
@@ -860,18 +861,18 @@ description and orchestration of reproducible multi-population experiments.
 Following the application design described in the previous section, we now
 present the workflow of an experiment's entire life-cycle viewed from the
 perspective of the two roles users can play. On one side is the user role that
-designs and runs experiments and, on the other, the role of a developer of
+designs and runs experiments and, on the other, a developer of
 algorithms. The scenario presented in Figure~\ref{fig:experiment_flow} shows the
-workflow of an experiment in Evo\-Swarm the two roles users can play. The first
+workflow of an experiment in EvoSwarm and the two roles users can play. The first
 step is to develop the search strategy algorithms that are going to be used by
 the multi-population algorithm; algorithm developers do this. Then users are
 responsible for the configuration and deployment of the resources needed for the
 experiment. Once the application is running, users can start one or several
 experiments, monitor the execution, and analyze the results. Depending on the
-type of experiment executed, users could have additional needs, in this case
+type of experiment executed, users could have additional needs. In this case,
 there are additional scripts for processing the results of experiments to be
 used with the COCO framework. In the next sections, we give more details about
-these roles and their workflows, and at the end we present a proof-of-concept example of a
+these roles and their workflows, followed by a proof-of-concept example of a
 reproducible experiment in EvoSwarm.
 
 %\begin{itemize}
@@ -893,17 +894,16 @@ reproducible experiment in EvoSwarm.
 
 \subsection{EvoSwarm from the Developer Point of View} 
 
-Developers can add new algorithm as stateless functions in
+Developers can add new algorithms as stateless functions in
 several ways and with two levels of integration. In the first level of
 integration, the algorithm execution is not dependent on an initial
 configuration created in the setup, and it only needs to take messages from the
-input queue and return the modified population to the output queue. On the
+input queue and return the modified population to the output queue. At the
 second level, the algorithm receives a configuration from the initial setup,
 specifying the initial algorithm parameters. We show an example of the configuration
 file received by workers in Listing \ref{code:config}  in which we abbreviated
-the population key (the ellipsis is used instead). The message includes the current state
-of the population, together with data about the problem, algorithm,
-and its parameters. 
+the population key (the ellipsis is used instead). The message includes the 
+current state of the population and data about the problem, algorithm, and parameters. 
 
 \begin{lstlisting}[language=Python, caption = Configuration message example, label=code:config]
 {"problem":{
@@ -940,38 +940,38 @@ and its parameters.
 }
 \end{lstlisting}
 
-In the case of the first level of integration, developers
+In the first level of integration, developers
 can implement a new stateless Docker container following
 the description in the previous section (\ref{workers}). The worker
-container executes a daemon that continuously pulls messages from the input queue
-on the Redis host specified as an environment variable {\texttt REDIS\_HOST}. If the new
+container executes a daemon that continuously pulls messages from the Redis host's input queue
+specified as an environment variable {\texttt REDIS\_HOST}. If the new
 population-based algorithm is written in Python, developers can base the new
 implementation on the provided worker container image, adding a new algorithm
 function and worker and modifying the \texttt{main.py} file. 
 The worker must include a constructor with the configuration dictionary 
-(see Listing \ref{code:config}) as the only parameter, and call a the new function 
+(see Listing \ref{code:config}) as the only parameter and call a the new function 
 with the required parameters, unpacking them from the configuration dictionary if necessary.
-All the code of the EvoSwarm Application is published with the open source MIT license.
+All the code of the EvoSwarm Application is published with an open-source MIT license.
 
 If developers use an existing library for population-based algorithms, they need
-to change the standard model of execution, that creates first a random
+to change the standard model of execution, which creates a random
 population because, in this case, the algorithm needs to start with the
 population provided as a parameter. Depending on the evolutionary (or other) algorithm library used,
 it may be required to extract the population from the
 JSON message and replace the population object created by the default library implementation. For
-example, the DEAP library we used for the GA algorithm, creates the type of the
+example, the DEAP library we used for the GA algorithm creates the type of the
 population at runtime (i.e., bit, float), so we have to replace the population
 once DEAP created it. In the case of EvoloPy, the PSO method directly uses a
 list of floats for storing the swarm, so we just added a parameter to receive
 the population as a list of floats. Both libraries store information about each
 iteration, so we just read it and put it in the format required.
-Again, the state of the population must be encoded as a JSON message to be
+Again, the population's state must be encoded as a JSON message to be
 returned as a result, with additional data as
-depicted in Listing \ref{code:result}. The output message contains the id of the
-worker container together with records giving information about each iteration
-of the algorithm, including the best solution found. The controller uses this
-information to track the execution of the algorithm and keep a log in the Redis
-container for posterior analyses.
+depicted in Listing \ref{code:result}. The output message contains worker container's id 
+together with records giving information about each iteration
+of the algorithm, including the best solution found. The controller uses 
+this information to track the algorithm's execution and keep a 
+log in the Redis container for posterior analyses.
 
 \begin{lstlisting}[language=Python, caption=Fragment of an output message, label=code:result ]
 {
@@ -1001,19 +1001,19 @@ container for posterior analyses.
 
 For the secondary level of integration, developers need to add code to the setup
 container to specify additional configuration options. For instance,
-in the current configuration message (see Listing \ref{code:config})
-workers executing a GA, initialize the mutation and crossover 
+in the current configuration message (see Listing \ref{code:config}),
+workers executing a GA initialize the mutation and crossover 
 probabilities randomly from a specific range of values. Users specify
 this range on the experiment configuration. 
 Migration between populations is independent of the type of algorithm, as the
-controller treats messages as the same type of objects. But developers could
-also change the controller to specify new rules of operation, for instance, to
+controller treats messages as the same type of objects. However, developers could
+also change the controller to specify new operation rules, for instance, to
 change the type of migration depending on the algorithm. 
-For example, in the case of swarm-based algorithms,  migration between  
+For example, in swarm-based algorithms,  migration between  
 populations (swarms) can follow a topology, indicating valid connections 
 between them (i.e., ring or hypercube). The controller
 can apply these rules selectively only to swarm-based algorithms. 
-In general, these configuration options will be algorithm and library specific. 
+In general, these configuration options will be algorithm and library-specific. 
 
 On either level of integration and after making the changes outlined before,
 algorithm developers can upload the container 
@@ -1023,13 +1023,13 @@ Another option is to upload the container image definition (Dockerfile) to GitHu
 define a trigger to re-upload the image to the registry after an update. Having
 images publicly available can contribute to the reproducibility of experiments.
 Moreover, having more algorithms available can benefit researchers trying to
-compare against other algorithms or increase the diversity of their algorithms
-by adding more search methods. Finally, in some cloud services, having hosted
+compare against other algorithms or increase their algorithms' diversity by 
+adding more search methods. Finally, in some cloud services, having hosted
 images is a requirement, as it is the case of Amazon ECS.
 
-Moreover, public repositories have the functionality for documenting, sharing,
-and tracking different versions of both images and image definitions by using
-tags. This infrastructure supports the objective of the paper, which is to
+Moreover, public repositories can document, share, 
+and track different versions of both images and image definitions by using
+tags. This infrastructure supports this paper's objective, which is to
 contribute to the reproducibility of experiments and platform independence.
 
 \subsection{EvoSwarm from the User Point of View} 
@@ -1039,13 +1039,12 @@ The user role is responsible for
 editing the {\tt docker-compose} configuration files that reference the images created
 by developers. To deploy the application, he or she needs to edit the {\tt
 docker-compose.yml} file to specify the type and number of containers required
-for the experiments. Then, the {\tt docker-compose} application is responsible for
-starting all the containers, and downloading new versions if it is necessary,
+for the experiments. The {\tt docker-compose} application is then responsible for
+starting all the containers and downloading new versions if necessary
 by executing the command {\tt docker-compose up}  inside the EvoSwarm directory.
 
-
 After starting the application, users can push several Experiment Definition 
-files at a time and start monitoring the current execution in the terminal.
+files and start monitoring the current execution in the terminal.
 After an experiment is finished, the user must execute another script
 that takes as argument the experiment id to generate a collection of files containing all the
 data generated by the experiment, again in a JSON format. An example of an 
@@ -1053,7 +1052,7 @@ experiment definition is shown in Listing \ref{code:exp}. We give more details a
 data contained in the file in the next section. Users can use these files 
 to analyze and plot experiment data.  Python
 scripts are included in the repository to plot the running times for the
-experiments, and all other plots used in this paper;  there is also a script to
+experiments and all other plots used in this paper;  there is also a script to
 generate the files needed by the COCO framework \cite{hansen2016coco}, which can generate standard
 comparisons against other methods.
 
