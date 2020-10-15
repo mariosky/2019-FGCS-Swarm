@@ -453,43 +453,43 @@ a better match to the inherently heterogeneous nature of cloud-based
 architectures. Pool-based systems are closer to serverless systems
 \cite{malawski2017serverless}, as they pull populations from the pool and run
 whole algorithms, instead of just doing the evaluation. The pool 
-is a shared data storage for results, and can be accessed in an
+is a shared data storage for results and can be accessed in an
 asynchronous way, which suits better the nature of cloud-native systems.
 
 \section{Proposed Method} 
 \label{method} 
 
 In this section, we present the design
-and a container-based implementation of the model we propose for the execution
-of multi-population based algorithms. We follow the requirements outlined in
+and a container-based implementation of the model we propose to execute
+multi-population based algorithms. We follow the requirements outlined in
 Section \ref{multi} and the general design principles of cloud-native
-applications we have mentioned earlier; our intention is to steer
+applications we have mentioned earlier; we intend to steer
 clear of a direct translation of ``classical'' GA architectures to the
 cloud and design from the ground up a cloud-native method. As a first step, we describe the general
-architecture, and then  every component in detail. 
+architecture and then every component in detail. 
 
-The most elemental data structure used throughout the system is the population; and at a higher
+The most basic data structure used throughout the system is the population, and at a higher
 level, we can view the system as a continuous stream of populations
 flowing from one process to the other. By ``continuous stream,'' we mean that ideally,
 everything must happen asynchronously without components needing to wait for
 others. In this kind of system, this streaming functionality is normally
 implemented by using a message queue system. For instance, if one process needs
 to communicate a population to another, it must pack the population into
-a message, and then send the message 
+a message and then send the message 
 to the queuing system without waiting for a response; this
 means that after the process pushes the message, it continues its execution
 without waiting for a result. On the other end, the recipient subscribes to the
-message queue by defining an event handler method that is going to be triggered when a
-message is pushed to it. The two components at each end of the queue are
+message queue by defining an event handler method that will be triggered when a
+message is pushed to it. At each end of the queue, the two components are 
 Producers that push messages to the queue and Consumers that pull them. This
 pattern is an essential component of a reactive architecture and makes
-it highly scalable; one of the reasons for this is the use of functions
-that have no secondary effects or access global storage, that is,
+it highly scalable; one reason for this is the use of functions
+with no secondary effects, that is,
 stateless functions. These functions do not need to read, keep, or modify data outside of the method. If
-Consumers are implemented using stateless functions, and thus, there is no difference
-between having one or many copies of the same function pulling work from the queue all at the
-same time, because no side effects, including unwanted resource
-locking problems,  are going to result from this concurrency.
+Consumers are implemented using stateless functions, there is no difference
+between having one or many copies of the same function pulling work from the queue 
+simultaneously, because there are no side effects, including unwanted resource
+locking problems resulting from this concurrency.
 % This is important and we should probably mention that in the
 % introduction - JJ 
 Based on these general principles, we next define the proposed model.
