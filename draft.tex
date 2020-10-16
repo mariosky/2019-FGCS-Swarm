@@ -88,25 +88,25 @@ Genetic Programming (GP) \cite{back1996evolutionary}, Grey Wolf Optimization
 while examples of (SI) \cite{kennedy2006swarm} are particle swarm
 optimization (PSO) \cite{clerc2010particle} and ant colony algorithms (ACO) \cite{dorigo1999ant}.
 
-Besides being, all of them, population-based, they also share the common characteristic of
-creating an initial set of random candidate solutions later used by a 
-nature-inspired heuristic to generate a new set of candidates. 
-Population-based algorithms are intrinsically parallel.
-The fitness of each individual can be (in general) evaluated independently of 
-others, and similarly, each population could evolve in isolation. Researchers use the term
-multi-population based methods when referring to techniques using
-many populations as part of their optimization strategy. 
-Since earlier works, researchers have been proposing some form of parallelization
-\cite{muhlenbein1988evolution} to increase these algorithms' scalability
-by adding some form of interaction between populations running in isolation.
-The island model was one of the first techniques proposed for parallelization,
-which led to early proofs of speed-up \cite{gorges1990explicit,grosso1985computer}. 
-% Repetitive - M
-%The concept was to divide a large population into communicated subpopulations. 
-Since then, other population-based algorithms have adopted the idea. 
-Researchers have found additional benefits
-besides the execution speed; these include avoiding a premature convergence and
-maintaining the diversity of the global population \cite{li2015multi}. 
+Besides being, all of them, population-based, they also share the
+common characteristic of creating an initial set of random candidate
+solutions which is later used by a nature-inspired metaheuristic to
+generate a new set of candidates; there are parts of this process that
+can be easily done in parallel. For instance, the fitness of each
+individual can be (in general) evaluated independently of others, and
+similarly, each population could evolve in isolation. Researchers use
+the term multi-population based methods when referring to techniques
+using many populations as part of their optimization strategy.  Since
+earlier works, researchers have been proposing some form of
+parallelization \cite{muhlenbein1988evolution} to increase these
+algorithms' scalability by adding some form of interaction between
+populations running in isolation.  The island model was one of the
+first techniques proposed for parallelization, which led to early
+proofs of speed-up \cite{gorges1990explicit,grosso1985computer}.
+Since then, other population-based algorithms have adopted the idea.
+Researchers have found additional benefits besides the execution
+speed; these include avoiding a premature convergence and maintaining
+the diversity of the global population \cite{li2015multi}.
 
 % Probably it's not the time for this, but maybe it would be interesting to 
 % mention that asynchronous implementations in most cases need a change in 
@@ -142,15 +142,12 @@ voluntary computing systems \cite{MilkyWay,merelo2016nodio},
 and, more importantly, cloud computing
 \cite{GValdez2015,salza2019speed,valenzuela2015implementing,FlexGP}.
 
-%% JJ Can you improve the redability of the paragraph below? 
-%% Grammarly suggests that is hard to read, verly long sentences.
-%% Edited a little - Mario
 Cloud computing has become the standard way of running
 enterprise applications.  Not only because of the convenience of the
 pay-as-you-go model or the non-existent sunk cost of physical facilities, but also because
 it offers a way of describing the infrastructure as part of the code, so that it
 is much easier to reproduce results and this has been a boon for scientific
-computing.  
+computing.
 However,  cloud computing has also been evolving, going from simply
 putting old-style monolithic applications on virtual machines executing on an external 
 data center to microservices \cite{microservices} and serverless architectures \cite{varghese2018next,Varghese2018849} 
