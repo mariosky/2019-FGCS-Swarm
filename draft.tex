@@ -158,9 +158,9 @@ that favor the parallel and asynchronous communication of
 heterogeneous resources. In the process, a new methodology for designing 
 {\em cloud-native applications} has been created, with brand new methods and
 techniques \cite{Baldini2016287}. 
-In these architectures, services, or even functions are seen as independent 
-processing nodes, departing from the monolithic
-and even distributed paradigms, and becoming a loosely coupled collection of {\em
+In these architectures, services are seen as independent processing nodes, 
+departing from monolithic or distributed paradigms to becoming a loosely 
+coupled collection of {\em
 stateless functions}\cite{malawski2017serverless}, that react to events. 
 %and only come into existence while they are doing some processing.
 Systems developed with the patterns outlined above have the
@@ -181,12 +181,13 @@ however, when developing their multi-population algorithms, they face additional
   %  processing. 
 
     \item They need to establish a workflow of local development and
-prototyping while having the option of deployment to services provided
-by a cloud provider, thus using modern methodologies and technologies.
+prototyping while having the option of deployment to cloud services,
+ thus using modern methodologies and technologies.
 
     \item They must log experimental results and be able to replicate the experiments. 
 
-    \item They must consider additional parameters that can affect the monetary cost or the performance of the
+    \item They must consider additional parameters that can affect the monetary cost 
+    or the performance of the
     execution — for instance, the format and size of messages, the number of
     worker processes and their capabilities.  
 \end{itemize}
@@ -314,10 +315,11 @@ background of the fundamental issues of integrating nature-inspired optimization
 and multi-population methods. Section \ref{soa} presents state of the art relevant to
 our work. In Section \ref{method}, we present the proposed method and the container-based
 application in Section \ref{docker} and the workflow for reproducible experiment design in Section \ref{experiment_flow}. % No reference to section 6.
-Section \ref{setup} describes the empirical evaluation design to assess the effectiveness
-of the method, concerning scalability and % This is a subsection, fix it. 
+Section \ref{setup} describes the empirical evaluation design to assess the 
+method's effectiveness, concerning scalability and % This is a subsection, fix it. 
 the heterogeneous populations' performance.  % No references to sections 9 and 10
-Finally, we offer the conclusions of this paper and suggestions for future work in Section \ref{conclusions}.
+Finally, we offer the conclusions of this paper and suggestions for future work in 
+Section \ref{conclusions}.
 
 
 \section{Multi-population Methods} % Is this part of the state of the
@@ -454,7 +456,7 @@ asynchronous way, which suits better the nature of cloud-native systems.
 
 In this section, we present the design
 and a container-based implementation of the model we propose to execute
-multi-population based algorithms. We follow the requirements outlined in
+multi-population-based algorithms. We follow the requirements outlined in
 Section \ref{multi} and the general design principles of cloud-native
 applications we have mentioned earlier; we intend to steer
 clear of a direct translation of ``classical'' GA architectures to the
@@ -480,8 +482,8 @@ it highly scalable; one reason for this is the use of functions
 with no secondary effects, that is,
 stateless functions. These functions do not need to read, keep, or modify data outside of the method. If
 Consumers are implemented using stateless functions, there is no difference
-between having one or many copies of the same function pulling work from the queue 
-simultaneously, because there are no side effects, including unwanted resource
+between having one or many copies of the same function simultaneously pulling work
+from the queue. There are no side effects, including unwanted resource
 locking problems resulting from this concurrency.
 % This is important and we should probably mention that in the
 % introduction - JJ 
@@ -499,7 +501,7 @@ Based on these general principles, we next define the proposed model.
 
 \subsection{Event-Driven Model} 
 \label{edm}
-Based on a reactive architecture we proposed in a previous work
+Based on a reactive architecture we proposed in our previous work
 \cite{guervos2018introducing}, we now describe the general architecture shown in
 Figure \ref{fig:kafkEO}. Again, we can explain the model using the analogy
 of producers and consumers of messages. First, we can see two queues, 
@@ -539,14 +541,14 @@ from the \texttt{Input} queue. They take the current state of the population and
 run the algorithm for a certain number of iterations. 
 
 \item Once they finish the execution, the population state
-is packed again with additional metadata about the algorithm's execution.
+is again packed with additional metadata about the algorithm's execution.
 The resulting populations are now pushed to the Output queue. Once finished, another 
 population is pulled from the queue.
 
 \item The \texttt{Controller} process is responsible for keeping track of the progress of 
-the search. It pulls current populations from the \texttt{Output} queue, inspects the metadata, 
-and if an optimal solution has been found or the maximum number of iteration has been
-reached, it signals the stop of the execution. 
+the search. It pulls current populations from the \texttt{Output} queue, inspects the metadata. 
+If an optimal solution has been found or the maximum number of iteration has been
+reached, it signals the execution to stop. 
 
 \item Otherwise, it passes the stream of messages 
 to a migration process, where populations are mixed. New populations 
@@ -558,7 +560,7 @@ messages.
 This reactive architecture has the following advantages:\begin{itemize}
 \item 
 An important aspect of the proposal is the decoupling of the population and 
-the population-based algorithm. It is common that in a classic island-based algorithm
+the population-based algorithm. It is common that in a classic island-based algorithm,
 each island is executed in a separate processing node, i.e., in a virtual machine, CPU,
 or thread. In this case, we can have just one processing node or many nodes, each 
 running with a different search strategy or parameters. 
@@ -581,15 +583,15 @@ execution.
     \label{fig:population_message}
 \end{figure}
 
-On the other hand, there are several caveats: It is more
-costly to move entire populations as messages than only passing
+On the other hand, we have several caveats: It is more
+costly to move entire populations as messages than passing only
 specific individuals from a process to another. Designers must consider
 this cost when working with large individuals, and if possible, send
-populations using several messages, use compression, or adjust the size
-of populations. Pool-based algorithms also suffer from this drawback,
-but web-based implementations have been working with continuous
-optimization problems with 1000 dimensions.  However, in other cases, % Reference that paper - Mario
-this is not a viable approach.
+populations using several messages, use compression, or adjust the populations'
+size. Pool-based algorithms also suffer from this drawback.
+%,but web-based implementations have been working with continuous
+%optimization problems with 1000 dimensions.  However, in other cases, % Reference that paper - Mario
+%this is not a viable approach.
 
 \begin{figure}[ht]
     \centering
@@ -601,8 +603,8 @@ this is not a viable approach.
 \subsection{Comparison with Other Cloud-based Works} 
 \label{comparison}
 
-Next, we compare the message-driven architecture we presented against four other
-proposals for multi-population algorithms found in the literature. We center the
+Next, we compare the message-driven architecture we presented against four
+multi-population-based algorithms found in the literature. We center the
 comparison on the coupling and communication between the main components:
 populations, processing nodes, and algorithms.  In Figure \ref{fig:population_message}, we show the
 main components of a message-driven architecture. We can see that the algorithm
@@ -615,12 +617,12 @@ for their execution.
 In contrast, in the classic island model shown in Figure
 \ref{fig:classicisland}, algorithms are  population methods, and the same processing
 node keeps both the algorithm process and the state of the population.  Other
-processing nodes follow the same configuration and form of execution and they
+processing nodes follow the same configuration and execution form, and they
 only pass specific individuals between them.  In this model, adding additional
 processing nodes, on-runtime, can be more difficult because they need to have
 an addressing mechanism or simply be aware of these new nodes. This is
 solved in part in Peer to Peer (P2P) evolutionary algorithms
-\cite{juanlu:europar}, but coupling still exists, meaning that every
+\cite{juanlu:europar}. However, coupling still exists, meaning that every
 node must run the whole evolutionary algorithm and hold full copies of
 its subpopulation. 
 
@@ -722,7 +724,7 @@ operations have a time complexity of $\mathcal{O}(1)$. We use the official
 
 The controller is an essential component of the architecture (see Figure \ref{fig:kafkEO})
 because it is responsible for maintaining the evolutionary loop. It takes newly
-evolved populations from the \texttt{Output Queue}, mixes them,   and produces new
+evolved populations from the \texttt{Output Queue}, mixes them, and produces new
 messages from the result. At the same time, it must keep track of two conditions
 for ending the loop: the number of messages it has received reaches a maximum
 value, or the error of the best solution goes below a specific threshold.  Finally, it
@@ -763,8 +765,8 @@ In Figure \ref{fig:marble_controller}, we  have the following composition of Obs
 \begin{enumerate}
 \item The controller continually pulls new messages from the \texttt{Output} 
 message queue. These messages are instantly emitted by the  \texttt{consumed\_messages}
-\texttt{Observable}. In this particular period, we can see that the stream receives 
-two populations from another experiment and are shown as two red marbles.  
+\texttt{Observable}.This particular example shows that the stream receives 
+two populations from another experiment, and these are shown as two red marbles.  
 The filter operator removes all messages that belong to a different experiment; 
 in this case, we are only interested in blue marbles. 
 
@@ -896,7 +898,7 @@ second level, the algorithm receives a configuration from the initial setup,
 specifying the initial algorithm parameters. We show an example of the configuration
 file received by workers in Listing \ref{code:config}  in which we abbreviated
 the population key (the ellipsis is used instead). The message includes the 
-current state of the population and data about the problem, algorithm, and parameters. 
+population's current state and data about the problem, algorithm, and parameters. 
 
 \begin{lstlisting}[language=Python, caption = Configuration message example, label=code:config]
 {"problem":{
