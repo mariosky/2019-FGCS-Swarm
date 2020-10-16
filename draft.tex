@@ -1070,7 +1070,7 @@ other methods.
 \end{lstlisting}
 
 
-\subsection{Deploying to a Cloud Provider}
+\subsection{Deploying to a cloud provider}
 \label{cloud-aws}
 
 EvoSwarm describes the deployment of loosely coupled processes in a consistent
@@ -1079,10 +1079,10 @@ environments because we can deploy them on an infrastructure that abstracts the
 underlying compute, storage, and networking primitives. This infrastructure does
 not need to be a cloud provider; it could be a developer's laptop, a single
 server, or a production environment. This section gives specific details
-about how we deployed EvoSwarm in a cloud-setting for running the experiments
+about how we deployed EvoSwarm in a cloud setting for running the experiments
 within this paper. Running the cloud-native application in the cloud has the obvious
 benefit of a multi-instance deployment, where we can run containers in several
-instances executing at the same time, not only in a single machine as it is the case when using docker-compose. 
+computing nodes at the same time, not only in a single machine as it is the case when using docker-compose.
 
 When we deploy a cloud-native application to a cloud provider, there
 are, among others, two options to choose from:
@@ -1139,7 +1139,7 @@ provision the  EC2 containers, networking, and group permissions for each
 experimental setup; for instance, when going from 2 to 8 workers, we need to increase the
 number of EC2 instances to meet the required amount of CPU units.
 
-Multicontainer applications are deployed to ECS as tasks, and a single cluster can run multiple tasks in
+Multicontainer applications are deployed to ECS as a series of tasks {\em tasks}, and a single cluster can run multiple tasks in
 parallel. Using the ECS CLI, we can provision a cluster with a configuration file
 specifying the computing resources needed. We can also specify the configuration of a task 
 by using a task definition file (see Listing~\ref{code:ecs}) in YAML format.
@@ -1155,7 +1155,8 @@ containers we used the file in Listing ~\ref{code:compose}.
 
 Each container is defined as a {\texttt service} ({\em task} in AWS terms), with the following attributes: {\texttt image},
 that reference the container images we have published in Docker hub
-\footnote{\url{https://hub.docker.com/u/mariosky}}, open {\texttt ports}, a {\texttt command} to be executed at
+\footnote{They are shown as different repositories for user {\tt
+    mariosky} here: \url{https://hub.docker.com/u/mariosky}}, open {\texttt ports}, a {\texttt command} to be executed at
 startup, configuration for the AWS {\texttt logging} service, and finally, {\texttt environment}
 variables used by code running inside containers.
 
