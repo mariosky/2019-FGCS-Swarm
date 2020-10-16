@@ -1097,21 +1097,34 @@ are, among others, two options to choose from:
   \item[A container orchestration service]: These services are compatible with {\tt docker-compose}
     files for configuration and provide transparent provisioning. Examples of these
     services are Amazon Elastic Container Service,  Red Hat Openshift
-    (which is also open-source), and Marantis Docker Enterprise using Docker Swarm.
+    (which is also open source), and Marantis Docker Enterprise using Docker Swarm.
     Salza et al. \cite{salza2019speed} tested a variant of this option by using a CoreOs cluster. 
 
 \end{description}
-
-%\subsubsection{Setup} % Even if it's a sub-sub section, flesh this out ... - JJ
-%\label{setup:local-cloud}
 
 We chose the second option, a container orchestration service. We
 deployed the EvoSwarm application in Amazon Elastic Container Service (ECS)
 since it needs fewer changes in configuration (from deploying it locally using
 {\tt docker-compose}) and it has a lower cost than the Kubernetes
-alternative.
+alternative. This does not imply any loss of generality; first,
+because it's {\tt docker-compose} compatible, and it can be deployed
+in approximately the same way to any of the services, mentioned above,
+compatible with it. Since {\tt docker-compose} is open source, it can
+be ported to any computing node, and can thus be deployed to any other
+cloud service like Azure or Google Cloud Platform. At any rate, please
+note that there are several levels of infrastructure programming
+here. At the lowest level, we are using docker containers, which are
+compatible across a myriad of cloud providers in one way or other. At
+the next level, we are using a container composition technology that
+is also standard, {\tt docker compose}, once again compatible across
+any platform that can host that kind of service. There's, however, a
+final, platform-specific, infrastructure definition that will have to
+vary across any public or private cloud platform that we are using,
+and that will tap the cloud provider API. These changes, however, are
+usually minimal, and can also be done through the CLI or using the web
+console.
 
-We can define an ECS cluster directly on the AWS Elastic Cloud VMs or through the
+For instance, we can define an ECS cluster directly on the AWS Elastic Cloud VMs or through the
 AWS Fargate service. Fargate is a serverless compute engine for containers that
 provides automatic provision and management of AWS ECS resources. With this
 service, calculating the cost of execution is simplified because users only
