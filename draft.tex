@@ -88,25 +88,25 @@ Genetic Programming (GP) \cite{back1996evolutionary}, Grey Wolf Optimization
 while examples of (SI) \cite{kennedy2006swarm} are particle swarm
 optimization (PSO) \cite{clerc2010particle} and ant colony algorithms (ACO) \cite{dorigo1999ant}.
 
-Besides being, all of them, population-based, they also share the common characteristic of
-creating an initial set of random candidate solutions later used by a 
-nature-inspired heuristic to generate a new set of candidates. 
-Population-based algorithms are intrinsically parallel.
-The fitness of each individual can be (in general) evaluated independently of 
-others, and similarly, each population could evolve in isolation. Researchers use the term
-multi-population based methods when referring to techniques using
-many populations as part of their optimization strategy. 
-Since earlier works, researchers have been proposing some form of parallelization
-\cite{muhlenbein1988evolution} to increase these algorithms' scalability
-by adding some form of interaction between populations running in isolation.
-The island model was one of the first techniques proposed for parallelization,
-which led to early proofs of speed-up \cite{gorges1990explicit,grosso1985computer}. 
-% Repetitive - M
-%The concept was to divide a large population into communicated subpopulations. 
-Since then, other population-based algorithms have adopted the idea. 
-Researchers have found additional benefits
-besides the execution speed; these include avoiding a premature convergence and
-maintaining the diversity of the global population \cite{li2015multi}. 
+Besides being, all of them, population-based, they also share the
+common characteristic of creating an initial set of random candidate
+solutions which is later used by a nature-inspired metaheuristic to
+generate a new set of candidates; there are parts of this process that
+can be easily done in parallel. For instance, the fitness of each
+individual can be (in general) evaluated independently of others, and
+similarly, each population could evolve in isolation. Researchers use
+the term multi-population based methods when referring to techniques
+using many populations as part of their optimization strategy.  Since
+earlier works, researchers have been proposing some form of
+parallelization \cite{muhlenbein1988evolution} to increase these
+algorithms' scalability by adding some form of interaction between
+populations running in isolation.  The island model was one of the
+first techniques proposed for parallelization, which led to early
+proofs of speed-up \cite{gorges1990explicit,grosso1985computer}.
+Since then, other population-based algorithms have adopted the idea.
+Researchers have found additional benefits besides the execution
+speed; these include avoiding a premature convergence and maintaining
+the diversity of the global population \cite{li2015multi}.
 
 % Probably it's not the time for this, but maybe it would be interesting to 
 % mention that asynchronous implementations in most cases need a change in 
@@ -142,15 +142,12 @@ voluntary computing systems \cite{MilkyWay,merelo2016nodio},
 and, more importantly, cloud computing
 \cite{GValdez2015,salza2019speed,valenzuela2015implementing,FlexGP}.
 
-%% JJ Can you improve the redability of the paragraph below? 
-%% Grammarly suggests that is hard to read, verly long sentences.
-%% Edited a little - Mario
 Cloud computing has become the standard way of running
 enterprise applications.  Not only because of the convenience of the
 pay-as-you-go model or the non-existent sunk cost of physical facilities, but also because
 it offers a way of describing the infrastructure as part of the code, so that it
 is much easier to reproduce results and this has been a boon for scientific
-computing.  
+computing.
 However,  cloud computing has also been evolving, going from simply
 putting old-style monolithic applications on virtual machines executing on an external 
 data center to microservices \cite{microservices} and serverless architectures \cite{varghese2018next,Varghese2018849} 
@@ -211,12 +208,14 @@ and available in a public
 GitHub repository
 \footnote{\url{https://github.com/mariosky/EvoSwarm}}.
 
-We preferred the use of a container-based implementation for this prototype because
-it is more suitable for development and replication without needing
-additional components. Nevertheless, the application is compatible with other
-orchestration and deployment technologies if more scalability is needed. 
-With additional configuration settings, applications can be deployed 
-to a Docker Swarm or a Kubernetes system.
+% ------------------------ Commented this out since this is said
+% elsewhere ----------------------------------------------------
+% We preferred the use of a container-based implementation for this prototype because
+% it is more suitable for development and replication without needing
+% additional components. Nevertheless, the application is compatible with other
+% orchestration and deployment technologies if more scalability is needed. 
+% With additional configuration settings, applications can be deployed 
+% to a Docker Swarm or a Kubernetes system.
 %% Here we could talk about Cloud-based platform for executing the application
 %% and the cloud-lock risk - Mario
 
@@ -1028,7 +1027,7 @@ and track different versions of both images and image definitions by using
 tags. This infrastructure supports this paper's objective, which is to
 contribute to the reproducibility of experiments and platform independence.
 
-\subsection{EvoSwarm from the User Point of View} 
+\subsection{EvoSwarm from the user's point of view} 
 \label{sec:evoswarm:config}
 
 The user role is responsible for
@@ -1039,16 +1038,16 @@ for the experiments. The {\tt docker-compose} application is then responsible fo
 starting all the containers and downloading new versions if necessary
 by executing the command {\tt docker-compose up}  inside the EvoSwarm directory.
 
-After starting the application, users can push several Experiment Definition 
+After starting the application, users can push several Experiment Definition
 files and start monitoring the current execution in the terminal.
 After an experiment is finished, the user must execute another script
 that takes as argument the experiment id to generate a collection of files containing all the
-data generated by the experiment, again in a JSON format. An example of an 
-experiment definition is shown in Listing \ref{code:exp}. We give more details about the 
-data contained in the file in the next section. Users can use these files 
-to analyze and plot experiment data.  Python
-scripts are included in the repository to plot the running times for the
-experiments and all other plots used in this paper;  there is also a script to
+data generated by the experiment, again in a JSON format. An example of an
+experiment definition is shown in Listing \ref{code:exp}. We give more details about the
+data contained in the file in the next section. Users can use these files
+to analyze and plot experiment data. We include Python
+scripts  in the repository to plot the running times for the
+experiments and all other charts used in this paper;  there is also a script to
 generate the files needed by the COCO framework \cite{hansen2016coco}, which can generate standard
 comparisons against other methods.
 
@@ -1099,21 +1098,34 @@ are, among others, two options to choose from:
   \item[A container orchestration service]: These services are compatible with {\tt docker-compose}
     files for configuration and provide transparent provisioning. Examples of these
     services are Amazon Elastic Container Service,  Red Hat Openshift
-    (which is also open-source), and Marantis Docker Enterprise using Docker Swarm.
+    (which is also open source), and Marantis Docker Enterprise using Docker Swarm.
     Salza et al. \cite{salza2019speed} tested a variant of this option by using a CoreOs cluster. 
 
 \end{description}
-
-%\subsubsection{Setup} % Even if it's a sub-sub section, flesh this out ... - JJ
-%\label{setup:local-cloud}
 
 We chose the second option, a container orchestration service. We
 deployed the EvoSwarm application in Amazon Elastic Container Service (ECS)
 since it needs fewer changes in configuration (from deploying it locally using
 {\tt docker-compose}) and it has a lower cost than the Kubernetes
-alternative.
+alternative. This does not imply any loss of generality; first,
+because it's {\tt docker-compose} compatible, and it can be deployed
+in approximately the same way to any of the services, mentioned above,
+compatible with it. Since {\tt docker-compose} is open source, it can
+be ported to any computing node, and can thus be deployed to any other
+cloud service like Azure or Google Cloud Platform. At any rate, please
+note that there are several levels of infrastructure programming
+here. At the lowest level, we are using docker containers, which are
+compatible across a myriad of cloud providers in one way or other. At
+the next level, we are using a container composition technology that
+is also standard, {\tt docker compose}, once again compatible across
+any platform that can host that kind of service. There's, however, a
+final, platform-specific, infrastructure definition that will have to
+vary across any public or private cloud platform that we are using,
+and that will tap the cloud provider API. These changes, however, are
+usually minimal, and can also be done through the CLI or using the web
+console.
 
-We can define an ECS cluster directly on the AWS Elastic Cloud VMs or through the
+For instance, we can define an ECS cluster directly on the AWS Elastic Cloud VMs or through the
 AWS Fargate service. Fargate is a serverless compute engine for containers that
 provides automatic provision and management of AWS ECS resources. With this
 service, calculating the cost of execution is simplified because users only
