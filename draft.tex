@@ -130,7 +130,7 @@ through a central repository \cite{sofea:cec2012, JSON} or message queues
 \cite{salza2019speed, guervos2018introducing}. In this work, we follow this
 practice.
 
-The trend concerning the parallel execution multi-population algorithms goes from
+The trend concerning parallel execution multi-population algorithms goes from
 earlier hardware-based implementations using transputers
 \cite{gorges1990explicit} through 
 multi-core systems \cite{Serrano2008,lai2019adaptive} to multi-threaded \cite{merelo2019scaling} ones.
@@ -161,7 +161,7 @@ techniques \cite{Baldini2016287}.
 In these architectures, services or even functions are seen as independent 
 processing nodes, departing from the monolithic
 and even distributed paradigms, and becoming a loosely coupled collection of {\em
-stateless functions} \cite{malawski2017serverless}, that react to events. 
+stateless functions}\cite{malawski2017serverless}, that react to events. 
 %and only come into existence while they are doing some processing.
 Systems developed with the patterns outlined above have the
 properties of a reactive system \cite{boner2014reactive}, and they are generally 
@@ -506,7 +506,7 @@ one labeled \texttt{Input} and the other one \texttt{Output}. In the diagram,
 push operations on a queue are represented by solid arrows connecting to the left side
 of the queue box, and pull or pop operations as solid arrows leaving from the right side.
 The architecture has at least four processes indicated in the diagram as
-swimlanes: First, the \texttt{Setup} process, responsible for the reading a configuration
+swimlanes: First, the \texttt{Setup} process, responsible for reading a configuration
 file and creating the initial populations. Second, the \texttt{Controller} process,
 responsible for the migration between populations and keeping track of the algorithm's
 iterations. The \texttt{Message Queue} process runs the \texttt{Input} and \texttt{Output}
@@ -836,7 +836,7 @@ infinite loop, continually trying to pull a new population to work on it. Once
 \texttt{main.py} receives a message containing configuration data, it creates a
 worker object responsible for initializing and running the specified stateless
 function (i.e., GA or PSO) with the population and configuration inside the message.
-Once the function returns the evolved population, the
+Once the function returns the evolved population,
 the main script pushes the results to the \texttt{Output} queue, and continues
 to execute the infinite loop. This process is shown in Figure \ref{fig:worker}.
 
@@ -941,7 +941,7 @@ population-based algorithm is written in Python, developers can base the new
 implementation on the provided worker container image, adding a new algorithm
 function and worker and modifying the \texttt{main.py} file. 
 The worker must include a constructor with the configuration dictionary 
-(see Listing \ref{code:config}) as the only parameter and call a the new function 
+(see Listing \ref{code:config}) as the only parameter and call the new function 
 with the required parameters, unpacking them from the configuration dictionary if necessary.
 All the code of the EvoSwarm Application is published with an open-source MIT license.
 
@@ -953,13 +953,14 @@ it may be required to extract the population from the
 JSON message and replace the population object created by the default library implementation. For
 example, the DEAP library we used for the GA algorithm creates the type of the
 population at runtime (i.e., bit, float), so we have to replace the population
-once DEAP created it. In the case of EvoloPy, the PSO method directly uses a
+once DEAP creates it. In the case of EvoloPy, the PSO method directly uses a
 list of floats for storing the swarm, so we just added a parameter to receive
 the population as a list of floats. Both libraries store information about each
 iteration, so we just read it and put it in the format required.
 Again, the population's state must be encoded as a JSON message to be
 returned as a result, with additional data as
-depicted in Listing \ref{code:result}. The output message contains worker container's id 
+depicted in Listing \ref{code:result}. The output message contains the
+worker container's id 
 together with records giving information about each iteration
 of the algorithm, including the best solution found. The controller uses 
 this information to track the algorithm's execution and keep a 
@@ -1092,7 +1093,7 @@ are, among others, two options to choose from:
   algorithm, and Dziurzanski et al. \cite{dziurzanski2020scalable} later refined
   it.
 
-  \item[A container orchestration service] these services are compatible with {\tt docker-compose}
+  \item[A container orchestration service]: These services are compatible with {\tt docker-compose}
     files for configuration and provide transparent provisioning. Examples of these
     services are Amazon Elastic Container Service,  Red Hat Openshift
     (which is also open-source), and Marantis Docker Enterprise using Docker Swarm.
@@ -1161,13 +1162,15 @@ capable {\texttt C5 High-CPU XLarge} instance,  with
 four vCPUs and 4096 CPU shares, with this configuration each worker gets a pair of vCPUs.  
 We scaled the number of instances as needed, using one instance for every two {\texttt worker} containers. 
 
-Because all these instances run in a private subnet, we also
-run a Bastion instance, that is, a specially protected network node, in a public subnet, from where we send the
-commands to execute the experiments
-and later collected the results. We connected to this instance through a {\texttt ssh} session from 
-our personal workstation. This is a {\texttt R5AD Large} instance, selected with 75GiB of storage, needed for
-keeping the logs, and more memory (16GiB) for processing the logs in memory. The details these EC2 instances 
-and their cost at the time of writing are shown in Table \ref{tab:ec2}.
+Because all these instances run in a private subnet, we also run a
+Bastion instance, that is, a specially protected network node, in a
+public subnet, from where we send the commands to execute the
+experiments and later collect the results. We connected to this
+instance through a {\texttt ssh} session from our personal
+workstation. This is a {\texttt R5AD Large} instance, selected with
+75GiB of storage, needed for keeping the logs, and more memory (16GiB)
+for processing the logs in memory. The details these EC2 instances and
+their cost at the time of writing are shown in Table \ref{tab:ec2}.
 
 
 \begin{table}[h!tbp]
@@ -1254,7 +1257,7 @@ The complete configuration files are available at public GitHub repository
 \footnote{\url{https://github.com/mariosky/EvoSwarm/tree/master/aws-EC2}}, and
 they are used on the next section to carry an extensive evaluation of the framework.
 Again, each configuration describes the deployment of containers in a consistent
-and portable way, an it was used in each phase of the life cycle, from
+and portable way, and it was used in each phase of the life cycle, from
 development through testing to production independently on the kind of
 infrastructure.
 
@@ -1518,7 +1521,7 @@ parameters for this. See Table \ref{tab:params:10} for the complete list.
   \centering
   \includegraphics[width=\textwidth]{eval_ratio}
   \caption{Boxplot of the number of evaluations per second, for 30 instances of function $f_4$,
-          with different number of workers and number of populations. The $y$ axis is in log scale.}
+          with different number of workers and  populations. The $y$ axis is in log scale.}
   \label{fig:spworker:evalspersecond}
 \end{figure}
 
@@ -1618,7 +1621,7 @@ waiting for populations to be available in the queue.
 Table~\ref{tab:speedup-table} shows the speed-up obtained against the baseline of
 one worker. We achieved the maximum speed-up when using four workers or more with
 twenty populations. On the other hand, the maximum speed-up when we consider the
-cost it was with eight workers. The best speed-ups for each number of workers are
+cost was with eight workers. The best speed-ups for each number of workers are
 shown in bold in the table.  
 
 
@@ -1638,7 +1641,7 @@ underline and bold, respectively).
 \begin{figure}[h!tbp]
   \centering
   \includegraphics[width=\textwidth]{evals_per_instance}
-  \caption{Boxplot of the number of function evaluations required to reach the target, for 30 instances of function $f_4$, with a different number of workers and populations sizes}
+  \caption{Boxplot of the number of function evaluations required to reach the target, for 30 instances of function $f_4$, with a different number of workers and population sizes}
   \label{fig:evals_instance}
 \end{figure}
 
@@ -1837,7 +1840,7 @@ A multi-population based algorithm can decrease the execution time
 thanks to running the algorithm on several populations at the same
 time. But, if the populations are heterogeneous 
 it might enhance evolutionary search and avoid unneeded
-evaluations to a greater extent than homogeneous systems systems do; heterogeneous settings, if
+evaluations to a greater extent than homogeneous systems do; heterogeneous settings, if
 done right, increase the diversity of the whole population\cite{araujo2008multikulti}.
 
 But this is a rule of thumb, and it will depend on the degree of heterogeneity,
@@ -1856,7 +1859,7 @@ same parameters as before.
 In order to run this experiment, we just needed to edit a configuration file and
 start it up. The plots presented in the results are generated by the BBOB
 framework from the JSON log file for each run. There was no additional setup
-needed, proving how this framework is able to not only offer an reproducible way
+needed, proving how this framework is able to not only offer a reproducible way
 to run experiments, but also how easily it interfaces with other common tools in
 the EC ecosystem.
 
@@ -1899,22 +1902,20 @@ that the later have better performance.
 \section{Conclusions} 
 \label{conclusions}
 
-In this paper we have presented the EvoSwarm framework for 
-the reproducible execution of experiments with an event-based, cloud-native architecture 
-suitable for hosting multi-population, multi-algorithm optimization
-methods. 
-The framework is based in industry-standard development
-tools such as Docker and Docker Compose, making it easy for scientists and practitioners to develop and deploy
-% The last version still uses Docker Compose? - JJ
-% Well it uses docker-compose files, and these files are  
-% converted to tasks and services by the ECS-CLI. -Mario
-% It still can be used to run the application locally - Mario 
+In this paper we have presented the EvoSwarm framework for the
+reproducible execution of experiments with an event-based,
+cloud-native architecture suitable for hosting multi-population,
+multi-algorithm optimization methods.  The framework is based on
+industry-standard development tools such as Docker and Docker Compose,
+making it easy for scientists and practitioners to develop and deploy
 multi-algorithm distributed experiments. The model implemented by the
-framework is based on the asynchronous
-exchange of messages between stateless functions that react to a continuous
-stream of data; populations are the messages that flow in this stream. We show the differences of the message-driven architecture we presented against
-four other proposals for multi-population algorithms found in the literature, and highlight the 
-advantages for conducting asynchronous multi-population algorithms.
+framework is based on the asynchronous exchange of messages between
+stateless functions that react to a continuous stream of data;
+populations are the messages that flow in this stream. We show the
+differences of the message-driven architecture we presented against
+four other proposals for multi-population algorithms found in the
+literature, and highlight the advantages for conducting asynchronous
+multi-population algorithms.
 
 We have proposed a new methodology for the reproducible deployment and execution of
 multiple experiments by specifying the infrastructure as part of an experiment
@@ -1965,7 +1966,7 @@ workers by hand. This would need a certain amount of configuration, as we would
 be using container orchestration with auto-scaling capabilities such as
 Kubernetes or Docker Swarm. The current orchestration (Amazon ECS) also has
 auto-scaling capabilities, but additional configuration is needed; also, we need
-to establish the auto-scaling of both containers and Amazons EC2 instances.
+to establish the auto-scaling of both containers and Amazon's EC2 instances.
 Instead of setting a fixed number of workers, only the maximum amount would need
 to be established, which could be done directly or by setting an evaluation
 budget.
