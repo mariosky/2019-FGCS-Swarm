@@ -158,7 +158,7 @@ that favor the parallel and asynchronous communication of
 heterogeneous resources. In the process, a new methodology for designing 
 {\em cloud-native applications} has been created, with brand new methods and
 techniques \cite{Baldini2016287}. 
-In these architectures, services or even functions are seen as independent 
+In these architectures, services, or even functions are seen as independent 
 processing nodes, departing from the monolithic
 and even distributed paradigms, and becoming a loosely coupled collection of {\em
 stateless functions}\cite{malawski2017serverless}, that react to events. 
@@ -180,8 +180,9 @@ however, when developing their multi-population algorithms, they face additional
   %  \item To scale the system, when it is possible, there are several options, including the  use of stateless functions for
   %  processing. 
 
-    \item They need to establish a workflow of local development and prototyping while having the 
-    option of deployment in a cloud provider. It is desirable to use modern development methodologies and technologies. 
+    \item They need to establish a workflow of local development and
+prototyping while having the option of deployment to services provided
+by a cloud provider, thus using modern methodologies and technologies.
 
     \item They must log experimental results and be able to replicate the experiments. 
 
@@ -496,7 +497,7 @@ Based on these general principles, we next define the proposed model.
     \label{fig:kafkEO}
 \end{sidewaysfigure}
 
-\subsection{Event Driven Model} 
+\subsection{Event-Driven Model} 
 \label{edm}
 Based on a reactive architecture we proposed in a previous work
 \cite{guervos2018introducing}, we now describe the general architecture shown in
@@ -530,7 +531,7 @@ static data, including each individual inside. Each population includes a metada
 section where its algorithm and execution parameters are specified. For instance, 
 for a GA, the mutation rate, type of crossover operator, and other values are indicated.
 
-\item Each population is then pushed to the \texttt{Input} queue, so that they can be consumed 
+\item Each population is then pushed to the \texttt{Input} queue so that they can be consumed 
 by stateless functions responsible for the search's execution.
 
 \item One or more \texttt{Stateless functions} are constantly pulling population messages
@@ -614,7 +615,7 @@ for their execution.
 In contrast, in the classic island model shown in Figure
 \ref{fig:classicisland}, algorithms are  population methods, and the same processing
 node keeps both the algorithm process and the state of the population.  Other
-processing nodes follow the same configuration and form of execution, and they
+processing nodes follow the same configuration and form of execution and they
 only pass specific individuals between them.  In this model, adding additional
 processing nodes, on-runtime, can be more difficult because they need to have
 an addressing mechanism or simply be aware of these new nodes. This is
@@ -837,7 +838,7 @@ infinite loop, continually trying to pull a new population to work on it. Once
 worker object responsible for initializing and running the specified stateless
 function (i.e., GA or PSO) with the population and configuration inside the message.
 Once the function returns the evolved population,
-the main script pushes the results to the \texttt{Output} queue, and continues
+the main script pushes the results to the \texttt{Output} queue and continues
 to execute the infinite loop. This process is shown in Figure \ref{fig:worker}.
 
 \section{Workflow for Reproducible Experiment Design in EvoSwarm} 
@@ -1150,17 +1151,21 @@ variables used by code running inside containers.
   \label{fig:aws-configuration}
 \end{figure}
 
-Figure \ref{fig:aws-configuration} shows the basic EC2 configuration used for the deployment
-of experiments. We selected three types of EC2 instances according to our needs; the  
-{\texttt setup}, {\texttt controller}, and {\texttt redis} containers do not demand many resources
-and we do not need to scale them as the amount of parallel workers are increased. They run in a
-single {\texttt C5  High-CPU large} instance. With the available 2048 CPU shares divided as follows:
-{\texttt setup} (128),  {\texttt controller} (896), {\texttt redis} (1024). With this assignment 
-the {\texttt redis} container gets a dedicated vCPU, needed because it is the most demanding 
-task of the three. We assigned 2048 units to each {\texttt worker} container, and using a more 
-capable {\texttt C5 High-CPU XLarge} instance,  with 
-four vCPUs and 4096 CPU shares, with this configuration each worker gets a pair of vCPUs.  
-We scaled the number of instances as needed, using one instance for every two {\texttt worker} containers. 
+Figure \ref{fig:aws-configuration} shows the basic EC2 configuration
+used for the deployment of experiments. We selected three types of EC2
+instances according to our needs; the {\texttt setup}, {\texttt
+controller}, and {\texttt redis} containers do not demand many
+resources and we do not need to scale them as the amount of parallel
+workers are increased. They run in a single {\texttt C5 High-CPU
+large} instance. With the available 2048 CPU shares divided as
+follows: {\texttt setup} (128), {\texttt controller} (896), {\texttt
+redis} (1024). With this assignment, the {\texttt redis} container
+gets a dedicated vCPU, needed because it is the most demanding task of
+the three. We assigned 2048 units to each {\texttt worker} container,
+and using a more capable {\texttt C5 High-CPU XLarge} instance, with
+four vCPUs and 4096 CPU shares, with this configuration each worker
+gets a pair of vCPUs.  We scaled the number of instances as needed,
+using one instance for every two {\texttt worker} containers.
 
 Because all these instances run in a private subnet, we also run a
 Bastion instance, that is, a specially protected network node, in a
@@ -1255,7 +1260,7 @@ their cost at the time of writing are shown in Table \ref{tab:ec2}.
 
 The complete configuration files are available at public GitHub repository 
 \footnote{\url{https://github.com/mariosky/EvoSwarm/tree/master/aws-EC2}}, and
-they are used on the next section to carry an extensive evaluation of the framework.
+they are used in the next section to carry an extensive evaluation of the framework.
 Again, each configuration describes the deployment of containers in a consistent
 and portable way, and it was used in each phase of the life cycle, from
 development through testing to production independently on the kind of
@@ -1266,12 +1271,13 @@ infrastructure.
 \label{setup} % To be renamed 
 
 
-In the previous section, we have described an option for an EvoSwarm deployment that can be used by 
-the public to create reproductive research in the cloud; in this section we are
-using the same framework to learn if the proposed solution can efficiently
-improve the scalability and performance of population-based optimization
-algorithms. 
-Hence, in the following sections, we provide answers to the following questions:
+In the previous section, we have described an option for an EvoSwarm
+deployment that can be used by the public to create reproductive
+research in the cloud; in this section, we are using the same
+framework to learn if the proposed solution can efficiently improve
+the scalability and performance of population-based optimization
+algorithms.  Hence, in the following sections, we provide answers to
+the following questions:
 
 \begin{itemize}
 \item Can we improve the execution time of the algorithm by adding populations
@@ -1354,20 +1360,23 @@ functions.
   \end{tabular}
 \end{table}
 
-Next, we show the parameters for each algorithm, with Table \ref{tab:GAparams} for
-the GA and Table \ref{tab:PSOparams} for the PSO. We obtained these parameters
-following the same method as in a previous work \cite{garcia2017benchmarking}.
-To obtain the parameters, we tested first on the Rastrigin separable function
-with five dimensions. After about fifteen experiments, the most challenging
-targets were achieved for this particular function. We tested again with
-functions one to three, and after obtaining favorable results, the PSO and GA
-algorithm parameters were set. In the GA, we randomly set the mutation and
-crossover probabilities to have more heterogeneous workers;
-for these parameters, the range of values is specified. We did not change these parameters during the 
-experiments, and only the number of populations, population size and number of generations were
-provided as parameters. This strategy has been applied successfully for increasing 
-the performance of multi-population algorithms without requiring the setting 
-of initial parameters \cite{garcia2014randomized}.
+Next, we show the parameters for each algorithm, with Table
+\ref{tab:GAparams} for the GA and Table \ref{tab:PSOparams} for the
+PSO. We obtained these parameters following the same method as in a
+previous work \cite{garcia2017benchmarking}.  To obtain the
+parameters, we tested first on the Rastrigin separable function with
+five dimensions. After about fifteen experiments, the most challenging
+targets were achieved for this particular function. We tested again
+with functions one to three, and after obtaining favorable results,
+the PSO and GA algorithm parameters were set. In the GA, we randomly
+set the mutation and crossover probabilities to have more
+heterogeneous workers; for these parameters, the range of values is
+specified. We did not change these parameters during the experiments,
+and only the number of populations, population size, and number of
+generations were provided as parameters. This strategy has been
+applied successfully for increasing the performance of
+multi-population algorithms without requiring the setting of initial
+parameters \cite{garcia2014randomized}.
 
 The experiments can be easily reproduced by using the configuration
 files the EvoSwarm application uses to run the noiseless BBOB testbed
@@ -1481,8 +1490,8 @@ decrease the workload of workers:
 
 
 
-From this description it can be deduced that we give more importance in this
-paper to the number of populations, since they are the basic unit of
+From this description, it can be deduced that we give more importance in this
+paper to the number of populations since they are the basic unit of
 work, the message, that
 can be executed in parallel. Together with the size of each population and the
 number of generations, this parameter determines the maximum number of function
@@ -1490,10 +1499,11 @@ evaluations for a single iteration. We do not have control over each algorithm's
 complexity, but future analyses could focus on balancing populations and number
 of worker nodes according to this.
 
-In this experiment, we evaluate how the number of populations and the number of
-workers in the system are related to the scalability of the system.
-In the next section, we describe the experimental setup, and a discussion of the results
-follows, with respect to the speed-up in terms of evaluations per second (Section~\ref{sec:speedup}), and 
+In this experiment, we evaluate how the number of populations and the
+number of workers in the system are related to the scalability of the
+system.  In the next section, we describe the experimental setup and a
+discussion of the results follows, with respect to the speed-up in
+terms of evaluations per second (Section~\ref{sec:speedup}), and
 execution time (Section~\ref{sec:exec-time}).
 
 \subsubsection{Setup} % Again, this in the index with no context should say something. Please flesh it out.
@@ -1503,7 +1513,7 @@ To answer the first research question, we need to evaluate the effect of the
 number of populations and the number of workers on the scalability of the
 system, and in order to achieve this we propose an experiment for
 which we have selected $f_4$ (Skew
-Rastrigin-Bueche separable) from the BBOB testbed, over 10 and 20 dimensions. This function has been used
+Rastrigin-Bueche separable) from the BBOB testbed, over 10, and 20 dimensions. This function has been used
 because it is computationally demanding, and in higher dimensions has been
 difficult for PSO \cite{el2009black} and GAs \cite{nicolau2009application} to
 solve with the required FEs. As we are only comparing in terms of scalability,
@@ -1532,7 +1542,7 @@ not significant throughout the tables of this section.  % Where? - JJ
 To measure the speed-up obtained by the addition of workers, we will use the
 number of evaluations per second, instead of the time required to finish an
 instance of a problem. The reason for this is that in some cases reaching the
-desired target can require less work, because we are using a stochastic search. 
+desired target can require less work because we are using a stochastic search. 
 We are going to measure the total increase of work done in a second by adding more workers.
 
 \begin{table}[h!tbp]
@@ -1631,7 +1641,7 @@ the previous configuration, for example, when increasing from four to eight
 workers, and the p-value for the Wilcoxon Signed-Rank test. There was an
 increment in all cases. Again, the best effect is achieved when the number of
 populations is higher than the number of workers. Configurations following this
-basic rule doubled the speed or where near it. Using five populations, we
+basic rule doubled the speed or were near that. Using five populations, we
 obtained the best and worst speed-up depending on the number of workers (shown in
 underline and bold, respectively).
 
@@ -1972,13 +1982,13 @@ to be established, which could be done directly or by setting an evaluation
 budget.
 
 From the algorithmic point of view, there are many possible lines of
-research. Mixing population-based algorithms with other algorithms
+research. Mixing population-based algorithms with other kinds
 would be a possibility, but also using different instances of
 population based algorithms, such as checking how Estimation of
 Distribution Algorithms would work together with evolutionary
 algorithms. EvoloPy also includes other population based algorithms,
 which could be tested, trying to find out which sets of algorithms are
-a better match to each other. All these will be explored as future
+a better match for each other. All these will be explored as future
 lines of work.
 
 \section{Acknowledgements}
