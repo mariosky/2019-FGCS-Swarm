@@ -43,16 +43,17 @@ populations can be done in parallel, and they can interact asynchronously,
 a fact that can be leveraged to create scalable implementations based
 on, among other methods, distributed, multi-threaded, parallel, and
 cloud-native computing.  However, the design of these cloud-native,
-distributed, multi-population algorithms is not a trivial task. Coming
-from monolithic (single-instance) solutions, adaptations at several
+distributed, multi-population algorithms is not a trivial task. Using
+as a foundation monolithic (single-instance) solutions, adaptations at several
 levels, from the algorithmic to the functional, must be made to
 leverage the scalability, elasticity, (limited) fault-tolerance,
 reproducibility, and cost-effectiveness of cloud systems while, at the
 same time, conserving the intended functionality. Instead of an
-evolutive approach, in this paper we propose to create from scratch a
-cloud-native optimization framework that is able to include multiple
-algorithms and use few parameters to work. This solution goes beyond
-current state of the art via a framework that is able to support
+evolutive approach, in this paper we propose a
+cloud-native optimization framework created from scratch, that is able to include multiple
+(population-based) algorithms without increasing the number of
+parameters that need tuning. This solution goes beyond
+current state of the art, since is able to support
 different algorithms at the same time, work asynchronously, and also
 be easily deployable to any cloud platform. We evaluate the
 performance and scalability of this solution, together with the effect
@@ -61,17 +62,8 @@ size of populations with respect to problem size. The architecture and
 the implemented platform is an excellent alternative for running
 locally or in the cloud, thus proving that cloud-native bioinspired
 algorithms perform better in their ``natural'' environment than other
-kinds of algorithms, % Did we compare it to other kind of algorithms?
-                     % If we didn't, this should go - JJ 
-                     % Compared against GA and PSO and others from BBOB - Mario
-                     % on the algorithm, not speedup 
-                     % I like the sentence, If we did not prove it, 
-                     % at least we build a tool that will allow
-                     % algorithms to run in their natural environment.
-                     % The focus of the Journal after all is in computer systems - M
-
-and setting a new baseline for scaling and
-performance in the cloud.
+kinds of algorithms, and setting a new baseline for scaling and
+performance of this kind of algorithms in the cloud.
 \end{abstract}
 
 \begin{keyword}
