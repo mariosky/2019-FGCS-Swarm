@@ -1563,7 +1563,7 @@ We are going to measure the total increase of work done in a second by adding mo
 
 \begin{table}[h!tbp]
   \caption{Speed-up by worker and dimension, taking one worker as the
-    baseline. Speed-up is obtained by dividing the evaluation ratio of the baseline by the 
+    baseline. Speed-up is obtained by dividing the baseline's evaluation ratio by the 
     ratio of the increased number of workers.}
 % Clarify here what you are measuring. Number of evaluations for
 % whatever divided by whatever - JJ
@@ -1597,9 +1597,9 @@ workers, for ten and twenty dimensions of $f_4$.
 
 
 %
-As expected, within the same number of populations, there is a linear speed-up
-when we add more workers. The speed-up is marginal in those cases where there 
-are fewer populations than workers.  The reason for this is that at any given time, 
+As expected, there is a linear speed-up when we add more workers 
+within the same number of populations. The speed-up is marginal in those cases where there 
+are fewer populations than workers. This is because, at any given time, 
 there are at least two populations in the message queue, leaving some of the workers 
 waiting for populations to be available in the queue.
 
@@ -1653,11 +1653,11 @@ shown in bold in the table.
 
 
 Table~\ref{tab:speedup:test} shows the speed-up obtained taking as the baseline
-the previous configuration, for example, when increasing from four to eight
+the previous configuration, such as increasing from four to eight
 workers, and the p-value for the Wilcoxon Signed-Rank test. There was an
 increment in all cases. Again, the best effect is achieved when the number of
 populations is higher than the number of workers. Configurations following this
-basic rule doubled the speed or were near that. Using five populations, we
+basic rule doubled the speed or where near that. Using five populations, we
 obtained the best and worst speed-up depending on the number of workers (shown in
 underline and bold, respectively).
 
@@ -1687,7 +1687,7 @@ underline and bold, respectively).
 \label{sec:exec-time}
 
 In the previous section, we have shown that as we increase the number of
-populations and workers, we increase the ratio of the number of evaluations per
+populations and workers, we increase the number of evaluations per
 second in the same proportion. However, it is vital to notice that we can also
 affect the number of evaluations we need to execute to find a solution. This
 reduction means that the multi-population based algorithm can perform better
@@ -1735,11 +1735,11 @@ median (30 runs) of the number of evaluations needed to complete an instance of
 the function $f_4$. For every selection in the number of populations, we could
 expect to have about the same number of FEs needed regardless of the number of
 workers. However, we can see that for some configurations, i.e., 10D and ten
-populations, eight workers will need less FEs then one (p = 0.012). Also, for
+populations, eight workers will need fewer FEs than one (p = 0.012). Also, for
 20D and twenty populations, there are differences between one and four workers
 (p = 0.08) and between four and sixteen (p = 0.01). These results indicate that
 there are benefits in the potential change of order in the message queue
-resulting from the parallelization of work.
+resulting from work parallelization.
 
 In Table \ref{tab:evals_instance} we try to acquire more insights on
 how this works. When we increase the number of populations from five to ten, or twenty,
@@ -1761,14 +1761,14 @@ the table.
 \end{figure}
 %
 
-The reduction in the number of FEs has an impact when we measure the speed up
+The reduction in the number of FEs impacts when we measure the speed up
 concerning the time needed to complete an experiment. In this case, we have
 measured the median of the seconds needed to complete an instance of the
-problem. Figure \ref{fig:spworker:time} shows in each box-plot the median (30
+problem. Figure \ref{fig:spworker:time} shows in each boxplot the median (30
 runs) of the execution time achieved by 2, 4, 8, and 16 workers, to finish an
 instance of the function $f_4$, for dimensions 10 and 20, when using 5, 10, and
 20 population sizes. We present each dimension in a row having a log scale on
-the y-axis, to compensate for the dimension increments and scalability.  
+the y-axis to compensate for the dimension increments and scalability.  
  
 
 \begin{table}[tbp]
@@ -1798,8 +1798,8 @@ the y-axis, to compensate for the dimension increments and scalability.
   \end{tabular}
 \end{table}
 
-In Table~\ref{tab:time} we can see that in some cases we have a supralinear
-speed-up, we highlighted these in boldface and indicated the speed-up value in
+In Table~\ref{tab:time} we can see that we have a supralinear
+speed-up in some cases; we highlighted these in boldface and indicated the speed-up value in
 parenthesis. The best overall times are underlined. As expected, increasing the
 number of workers for a fixed dimension and populations reduced the time
 required to find a solution, as long as the population number was higher than
